@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Watch Video</title>
+<style>body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #181818;
+  color: #fff;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #222;
+  padding: 10px 20px;
+}
+
+.header .logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.header .search-bar input {
+  padding: 5px;
+  width: 250px;
+  border: none;
+  border-radius: 3px;
+}
+
+.header .search-bar button {
+  padding: 5px 10px;
+  margin-left: 5px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.header .profile button {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 3px;
+}
+
+/* Watch page layout */
+.watch-page {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+/* Main video section */
+.player-section {
+  flex: 1;
+  max-width: 900px; /* Limit the width */
+  margin: 0 auto;   /* Center the player */
+}
+
+
+.player-section video {
+  width: 100%;
+  max-height: 500px; /* Limit the height */
+  border-radius: 5px;
+  object-fit: cover; /* Make sure video fits nicely */
+}
+
+.player-section h2 {
+  margin-top: 10px;
+  font-size: 22px;
+}
+
+.player-section p {
+  margin-top: 5px;
+  color: #ccc;
+}
+
+.video-stats {
+  margin: 10px 0;
+  color: #999;
+}
+
+.video-actions button {
+  margin-right: 10px;
+  padding: 5px 10px;
+  background: #333;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.video-actions button:hover {
+  background: #ff9900;
+  color: #000;
+}
+
+/* Recommended below */
+.recommended-below {
+  margin-top: 30px;
+}
+
+.recommended-below h3 {
+  margin-bottom: 15px;
+}
+
+/* Video card for recommended below */
+.video-card {
+  display: flex;
+  gap: 10px;
+  background: #222;
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+  margin-bottom: 10px;
+}
+
+.video-card:hover {
+  transform: scale(1.02);
+}
+
+.video-card img {
+  width: 160px;
+  height: 90px;
+  object-fit: cover;
+}
+
+.video-card h4 {
+  margin: 5px 0;
+  font-size: 14px;
+  color: #fff;
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+  <div class="logo">VideoSite</div>
+  <div class="search-bar">
+    <input type="text" id="search-bar" placeholder="Search videos...">
+    <button>Search</button>
+  </div>
+  <div class="profile">
+    <button>Login</button>
+  </div>
+</header>
+
+<!-- Main Watch Section -->
+<main class="watch-page">
+  <div class="player-section">
+    <video id="main-video" src="videos/video1.mp4" poster="thumbnails/video1.jpg" controls></video>
+    <h2 id="video-title">Sample Video Title</h2>
+    <p id="video-desc">This is a demo description for the video. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+    <div class="video-stats">
+      <span>1,234 views</span> • <span>Likes: 120</span> • <span>Shares: 15</span>
+    </div>
+
+    <div class="video-actions">
+      <button>👍 Like</button>
+      <button>👎 Dislike</button>
+      <button>🔗 Share</button>
+      <button>💾 Save</button>
+    </div>
+
+    <!-- Recommended Videos Below -->
+    <section class="recommended-below" id="recommended-videos">
+      <h3>Recommended Videos</h3>
+      <!-- JS injects video cards here -->
+    </section>
+  </div>
+</main>
+
+<script src="js/main.js"></script>
+</body>
+</html>

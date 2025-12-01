@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PW-Phisics Wallah</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="navbar">
+  <div class="fav1" id="id1">
+        <img src="a word.jpeg"  alt="">
+        
+    </div>
+        <ul id="navigation_bar">
+            <li><a href="home.html" class="active">Home</a></li>
+            <li><a href="add .html">Add new</a></li>
+
+
+        </ul>
+    </div>
+
+<main>
+  <section class="video-player-section">
+    <video id="main-video" controls>
+      Your browser does not support HTML5 video.
+    </video>
+    <h2 id="video-title">No video selected</h2>
+  </section>
+
+  <section class="recommended">
+    <h3>Recommended Videos</h3>
+    <div class="video-list" id="video-list"></div>
+  </section>
+</main>
+
+<section class="add-video">
+  <input type="file" id="video-file" accept="video/*">
+<input type="text" id="video-name" placeholder="Video Title">
+<button id="add-video-btn">Add Video</button>
+<div class="video-list" id="video-list"></div>
+<video id="main-video" controls></video>
+<h2 id="video-title">No video selected</h2>
+
+</section>
+
+<!-- Firebase SDKs -->
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.6.0/firebase-firestore-compat.js"></script>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>

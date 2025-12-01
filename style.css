@@ -1,0 +1,271 @@
+  /* Reset */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #121212;
+    color: #fff;
+  }
+
+  .fav1 img {
+    height: 33px;
+    width: 36px;
+    border-radius: 28px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    margin-left: -132PX;
+
+    margin-right: 0px;
+
+  }
+
+  .navbar {
+    display: flex;
+    background-color: #1f1f1f;
+    padding: 0.4vw;
+    text-align: center;
+
+    justify-content: center;
+    align-items: center;
+
+  }
+
+  #navigation_bar {
+    display: flex;
+  }
+
+  #navigation_bar li {
+    display: inline-block;
+
+  }
+
+  #navigation_bar li a {
+    color: rgb(187, 135, 255);
+    text-decoration: none;
+    font-size: 1.15rem;
+    padding: 0px 2.38vw;
+    font-family: "fira sans", sans-serif;
+  }
+
+  #navigation_bar li a:hover,
+  #navigation_bar li a.active {
+    text-decoration: underline;
+    color: rgb(181 233 244);
+    font-family: "fira sans", sans-serif;
+
+  }
+
+  main {
+    max-width: 1000px;
+    margin: 20px auto;
+    padding: 10px;
+  }
+
+  .video-player-section {
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .video-player-section video {
+    width: 100%;
+    border-radius: 10px;
+    max-height: 550px;
+  }
+
+  .video-player-section h2 {
+    margin-top: 10px;
+    font-size: 1.3em;
+  }
+
+  .recommended {
+    margin-top: 25px;
+  }
+
+  .recommended h3 {
+    margin-bottom: 10px;
+    font-size: 1.4em;
+  }
+
+  .video-list {
+    gap: 15px;
+    overflow-y: auto;
+    padding-bottom: 10px;
+    scroll-behavior: smooth;
+  }
+
+  .video-item {
+    flex: 0 0 auto;
+    width: 300px;
+    height: 166px;
+    margin-top: 12px;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .video-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  }
+
+  .video-item video {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+  }
+
+  .video-item p {
+    text-align: center;
+    padding: 8px 5px;
+    font-size: 0.95em;
+  }
+
+  .add-video {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 15px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .add-video input {
+    padding: 10px;
+    flex: 1;
+    min-width: 200px;
+    border-radius: 6px;
+    border: none;
+    background-color: #2c2c2c;
+    color: #fff;
+  }
+
+  .add-video input::placeholder {
+    color: #aaa;
+  }
+
+  .add-video button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    background-color: #ff3b3b;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .add-video button:hover {
+    background-color: #e63636;
+  }
+
+  /* Scrollbar for horizontal video list */
+  .video-list::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  .video-list::-webkit-scrollbar-thumb {
+    background-color: #555;
+    border-radius: 4px;
+  }
+
+  .video-list::-webkit-scrollbar-track {
+    background-color: #1e1e1e;
+  }
+
+  .video-item {
+    position: relative;
+    /* needed for absolute positioning of delete button */
+    flex: 0 0 200px;
+    background-color: #1e1e1e;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .video-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6);
+  }
+
+  .video-item .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px 7px;
+    font-size: 0.8em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff3b3b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: opacity 0.2s, background-color 0.2s;
+    z-index: 2;
+  }
+
+  .video-item .delete-btn:hover {
+    background-color: #e63636;
+    opacity: 1;
+  }
+
+  .video-item .delete-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 3px 7px;
+    font-size: 0.8em;
+    border: none;
+    border-radius: 5px;
+    background-color: #ff3b3b;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    opacity: 0;
+    /* hide by default */
+    transition: opacity 0.2s, background-color 0.2s;
+    z-index: 2;
+  }
+
+  .video-item:hover .delete-btn {
+    opacity: 0.9;
+    /* show on hover */
+  }
+
+  .video-item .delete-btn:hover {
+    background-color: #e63636;
+    opacity: 1;
+  }
+  #upload-btn {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  width: 60px;
+  height: 60px;
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: white;
+  background-color: #ff3b3b;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  transition: background-color 0.2s, transform 0.2s;
+  z-index: 100;
+}
+
+#upload-btn:hover {
+  background-color: #e63636;
+  transform: scale(1.1);
+}
