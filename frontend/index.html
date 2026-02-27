@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCAPDX | Home</title>
+  <meta name="description" content="ASCAPDX Digital is a community platform for posts, stories, messaging, and calls. Connect, share, and discover creators.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="ASCAPDX | Home">
+  <meta property="og:description" content="Join ASCAPDX Digital to share posts, stories, and chat in real time.">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="assets/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="ASCAPDX | Home">
+  <meta name="twitter:description" content="Join ASCAPDX Digital to share posts, stories, and chat in real time.">
+  <meta name="twitter:url" content="">
+  <meta name="twitter:image" content="assets/logo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="css/home.css">
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+  <style>
+    body.first-visit-loading {
+      overflow: hidden;
+    }
+    body.first-visit-loading > :not(#firstVisitLoader) {
+      visibility: hidden;
+    }
+    .first-visit-loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 0.9rem;
+      background: radial-gradient(circle at 20% 20%, #1d3d66 0%, #071324 55%, #030910 100%);
+      color: #e7f4ff;
+      transition: opacity 280ms ease;
+      opacity: 1;
+    }
+    .first-visit-loader.show {
+      display: flex;
+    }
+    .first-visit-loader.hide {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .first-visit-loader-logo {
+      width: 92px;
+      height: 92px;
+      object-fit: contain;
+      filter: drop-shadow(0 10px 25px rgba(0, 0, 0, 0.35));
+    }
+    .first-visit-loader-text {
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.92rem;
+    }
+    .first-visit-loader-dots {
+      display: inline-flex;
+      gap: 0.42rem;
+      align-items: center;
+      justify-content: center;
+    }
+    .first-visit-loader-dots i {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #6dc6ff;
+      opacity: 0.35;
+      animation: firstVisitLoaderPulse 1s infinite ease-in-out;
+    }
+    .first-visit-loader-dots i:nth-child(2) { animation-delay: 0.15s; }
+    .first-visit-loader-dots i:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes firstVisitLoaderPulse {
+      0%, 100% { transform: translateY(0); opacity: 0.35; }
+      50% { transform: translateY(-4px); opacity: 1; }
+    }
+  </style>
+  <script>
+    (function () {
+      try {
+        var key = "ascapdx_index_loader_seen_v1";
+        var seen = localStorage.getItem(key) === "1";
+        if (!seen) {
+          document.documentElement.classList.add("first-visit-loading-root");
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.add("first-visit-loading");
+          });
+        }
+      } catch (err) {}
+    })();
+  </script>
+</head>
+<body data-seo-path="/index.html">
+  <div id="firstVisitLoader" class="first-visit-loader" aria-hidden="true">
+    <img src="assets/logo.png" alt="ASCAPDX loading" class="first-visit-loader-logo">
+    <div class="first-visit-loader-text">Loading ASCAPDX</div>
+    <div class="first-visit-loader-dots" aria-hidden="true"><i></i><i></i><i></i></div>
+  </div>
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex user-search-form" role="search" onsubmit="return false;">
+              <input id="userSearchInput" style="display: none;" class="form-control user-search-input" type="search" placeholder="Search users...">
+              <button id="clearUserSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">x</button>
+            </form>
+          </li>
+          <li class="nav-item"><a class="nav-link active" style="margin-left: 10px;" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" style="margin-left: 10px;" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" style="margin-left: 10px;" href="upload.html"><i class="bi bi-cloud-arrow-up me-1"></i> Upload</a></li> -->
+          <li class="nav-item"><a class="nav-link" style="margin-left: 10px;" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" style="margin-left: 10px;" href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+          <li class="nav-item"><a class="nav-link" style="margin-left: 10px;" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main data-scroll-container>
+    <div class="shell">
+      <div class="content-col">
+        <section class="panel stories-panel">
+          <div class="stories-head">
+            <h2>Stories</h2>
+            <!-- <p class="stories-note">Disappears in 24h</p> -->
+          </div>
+          <input id="storyMediaInput" class="form-control" type="file" accept="image/*,video/*" style="display:none;">
+          <div id="storiesRail" class="stories-rail"></div>
+          <div id="storyUploadLoader" class="story-upload-loader" aria-live="polite" aria-hidden="true">
+            <div class="story-upload-track"><span id="storyUploadBar" class="story-upload-fill"></span></div>
+            <span id="storyUploadText">Uploading story... 0%</span>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div id="feed"></div>
+        </section>
+      </div>
+
+      <aside class="panel sidebar-panel">
+        <h2>Quick Access</h2>
+        <div class="menu-list">
+          <a class="menu-item" href="index.html"><i class="bi bi-house-door me-1"></i>Home</a>
+          <a class="menu-item" href="chat.html"><i class="bi bi-chat-dots me-1"></i>Chat</a>
+          <!-- <a class="menu-item" href="upload.html"><i class="bi bi-cloud-arrow-up me-1"></i>Upload</a> -->
+          <a class="menu-item" href="follow-people.html"><i class="bi bi-search me-1"></i>People</a>
+          <a class="menu-item" href="profile.html"><i class="bi bi-person-circle me-1"></i>My Profile</a>
+          <a class="menu-item" href="settings.html"><i class="bi bi-gear me-1"></i>Settings</a>
+          <a class="menu-item" href="insights.html"><i class="bi bi-graph-up me-1"></i>Insights</a>
+          <!-- <a class="menu-item" href="voice-call.html"><i class="bi bi-telephone me-1"></i>Voice Call</a>
+          <a class="menu-item" href="video-call.html"><i class="bi bi-camera-video me-1"></i>Video Call</a> -->
+        </div>
+      </aside>
+
+    </div>
+  </main>
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a class="mobile-bottom-link active" href="index.html"><i class="bi bi-house-door"></i><span>Home</span></a>
+    <a class="mobile-bottom-link" href="chat.html"><i class="bi bi-chat-dots"></i><span>Chat</span></a>
+    <a class="mobile-bottom-link" href="posts.html"><i class="bi bi-grid"></i><span>Feed</span></a>
+    <a class="mobile-bottom-link" href="follow-people.html"><i class="bi bi-search"></i><span>People</span></a>
+    <a class="mobile-bottom-link" href="profile.html"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+  </nav>
+  <button id="openCreateBtn" class="fab-create" title="Create post" aria-label="Create post" aria-expanded="false">Create</button>
+  <div id="createChoiceMenu" class="create-choice-menu" aria-hidden="true">
+    <button id="createPostChoiceBtn" type="button" class="create-choice-btn"><i class="bi bi-grid"></i><span>Post</span></button>
+    <button id="createStoryChoiceBtn" type="button" class="create-choice-btn"><i class="bi bi-lightning-charge"></i><span>Story</span></button>
+  </div>
+  <div id="shareModal" class="share-modal" aria-hidden="true">
+    <div class="share-modal-card" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="share-modal-head">
+        <h3 id="shareModalTitle">Share Post</h3>
+        <button id="closeShareModalBtn" class="share-close" type="button" aria-label="Close share">x</button>
+      </div>
+      <input id="shareSearchInput" class="form-control share-search" type="search" placeholder="Search followers/following...">
+      <div id="shareUserList" class="share-list"></div>
+      <div class="share-modal-actions">
+        <button id="shareWhatsappBtn" class="share-whatsapp-btn" type="button">Send to WhatsApp</button>
+        <button id="shareFacebookBtn" class="share-facebook-btn" type="button">Share to Facebook</button>
+        <button id="shareInstagramBtn" class="share-instagram-btn" type="button">Share to Instagram</button>
+        <p class="share-link-note">Or send directly to users here.</p>
+      </div>
+    </div>
+  </div>
+  <div id="storyViewerModal" class="story-viewer" aria-hidden="true">
+    <div class="story-viewer-card" role="dialog" aria-modal="true" aria-label="Story viewer">
+      <div id="storyProgress" class="story-progress"></div>
+      <div class="story-viewer-head">
+        <div class="story-viewer-user">
+          <img id="storyViewerAvatar" class="story-viewer-avatar" src="assets/default-avatar.svg" alt="Story user">
+          <div>
+            <div id="storyViewerName" class="story-viewer-name">Story</div>
+            <div id="storyViewerTime" class="story-viewer-time"></div>
+          </div>
+        </div>
+        <div style="display:inline-flex; align-items:center; gap:0.4rem;">
+          <button id="deleteStoryBtn" class="story-delete" type="button" aria-label="Delete story"><i class="bi bi-trash3"></i><span>Delete</span></button>
+          <button id="closeStoryViewerBtn" class="story-close" type="button" aria-label="Close story">x</button>
+        </div>
+      </div>
+      <button id="storyPrevBtn" class="story-nav-btn story-nav-prev" type="button" aria-label="Previous story">&#8249;</button>
+      <button id="storyNextBtn" class="story-nav-btn story-nav-next" type="button" aria-label="Next story">&#8250;</button>
+      <div id="storyViewerMediaWrap" class="story-viewer-media-wrap"></div>
+      <div class="story-viewer-footer">
+        <div class="story-reactions" id="storyReactionsBar">
+                    <button class="story-react-btn" type="button" data-story-react="&#10084;&#65039;">&#10084;&#65039;</button>
+          <button class="story-react-btn" type="button" data-story-react="&#128293;">&#128293;</button>
+          <button class="story-react-btn" type="button" data-story-react="&#128514;">&#128514;</button>
+          <button class="story-react-btn" type="button" data-story-react="&#128079;">&#128079;</button>
+          <button class="story-react-btn" type="button" data-story-react="&#128525;">&#128525;</button>
+          <button id="storyInteractionsBtn" class="story-interactions-btn" type="button" style="display:none;">Viewers</button>
+        </div>
+        <form id="storyReplyForm" class="story-reply-form">
+          <input id="storyReplyInput" class="story-reply-input" type="text" maxlength="240" placeholder="Reply to this story...">
+          <button id="storyReplySendBtn" class="story-reply-send" type="submit">Send</button>
+        </form>
+        <div id="storyInteractionsPanel" class="story-interactions-panel" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="js/seo-meta.js"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/ui-feedback.js"></script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/posts.js"></script>
+  <script src="js/onboarding.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+  <script src="js/pwa-register.js"></script>
+  <script>
+    (function () {
+      var key = "ascapdx_index_loader_seen_v1";
+      var loader = document.getElementById("firstVisitLoader");
+      if (!loader) return;
+      var shouldShow = false;
+      try {
+        shouldShow = localStorage.getItem(key) !== "1";
+      } catch (err) {
+        shouldShow = false;
+      }
+      if (!shouldShow) return;
+      loader.classList.add("show");
+      loader.setAttribute("aria-hidden", "false");
+
+      function hideLoader() {
+        loader.classList.add("hide");
+        setTimeout(function () {
+          loader.classList.remove("show");
+          loader.setAttribute("aria-hidden", "true");
+          document.body.classList.remove("first-visit-loading");
+          try {
+            localStorage.setItem(key, "1");
+          } catch (err) {}
+        }, 320);
+      }
+
+      if (document.readyState === "complete") {
+        setTimeout(hideLoader, 3000);
+      } else {
+        window.addEventListener("load", function () {
+          setTimeout(hideLoader, 3000);
+        }, { once: true });
+      }
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

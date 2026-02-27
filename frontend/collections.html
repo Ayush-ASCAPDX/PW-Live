@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collections | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    body { margin: 0; font-family: Arial, sans-serif; background: #071325; color: #e9f4ff; }
+    .wrap { max-width: 1080px; margin: 1rem auto; padding: 0 1rem; }
+    .head { display: flex; align-items: center; justify-content: space-between; gap: 0.8rem; flex-wrap: wrap; }
+    .layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 0.9rem; margin-top: 0.9rem; }
+    .cardx { border: 1px solid rgba(153, 197, 244, .24); border-radius: 14px; background: rgba(11, 28, 49, .86); padding: .8rem; }
+    .list { display: grid; gap: 0.4rem; }
+    .collection-row { width: 100%; text-align: left; border: 1px solid rgba(153,197,244,.24); border-radius: 10px; background: rgba(9,24,41,.65); color: #e9f4ff; padding: .45rem .55rem; cursor: pointer; }
+    .collection-row.active { border-color: rgba(99, 221, 179, .65); background: rgba(17, 63, 55, .46); }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: .65rem; }
+    .post-card { border: 1px solid rgba(153,197,244,.24); border-radius: 12px; background: rgba(7,20,36,.75); overflow: hidden; }
+    .post-media { width: 100%; aspect-ratio: 1 / 1; background: #03101f; object-fit: cover; display: block; }
+    .post-body { padding: .5rem; font-size: .85rem; color: #cbe4fb; }
+    .muted { color: #9ec3e8; font-size: .85rem; }
+    .btn { border: 1px solid rgba(153,197,244,.35); border-radius: 10px; padding: .35rem .65rem; color: #e9f4ff; background: rgba(24, 60, 96, .4); text-decoration: none; cursor: pointer; }
+  </style>
+</head>
+<body data-seo-path="/collections.html">
+  <main class="wrap">
+    <div class="head">
+      <h1 style="font-size:1.2rem;margin:0;">My Collections</h1>
+      <a class="btn" href="settings.html">Back to Settings</a>
+    </div>
+    <div id="status" class="muted" style="margin-top:.45rem;"></div>
+    <div class="layout">
+      <section class="cardx">
+        <h2 style="font-size:1rem;margin:.1rem 0 .55rem;">Collections</h2>
+        <div id="collectionsList" class="list"></div>
+      </section>
+      <section class="cardx">
+        <h2 id="currentCollectionTitle" style="font-size:1rem;margin:.1rem 0 .55rem;">Posts</h2>
+        <div id="postsGrid" class="grid"></div>
+      </section>
+    </div>
+  </main>
+  <script src="js/app-config.js"></script>
+  <script>
+    (function () {
+      const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+      if (!session) return;
+      const ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+      const USERS_API = `${ORIGIN}/api/users`;
+      const POSTS_API = `${ORIGIN}/api/posts`;
+      const authFetch = (url, opts = {}) => (window.APP_CONFIG && window.APP_CONFIG.authFetch ? window.APP_CONFIG.authFetch(url, opts) : fetch(url, opts));
+
+      const statusEl = document.getElementById("status");
+      const collectionsList = document.getElementById("collectionsList");
+      const postsGrid = document.getElementById("postsGrid");
+      const currentCollectionTitle = document.getElementById("currentCollectionTitle");
+
+      let collections = [];
+      let allPosts = [];
+      let activeCollection = "";
+
+      function esc(v) {
+        return String(v || "").replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+      }
+
+      function getPostId(post) {
+        return String((post && (post.id || post._id)) || "");
+      }
+
+      function renderCollections() {
+        if (!collections.length) {
+          collectionsList.innerHTML = '<p class="muted">No collections yet.</p>';
+          return;
+        }
+        collectionsList.innerHTML = collections.map((c) => {
+          const name = String(c.name || "");
+          const active = name === activeCollection ? " active" : "";
+          return `<button type="button" class="collection-row${active}" data-collection="${encodeURIComponent(name)}">${esc(name)} <span class="muted">(${Number(c.count || 0)})</span></button>`;
+        }).join("");
+      }
+
+      function renderPosts() {
+        const col = collections.find((c) => String(c.name || "") === activeCollection);
+        if (!col) {
+          currentCollectionTitle.textContent = "Posts";
+          postsGrid.innerHTML = '<p class="muted">Select a collection.</p>';
+          return;
+        }
+        currentCollectionTitle.textContent = `Posts - ${col.name}`;
+        const ids = new Set((Array.isArray(col.postIds) ? col.postIds : []).map((id) => String(id)));
+        const posts = allPosts.filter((p) => ids.has(getPostId(p)));
+        if (!posts.length) {
+          postsGrid.innerHTML = '<p class="muted">No saved posts in this collection.</p>';
+          return;
+        }
+        postsGrid.innerHTML = posts.map((post) => {
+          const id = esc(getPostId(post));
+          const caption = esc(String(post.caption || "No caption").slice(0, 120));
+          const mediaUrl = esc(post.mediaUrl || "");
+          const mediaType = String(post.mediaType || "image") === "video" ? "video" : "image";
+          const mediaHtml = mediaUrl
+            ? (mediaType === "video"
+              ? `<video class="post-media" src="${mediaUrl}" controls preload="metadata"></video>`
+              : `<img class="post-media" src="${mediaUrl}" alt="Post ${id}">`)
+            : `<div class="post-media"></div>`;
+          return `
+            <article class="post-card">
+              ${mediaHtml}
+              <div class="post-body">
+                <div>${caption}</div>
+                <a class="btn" style="display:inline-block;margin-top:.45rem;font-size:.75rem;padding:.2rem .5rem;" href="index.html#post-${id}">Open</a>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      async function loadData() {
+        statusEl.textContent = "Loading collections...";
+        const colRes = await authFetch(`${USERS_API}/bookmarks/collections`);
+        const colData = await colRes.json().catch(() => ({}));
+        if (!colRes.ok) throw new Error(colData.message || "Could not load collections");
+        collections = Array.isArray(colData.items) ? colData.items : [];
+
+        const postRes = await authFetch(`${POSTS_API}`);
+        const postData = await postRes.json().catch(() => ([]));
+        allPosts = Array.isArray(postData) ? postData : [];
+
+        activeCollection = collections.length ? String(collections[0].name || "") : "";
+        renderCollections();
+        renderPosts();
+        statusEl.textContent = "";
+      }
+
+      collectionsList.addEventListener("click", (event) => {
+        const btn = event.target.closest("[data-collection]");
+        if (!btn) return;
+        activeCollection = decodeURIComponent(String(btn.getAttribute("data-collection") || ""));
+        renderCollections();
+        renderPosts();
+      });
+
+      loadData().catch((err) => {
+        statusEl.textContent = err.message || "Failed to load collections.";
+      });
+    })();
+  </script>
+</body>
+</html>

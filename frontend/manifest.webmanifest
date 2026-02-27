@@ -1,0 +1,20 @@
+{
+  "name": "ASCAPDX Digital",
+  "short_name": "ASCAPDX",
+  "start_url": "/frontend/index.html",
+  "display": "standalone",
+  "background_color": "#071325",
+  "theme_color": "#31c0ff",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -1,0 +1,226 @@
+:root {
+  --text-primary: #f8fbff;
+  --text-muted: #c6d3e8;
+  --label-color: #9ad7eb;
+  --surface: rgba(8, 16, 36, 0.55);
+  --surface-strong: rgba(10, 24, 52, 0.82);
+  --border: rgba(158, 191, 238, 0.24);
+  --accent: #59b3ff;
+  --accent-strong: #2a75e6;
+  --danger: #ff95a5;
+  --success: #a6f2c6;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: "Outfit", sans-serif;
+}
+
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 16px;
+  overflow-x: hidden;
+}
+
+.video-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.46) saturate(1.05);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(74, 154, 255, 0.28), transparent 36%),
+    radial-gradient(circle at 86% 84%, rgba(43, 88, 165, 0.22), transparent 40%),
+    linear-gradient(140deg, rgba(3, 10, 25, 0.8), rgba(4, 20, 44, 0.7));
+}
+
+.glass-card {
+  width: min(92vw, 560px);
+  border-radius: 26px;
+  padding: 34px 30px 28px;
+  color: var(--text-primary);
+  background: linear-gradient(160deg, var(--surface) 6%, var(--surface-strong) 96%);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(2, 7, 20, 0.46);
+}
+
+.signup-heading {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+.signup-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.96rem;
+}
+
+.form-label {
+  color: var(--label-color) !important;
+  margin-bottom: 0.42rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+.glass-card .form-control {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  border: 1px solid rgba(151, 187, 243, 0.25);
+  border-radius: 12px;
+  padding: 11px 13px;
+  margin-bottom: 6px;
+}
+
+.glass-card .form-control::placeholder {
+  color: rgba(217, 230, 250, 0.58);
+}
+
+.glass-card .form-control:focus {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(113, 176, 255, 0.72);
+  box-shadow: 0 0 0 0.2rem rgba(59, 132, 236, 0.22);
+}
+
+.email-otp-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.email-otp-row #emailInput {
+  max-width: 365px;
+}
+
+#requestOtpBtn {
+  min-width: 118px;
+  white-space: nowrap;
+  padding-top: 3rem;
+  border-radius: 10px;
+  border-color: rgba(178, 213, 255, 0.58);
+  color: #eef6ff;
+  font-weight: 500;
+  transition: transform 0.18s ease, background 0.18s ease, opacity 0.18s ease;
+}
+
+#requestOtpBtn:hover,
+#requestOtpBtn:focus {
+  color: #ffffff;
+  border-color: rgba(218, 235, 255, 0.85);
+  background: rgba(126, 177, 246, 0.18);
+  transform: translateY(-1px);
+}
+
+#requestOtpBtn.is-loading,
+#requestOtpBtn:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+}
+
+#verifyOtpBtn {
+  width: 100%;
+  border-radius: 12px;
+  border-color: rgba(178, 213, 255, 0.58);
+  color: #eef6ff;
+}
+
+#verifyOtpBtn:hover,
+#verifyOtpBtn:focus {
+  border-color: rgba(218, 235, 255, 0.85);
+  background: rgba(126, 177, 246, 0.18);
+  color: #ffffff;
+}
+
+.glass-card .btn-primary {
+  width: 100%;
+  border-radius: 12px;
+  padding: 11px 14px;
+  border: 0;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: linear-gradient(140deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 8px 24px rgba(44, 120, 220, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.glass-card .btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 12px 28px rgba(44, 120, 220, 0.45);
+}
+
+.glass-card .btn-primary:disabled {
+  background: linear-gradient(140deg, rgba(91, 121, 161, 0.7), rgba(69, 95, 130, 0.7));
+  box-shadow: none;
+}
+
+.auth-footer {
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.auth-footer a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+#msg {
+  margin-top: 12px;
+  min-height: 24px;
+  text-align: center;
+  font-weight: 500;
+}
+
+@media (max-width: 576px) {
+  .glass-card {
+    width: 100%;
+    border-radius: 20px;
+    padding: 24px 18px 20px;
+  }
+
+  .signup-subtitle {
+    margin-bottom: 20px;
+  }
+
+  .email-otp-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .email-otp-row #emailInput {
+    max-width: 100%;
+  }
+
+  #requestOtpBtn {
+    width: 100%;
+  }
+}

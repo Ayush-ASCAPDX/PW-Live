@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body{margin:0;font-family:Arial,sans-serif;background:#071325;color:#e9f4ff}
+    .shell{max-width:900px;margin:6rem auto 1rem;padding:0 1rem}
+    .cardx{border:1px solid rgba(153,197,244,.24);border-radius:14px;background:rgba(11,28,49,.86);padding:.9rem;margin-bottom:.9rem}
+    .rowx{display:flex;align-items:center;justify-content:space-between;gap:.8rem;padding:.35rem 0}
+    .muted{color:#9cc0df;font-size:.85rem}
+    .status{min-height:1.2rem;color:#8cefc5}
+    .col-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+  </style>
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/settings.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html"><img src="assets/logo.png" height="35" alt="ASCAPDX"></a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+          <li class="nav-item"><a class="nav-link active" href="settings.html">Settings</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <main class="shell">
+    <h1 style="font-size:1.2rem;margin-bottom:.8rem;">Settings Hub</h1>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Notifications</h2>
+      <div class="rowx"><label>Likes</label><input id="nLike" type="checkbox"></div>
+      <div class="rowx"><label>Comments</label><input id="nComment" type="checkbox"></div>
+      <div class="rowx"><label>Replies</label><input id="nReply" type="checkbox"></div>
+      <div class="rowx"><label>Mentions</label><input id="nMention" type="checkbox"></div>
+      <div class="rowx"><label>Follows</label><input id="nFollow" type="checkbox"></div>
+      <div class="rowx"><label>Follow requests</label><input id="nFollowRequest" type="checkbox"></div>
+      <div class="rowx"><label>Messages</label><input id="nMessage" type="checkbox"></div>
+      <div class="rowx"><label>Missed calls</label><input id="nMissed" type="checkbox"></div>
+      <div class="rowx"><label>Collection saves</label><input id="nCollectionSave" type="checkbox"></div>
+    </section>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Quiet Hours</h2>
+      <div class="rowx"><label>Enable quiet hours</label><input id="qEnabled" type="checkbox"></div>
+      <div class="rowx">
+        <label>Start hour</label>
+        <select id="qStartHour" class="form-select form-select-sm" style="max-width:180px;"></select>
+      </div>
+      <div class="rowx">
+        <label>End hour</label>
+        <select id="qEndHour" class="form-select form-select-sm" style="max-width:180px;"></select>
+      </div>
+      <div class="rowx">
+        <label>Timezone</label>
+        <input id="qTimezone" class="form-control form-control-sm" style="max-width:250px;" placeholder="e.g. Asia/Kolkata">
+      </div>
+      <p class="muted" style="margin:.3rem 0 0;">During quiet hours, notifications are suppressed.</p>
+    </section>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Privacy</h2>
+      <div class="rowx"><label>Account visibility</label><select id="pVisibility" class="form-select form-select-sm" style="max-width:180px;"><option value="public">Public</option><option value="private">Private</option></select></div>
+      <div class="rowx"><label>Who can message</label><select id="pMessages" class="form-select form-select-sm" style="max-width:180px;"><option value="everyone">Everyone</option><option value="followers">Followers</option><option value="none">No one</option></select></div>
+      <div class="rowx"><label>Who can call</label><select id="pCalls" class="form-select form-select-sm" style="max-width:180px;"><option value="everyone">Everyone</option><option value="followers">Followers</option><option value="none">No one</option></select></div>
+      <div class="rowx"><label>Who can comment</label><select id="pComments" class="form-select form-select-sm" style="max-width:180px;"><option value="everyone">Everyone</option><option value="followers">Followers</option><option value="none">No one</option></select></div>
+    </section>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Bookmarks Collections</h2>
+      <div class="col-actions">
+        <input id="newCollectionName" class="form-control form-control-sm" placeholder="Collection name" style="max-width:220px;">
+        <button id="addCollectionBtn" class="btn btn-sm btn-info">Add</button>
+        <a class="btn btn-sm btn-outline-light" href="collections.html">Open Collections</a>
+      </div>
+      <div id="collectionsList" class="muted" style="margin-top:.6rem;">Loading...</div>
+    </section>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Follow Requests</h2>
+      <div id="followRequestsList" class="muted">Loading...</div>
+    </section>
+    <section class="cardx">
+      <h2 style="font-size:1rem;">Quick Actions</h2>
+      <div class="col-actions">
+        <a class="btn btn-sm btn-outline-light" href="change-password.html">Change Password</a>
+        <a class="btn btn-sm btn-outline-light" href="profile.html">Sessions / Blocked</a>
+        <a class="btn btn-sm btn-outline-danger" href="delete-account.html">Delete Account</a>
+        <a class="btn btn-sm btn-outline-info" href="insights.html">Creator Insights</a>
+        <a class="btn btn-sm btn-outline-warning" href="manage-posts.html">Manage Posts</a>
+      </div>
+    </section>
+    <button id="saveSettingsBtn" class="btn btn-primary">Save Settings</button>
+    <p id="status" class="status"></p>
+  </main>
+  <script src="js/app-config.js"></script>
+  <script>
+    const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+    const API = ((window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000") + "/api/users";
+    const statusEl = document.getElementById("status");
+    const authFetch = (url, opts = {}) => (window.APP_CONFIG && window.APP_CONFIG.authFetch ? window.APP_CONFIG.authFetch(url, opts) : fetch(url, opts));
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+    function pad2(value) { return String(value).padStart(2, "0"); }
+    function initHourOptions() {
+      const startSel = document.getElementById("qStartHour");
+      const endSel = document.getElementById("qEndHour");
+      const options = Array.from({ length: 24 }).map((_, h) => `<option value="${h}">${pad2(h)}:00</option>`).join("");
+      startSel.innerHTML = options;
+      endSel.innerHTML = options;
+    }
+    function applyQuietEnabledState() {
+      const enabled = !!document.getElementById("qEnabled").checked;
+      document.getElementById("qStartHour").disabled = !enabled;
+      document.getElementById("qEndHour").disabled = !enabled;
+      document.getElementById("qTimezone").disabled = !enabled;
+    }
+    async function loadSettings() {
+      const res = await authFetch(`${API}/settings`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed to load settings");
+      document.getElementById("nLike").checked = !!(data.notificationPrefs && data.notificationPrefs.like);
+      document.getElementById("nComment").checked = !!(data.notificationPrefs && data.notificationPrefs.comment);
+      document.getElementById("nReply").checked = !!(data.notificationPrefs && data.notificationPrefs.reply);
+      document.getElementById("nMention").checked = !!(data.notificationPrefs && data.notificationPrefs.mention);
+      document.getElementById("nFollow").checked = !!(data.notificationPrefs && data.notificationPrefs.follow);
+      document.getElementById("nFollowRequest").checked = !!(data.notificationPrefs && data.notificationPrefs.follow_request);
+      document.getElementById("nMessage").checked = !!(data.notificationPrefs && data.notificationPrefs.message);
+      document.getElementById("nMissed").checked = !!(data.notificationPrefs && data.notificationPrefs.call_missed);
+      document.getElementById("nCollectionSave").checked = !!(data.notificationPrefs && data.notificationPrefs.collection_save);
+      document.getElementById("qEnabled").checked = !!(data.notificationQuietHours && data.notificationQuietHours.enabled);
+      document.getElementById("qStartHour").value = String((data.notificationQuietHours && Number.isFinite(Number(data.notificationQuietHours.startHour))) ? Number(data.notificationQuietHours.startHour) : 22);
+      document.getElementById("qEndHour").value = String((data.notificationQuietHours && Number.isFinite(Number(data.notificationQuietHours.endHour))) ? Number(data.notificationQuietHours.endHour) : 7);
+      document.getElementById("qTimezone").value = String((data.notificationQuietHours && data.notificationQuietHours.timezone) || Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC");
+      applyQuietEnabledState();
+      document.getElementById("pVisibility").value = (data.privacySettings && data.privacySettings.accountVisibility) || "public";
+      document.getElementById("pMessages").value = (data.privacySettings && data.privacySettings.allowMessagesFrom) || "everyone";
+      document.getElementById("pCalls").value = (data.privacySettings && data.privacySettings.allowCallsFrom) || "everyone";
+      document.getElementById("pComments").value = (data.privacySettings && data.privacySettings.allowCommentsFrom) || "everyone";
+      const collections = Array.isArray(data.bookmarkCollections) ? data.bookmarkCollections : [];
+      renderCollections(collections);
+    }
+    function renderFollowRequests(items) {
+      const list = document.getElementById("followRequestsList");
+      if (!list) return;
+      if (!Array.isArray(items) || !items.length) {
+        list.innerHTML = "No pending requests.";
+        return;
+      }
+      list.innerHTML = items.map((item) => {
+        const uname = String(item.username || "");
+        const name = String(item.name || uname);
+        return `<div class="rowx"><span>${escapeHtml(name)} <span class="muted">@${escapeHtml(uname)}</span></span><span class="col-actions"><button class="btn btn-sm btn-outline-success" data-accept="${encodeURIComponent(uname)}">Accept</button><button class="btn btn-sm btn-outline-danger" data-reject="${encodeURIComponent(uname)}">Reject</button></span></div>`;
+      }).join("");
+    }
+    async function refreshFollowRequests() {
+      const res = await authFetch(`${API}/follow-requests`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      renderFollowRequests(Array.isArray(data.items) ? data.items : []);
+    }
+    function renderCollections(items) {
+      const list = document.getElementById("collectionsList");
+      if (!items.length) { list.innerHTML = "No collections yet."; return; }
+      list.innerHTML = items.map((c) => `<div class="rowx"><span>${escapeHtml(String(c.name || ""))} <span class="muted">(${Number(c.count || 0)})</span></span><button class="btn btn-sm btn-outline-danger" data-del="${encodeURIComponent(String(c.name || ""))}">Delete</button></div>`).join("");
+    }
+    async function refreshCollections() {
+      const res = await authFetch(`${API}/bookmarks/collections`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      renderCollections(Array.isArray(data.items) ? data.items : []);
+    }
+    document.getElementById("saveSettingsBtn").addEventListener("click", async () => {
+      try {
+        const payload = {
+          notificationPrefs: {
+            like: document.getElementById("nLike").checked,
+            comment: document.getElementById("nComment").checked,
+            reply: document.getElementById("nReply").checked,
+            mention: document.getElementById("nMention").checked,
+            follow: document.getElementById("nFollow").checked,
+            follow_request: document.getElementById("nFollowRequest").checked,
+            message: document.getElementById("nMessage").checked,
+            call_missed: document.getElementById("nMissed").checked,
+            collection_save: document.getElementById("nCollectionSave").checked
+          },
+          notificationQuietHours: {
+            enabled: document.getElementById("qEnabled").checked,
+            startHour: Number(document.getElementById("qStartHour").value || 22),
+            endHour: Number(document.getElementById("qEndHour").value || 7),
+            timezone: String(document.getElementById("qTimezone").value || "").trim() || "UTC"
+          },
+          privacySettings: {
+            accountVisibility: document.getElementById("pVisibility").value,
+            allowMessagesFrom: document.getElementById("pMessages").value,
+            allowCallsFrom: document.getElementById("pCalls").value,
+            allowCommentsFrom: document.getElementById("pComments").value
+          }
+        };
+        const res = await authFetch(`${API}/settings`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed");
+        statusEl.textContent = "Settings saved.";
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to save settings.";
+      }
+    });
+    document.getElementById("addCollectionBtn").addEventListener("click", async () => {
+      try {
+        const name = String(document.getElementById("newCollectionName").value || "").trim();
+        if (!name) return;
+        const res = await authFetch(`${API}/bookmarks/collections`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name }) });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed");
+        document.getElementById("newCollectionName").value = "";
+        await refreshCollections();
+        statusEl.textContent = "Collection created.";
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to create collection.";
+      }
+    });
+    document.getElementById("collectionsList").addEventListener("click", async (e) => {
+      const btn = e.target.closest("[data-del]");
+      if (!btn) return;
+      try {
+        const name = decodeURIComponent(String(btn.getAttribute("data-del") || ""));
+        const res = await authFetch(`${API}/bookmarks/collections/${encodeURIComponent(name)}`, { method: "DELETE" });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed");
+        await refreshCollections();
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to delete collection.";
+      }
+    });
+    document.getElementById("followRequestsList").addEventListener("click", async (e) => {
+      const acceptBtn = e.target.closest("[data-accept]");
+      const rejectBtn = e.target.closest("[data-reject]");
+      if (!acceptBtn && !rejectBtn) return;
+      try {
+        const unameEncoded = acceptBtn ? acceptBtn.getAttribute("data-accept") : rejectBtn.getAttribute("data-reject");
+        const uname = decodeURIComponent(String(unameEncoded || ""));
+        const action = acceptBtn ? "accept" : "reject";
+        const res = await authFetch(`${API}/follow-requests/${encodeURIComponent(uname)}/${action}`, { method: "POST" });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed");
+        await refreshFollowRequests();
+        statusEl.textContent = data.message || "Done";
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to update request.";
+      }
+    });
+    document.getElementById("qEnabled").addEventListener("change", () => {
+      applyQuietEnabledState();
+    });
+    initHourOptions();
+    document.getElementById("qTimezone").value = Intl.DateTimeFormat().resolvedOptions().timeZone || "UTC";
+    applyQuietEnabledState();
+    loadSettings()
+      .then(() => refreshFollowRequests())
+      .catch((err) => { statusEl.textContent = err.message || "Failed to load settings."; });
+  </script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/pwa-register.js"></script>
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

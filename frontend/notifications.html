@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: #eaf5ff;
+      background: radial-gradient(circle at 80% -25%, #1b3c65 0%, #0a1528 45%, #050a12 100%);
+      font-family: "Manrope", sans-serif;
+    }
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 40;
+      background: linear-gradient(120deg, rgba(7, 18, 34, 0.86), rgba(11, 26, 46, 0.62));
+      border-bottom: 1px solid rgba(196, 220, 250, 0.16);
+      backdrop-filter: blur(14px);
+    }
+    main {
+      padding: 6.5rem 1rem 1.2rem;
+      display: grid;
+      place-items: start center;
+    }
+    .panel {
+      width: min(860px, 96vw);
+      border: 1px solid rgba(153, 197, 244, 0.22);
+      border-radius: 18px;
+      background: linear-gradient(145deg, rgba(14, 30, 51, 0.78), rgba(8, 20, 36, 0.7));
+      box-shadow: 0 20px 45px rgba(2, 8, 16, 0.4);
+      padding: 1rem;
+    }
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.8rem;
+      flex-wrap: wrap;
+    }
+    .panel-head h1 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+    #markAllBtn {
+      border: 1px solid rgba(157, 199, 241, 0.3);
+      border-radius: 999px;
+      background: rgba(33, 99, 156, 0.28);
+      color: #def0ff;
+      font-size: 0.78rem;
+      padding: 0.34rem 0.7rem;
+    }
+    #notificationsList {
+      display: grid;
+      gap: 0.45rem;
+      min-height: 80px;
+    }
+    .notif-row {
+      border: 1px solid rgba(157, 199, 241, 0.24);
+      border-radius: 12px;
+      background: rgba(11, 30, 53, 0.62);
+      padding: 0.55rem 0.65rem;
+      display: grid;
+      grid-template-columns: 22px minmax(0, 1fr) auto;
+      gap: 0.55rem;
+      align-items: start;
+    }
+    .notif-row.unread {
+      border-color: rgba(90, 179, 255, 0.56);
+      box-shadow: 0 0 0 1px rgba(54, 161, 252, 0.18) inset;
+    }
+    .notif-icon {
+      color: #9dd2ff;
+      font-size: 0.98rem;
+      margin-top: 0.12rem;
+    }
+    .notif-text {
+      color: #e8f3ff;
+      font-size: 0.9rem;
+      line-height: 1.3;
+      word-break: break-word;
+      margin: 0;
+    }
+    .notif-meta {
+      color: #9fc3e4;
+      font-size: 0.76rem;
+      margin-top: 0.26rem;
+    }
+    .notif-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      white-space: nowrap;
+    }
+    .notif-link,
+    .notif-read-btn {
+      border: 1px solid rgba(157, 199, 241, 0.3);
+      border-radius: 999px;
+      background: rgba(36, 88, 134, 0.3);
+      color: #e8f3ff;
+      font-size: 0.72rem;
+      padding: 0.2rem 0.54rem;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .empty-line {
+      margin: 0.3rem 0;
+      color: #aac3df;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body data-seo-path="/notifications.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link active" href="notifications.html"><i class="bi bi-bell me-1"></i> Notifications</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="panel">
+      <div class="panel-head">
+        <h1>Notifications</h1>
+        <button id="markAllBtn" type="button">Mark all read</button>
+      </div>
+      <div id="notificationsList"></div>
+    </section>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/notifications.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

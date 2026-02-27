@@ -1,0 +1,82 @@
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #1f3854 0%, #0f1f34 45%, #091423 100%);
+  color: #e7f3ff;
+}
+
+.glass-nav {
+  background: rgba(8, 25, 43, 0.82);
+  border-bottom: 1px solid rgba(147, 196, 243, 0.25);
+}
+
+.upload-shell {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.upload-card {
+  background: rgba(8, 27, 46, 0.88);
+  border: 1px solid rgba(151, 198, 244, 0.28);
+  border-radius: 14px;
+  padding: 1rem;
+}
+
+.upload-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+
+.upload-sub {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: #b7d6f4;
+}
+
+.form-label {
+  color: #d5e9fb;
+}
+
+.form-control,
+.form-select {
+  background: rgba(8, 34, 59, 0.82);
+  border: 1px solid rgba(145, 191, 235, 0.35);
+  color: #ecf7ff;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: rgba(8, 34, 59, 0.9);
+  color: #ecf7ff;
+}
+
+.progress-wrap {
+  margin-top: 0.9rem;
+  display: none;
+}
+
+.progress-wrap.show {
+  display: block;
+}
+
+.progress {
+  background: rgba(79, 121, 157, 0.34);
+}
+
+.progress-text {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  color: #c7dff7;
+}
+
+.status-line {
+  min-height: 1.2rem;
+  margin: 0.65rem 0 0;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .upload-shell {
+    grid-template-columns: 1fr;
+  }
+}

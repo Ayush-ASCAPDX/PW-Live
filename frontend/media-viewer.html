@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Viewer | ASCAPDX</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      --bg: #050c16;
+      --panel: #0b1a2c;
+      --line: rgba(159, 196, 236, 0.22);
+      --text: #eaf5ff;
+      --muted: #9fb7d0;
+      --accent: #39b8ff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      background: var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+      background: #091527;
+    }
+
+    .btn-back {
+      border: 1px solid rgba(142, 187, 232, 0.34);
+      background: rgba(38, 82, 124, 0.38);
+      color: var(--text);
+      border-radius: 10px;
+      padding: 0.42rem 0.72rem;
+      text-decoration: none;
+      font-size: 0.86rem;
+    }
+
+    .label {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .stage {
+      display: grid;
+      place-items: center;
+      padding: 0.9rem;
+    }
+
+    .frame {
+      width: min(1200px, 96vw);
+      height: max(100vh, 900px);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #040b14;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .media-video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #02070d;
+    }
+
+    .media-image {
+
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      background: #02070d;
+    }
+
+    .empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 1rem;
+      line-height: 1.4;
+    }
+  </style>
+</head>
+<body data-seo-path="/media-viewer.html">
+  <header class="topbar">
+    <a class="btn-back" href="chat.html">Back to Chat</a>
+    <span id="mediaTypeLabel" class="label">Media</span>
+  </header>
+  <main class="stage">
+    <section id="frame" class="frame"></section>
+  </main>
+
+  <script>
+    function sanitizeUrl(url) {
+      const raw = String(url || "").trim();
+      if (!raw) return "";
+      const allowed = ["http://", "https://", "/", "assets/", "./assets/", "blob:", "data:image/", "data:video/"];
+      return allowed.some((prefix) => raw.startsWith(prefix)) ? raw : "";
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const type = (params.get("type") || "").toLowerCase();
+    const src = sanitizeUrl(params.get("src") || "");
+    const frame = document.getElementById("frame");
+    const label = document.getElementById("mediaTypeLabel");
+
+    if (!src || (type !== "image" && type !== "video")) {
+      frame.innerHTML = '<p class="empty">Invalid media request.</p>';
+    } else if (type === "image") {
+      label.textContent = "Image";
+      frame.innerHTML = `<img class="media-image" src="${src}" alt="Chat image">`;
+    } else {
+      label.textContent = "Video";
+      frame.innerHTML = `<video class="media-video" src="${src}" controls playsinline preload="metadata"></video>`;
+    }
+  </script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

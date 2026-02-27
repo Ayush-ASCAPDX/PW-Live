@@ -1,0 +1,2809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap");
+
+    :root {
+      --panel: rgba(14, 30, 51, 0.78);
+      --line: rgba(153, 197, 244, 0.22);
+      --text: #eaf5ff;
+      --muted: #a8c3de;
+      --primary: #31c0ff;
+      --secondary: #46e0b6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      background: radial-gradient(circle at 80% -25%, #1b3c65 0%, #0a1528 45%, #050a12 100%);
+    }
+
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 40;
+      background: linear-gradient(120deg, rgba(7, 18, 34, 0.86), rgba(11, 26, 46, 0.62));
+      border-bottom: 1px solid rgba(196, 220, 250, 0.16);
+      backdrop-filter: blur(14px);
+    }
+
+    .navbar-brand,
+    h1 {
+      font-family: "Sora", sans-serif;
+    }
+
+    .nav-link {
+      border-radius: 999px;
+      padding: 0.5rem 110px;
+      color: #e8f3ff !important;
+      font-size: 16px;
+      transition: background-color 160ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(64, 168, 255, 0.2);
+    }
+
+    .user-search-form {
+      position: relative;
+      margin-right: 0.55rem;
+      min-width: 220px;
+    }
+
+    .user-search-input {
+      border-radius: 999px;
+      padding-left: 0.85rem;
+      padding-right: 2rem;
+      font-size: 0.88rem;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(98, 130, 166, 0.28);
+      color: #dcedff;
+      font-size: 0.9rem;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .clear-search-btn.show {
+      display: inline-flex;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 6.5rem 1rem 1rem;
+    }
+
+    .profile-shell {
+      position: relative;
+      width: min(860px, 94vw);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(145deg, var(--panel), rgba(8, 20, 36, 0.7));
+      box-shadow: 0 20px 45px rgba(2, 8, 16, 0.4);
+      padding: 1.2rem;
+    }
+
+    .profile-actions {
+      position: absolute;
+      top: 0.85rem;
+      right: 0.85rem;
+      z-index: 3;
+    }
+
+    .menu-trigger {
+      width: 36px;
+      height: 36px;
+      border: 0;
+      background: transparent;
+      display: inline-flex;
+      
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 0;
+      opacity: 0.92;
+      transition: opacity 140ms ease;
+    }
+
+    .menu-trigger:hover {
+      opacity: 1;
+    }
+
+    .menu-trigger span {
+      display: block;
+      width: 2.2px;
+      height: 19px;
+      background: #f2f8ff;
+      border-radius: 999px;
+      margin: 0 2.8px;
+    }
+
+    .profile-menu {
+      position: absolute;
+      top: calc(100% + 0.35rem);
+      right: 0;
+      width: 180px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(7, 20, 36, 0.96);
+      box-shadow: 0 14px 30px rgba(0, 0, 0, 0.38);
+      padding: 0.35rem;
+      display: none;
+    }
+
+    .profile-menu.show {
+      display: block;
+    }
+
+    .menu-item {
+      width: 100%;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text);
+      text-align: left;
+      padding: 0.5rem 0.6rem;
+      cursor: pointer;
+      font-size: 0.92rem;
+    }
+
+    .menu-item:hover {
+      background: rgba(62, 172, 255, 0.18);
+    }
+
+    .menu-item.danger {
+      color: #ffd2d2;
+    }
+
+    .menu-item.danger:hover {
+      background: rgba(168, 62, 62, 0.28);
+    }
+
+    .menu-count-badge {
+      float: right;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 0.35rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #06202f;
+      background: linear-gradient(120deg, #78d7ff, #4ce8c0);
+      border: 1px solid rgba(170, 233, 255, 0.6);
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.1rem;
+      flex-wrap: wrap;
+    }
+
+    .cover-preview {
+      width: 100%;
+      height: 170px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 1px solid var(--line);
+      background: #0b223c;
+      margin-bottom: 0.85rem;
+      cursor: pointer;
+    }
+
+    .avatar {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(163, 214, 255, 0.5);
+      background: #0b223c;
+      cursor: pointer;
+    }
+
+    .name {
+      font-size: 1.08rem;
+      font-weight: 700;
+      margin-bottom: 0.1rem;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 0.94rem;
+      margin-bottom: 0;
+    }
+
+    .profile-links {
+      margin-top: 0.35rem;
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-link-chip {
+      border: 1px solid rgba(153, 197, 244, 0.28);
+      border-radius: 999px;
+      background: rgba(9, 25, 45, 0.62);
+      color: #d8ecff;
+      font-size: 0.75rem;
+      padding: 0.18rem 0.5rem;
+      text-decoration: none;
+    }
+
+    .profile-link-chip:hover {
+      background: rgba(54, 130, 202, 0.35);
+      color: #fff;
+    }
+
+    .stats {
+      display: flex;
+      gap: 0.7rem;
+      margin-top: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-box {
+      border: 1px solid var(--line);
+      background: rgba(8, 24, 42, 0.72);
+      border-radius: 10px;
+      padding: 0.35rem 0.7rem;
+      min-width: 88px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .stat-box strong {
+      display: block;
+      line-height: 1.05;
+    }
+
+    .stat-box span {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .quick-actions {
+      display: flex;
+      gap: 0.55rem;
+      margin-top: 0.55rem;
+      flex-wrap: wrap;
+    }
+
+    .quick-btn {
+      border: 1px solid rgba(154, 220, 255, 0.32);
+      border-radius: 999px;
+      padding: 0.28rem 0.78rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #e7f4ff;
+      background: rgba(18, 48, 78, 0.55);
+      cursor: pointer;
+    }
+
+    .quick-btn:hover {
+      background: rgba(35, 88, 137, 0.62);
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    .quick-btn:focus-visible,
+    .stat-box:focus-visible,
+    .post-filter-chip:focus-visible,
+    .menu-item:focus-visible,
+    .btn-follow:focus-visible,
+    .btn-unfollow:focus-visible {
+      outline: 2px solid #7fd0ff;
+      outline-offset: 2px;
+      box-shadow: 0 0 0 3px rgba(67, 187, 255, 0.25);
+    }
+
+    @media (max-width: 640px) {
+      .glass-nav {
+        display: none;
+      }
+
+      main {
+        padding: 0.75rem 0.55rem 5.7rem;
+      }
+
+      .profile-shell {
+        padding: 0.85rem;
+      }
+
+      .stats {
+        gap: 0.45rem;
+      }
+
+      .stat-box {
+        min-width: 82px;
+        padding: 0.48rem 0.65rem;
+      }
+
+      .quick-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .quick-btn,
+      .post-filter-chip,
+      .btn-follow,
+      .btn-unfollow {
+        min-height: 40px;
+      }
+
+      .mobile-bottom-nav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 85;
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 0.2rem;
+        padding: 0.42rem 0.36rem calc(0.42rem + env(safe-area-inset-bottom));
+        background: linear-gradient(140deg, rgba(6, 20, 36, 0.96), rgba(12, 32, 56, 0.96));
+        border-top: 1px solid rgba(153, 197, 244, 0.26);
+        backdrop-filter: blur(10px);
+      }
+
+      .mobile-bottom-link {
+        color: #dbeeff;
+        text-decoration: none;
+        border-radius: 12px;
+        min-height: 48px;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        gap: 0.16rem;
+        font-size: 0.68rem;
+        line-height: 1;
+      }
+
+      .mobile-bottom-link i {
+        font-size: 1rem;
+      }
+
+      .mobile-bottom-link.active {
+        background: rgba(55, 197, 255, 0.22);
+        color: #ffffff;
+      }
+    }
+
+    .form-label {
+      color: #d9ecff;
+      margin-bottom: 0.35rem;
+      font-weight: 600;
+    }
+
+    .form-control {
+      background: rgba(7, 20, 36, 0.85);
+      border: 1px solid rgba(157, 199, 241, 0.25);
+      color: var(--text);
+    }
+
+    .form-control::placeholder {
+      color: #80a6ca;
+    }
+
+    .form-control:focus {
+      background: rgba(7, 20, 36, 0.95);
+      color: var(--text);
+      border-color: rgba(80, 194, 255, 0.72);
+      box-shadow: 0 0 0 0.2rem rgba(59, 192, 255, 0.24);
+    }
+
+    .actions {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-form-hidden {
+      display: none;
+    }
+
+    .btn-save {
+      border: none;
+      color: #03263f;
+      font-weight: 700;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+    }
+
+    .status {
+      min-height: 1.4rem;
+      color: #8cefc5;
+      font-size: 0.95rem;
+      margin-top: 0.4rem;
+    }
+
+    .posts-panel {
+      margin-top: 1.2rem;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 0.9rem;
+      background: rgba(7, 21, 38, 0.64);
+    }
+
+    .posts-panel h2 {
+      font-size: 1.05rem;
+      margin: 0;
+      font-family: "Sora", sans-serif;
+    }
+
+    .posts-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin: 0 0 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .posts-filters {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .post-filter-chip {
+      border: 1px solid rgba(160, 206, 250, 0.34);
+      border-radius: 999px;
+      background: rgba(12, 33, 56, 0.66);
+      color: #dbeeff;
+      font-size: 0.76rem;
+      padding: 0.2rem 0.56rem;
+      cursor: pointer;
+    }
+
+    .post-filter-chip.active {
+      border-color: rgba(157, 224, 255, 0.58);
+      background: rgba(54, 186, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 0.65rem;
+    }
+
+    .post-card {
+      border: 1px solid var(--line);
+      background: rgba(9, 25, 45, 0.8);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .post-media {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      background: #071426;
+    }
+
+    .post-meta {
+      padding: 0.5rem 0.6rem 0.6rem;
+    }
+
+    .post-caption {
+      margin: 0;
+      font-size: 0.83rem;
+      line-height: 1.3;
+      color: #dceeff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .post-sub {
+      margin-top: 0.3rem;
+      font-size: 0.75rem;
+      color: var(--muted);
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      border: 1px solid var(--line);
+      background: rgba(9, 25, 45, 0.8);
+      border-radius: 12px;
+      padding: 0.45rem 0.55rem;
+    }
+
+    .user-main {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(162, 211, 255, 0.42);
+    }
+
+    .user-meta {
+      line-height: 1.1;
+      min-width: 0;
+    }
+
+    .user-link {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .user-link:hover {
+      text-decoration: underline;
+      text-decoration-color: rgba(173, 221, 255, 0.65);
+    }
+
+    .user-meta strong {
+      display: block;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 170px;
+    }
+
+    .user-meta span {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .presence-pill {
+      display: inline-block;
+      margin-top: 0.2rem;
+      padding: 0.08rem 0.38rem;
+      border-radius: 999px;
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      color: #b9d6f1;
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .presence-pill.online {
+      border-color: rgba(113, 233, 172, 0.55);
+      color: #7ff1c5;
+      background: rgba(40, 120, 88, 0.26);
+    }
+
+    .btn-follow {
+      border: none;
+      color: #03263f;
+      font-weight: 700;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      padding: 0.33rem 0.8rem;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+    }
+
+    .btn-unfollow {
+      border: 1px solid rgba(170, 203, 241, 0.35);
+      color: #d9ecff;
+      background: rgba(72, 101, 133, 0.26);
+      font-weight: 600;
+      font-size: 0.82rem;
+      border-radius: 999px;
+      padding: 0.33rem 0.8rem;
+    }
+
+    .empty-text {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+    }
+
+    .viewer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      background: rgba(1, 7, 14, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .viewer-backdrop.show {
+      display: flex;
+    }
+
+    .viewer-card {
+      width: min(1100px, 96vw);
+      max-height: 95vh;
+      border: 1px solid rgba(153, 197, 244, 0.3);
+      border-radius: 14px;
+      background: rgba(5, 16, 29, 0.96);
+      overflow: auto;
+      padding: 0.75rem;
+    }
+
+    .viewer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .viewer-close {
+      border: 1px solid rgba(173, 205, 241, 0.4);
+      border-radius: 9px;
+      background: rgba(36, 70, 104, 0.4);
+      color: #e8f3ff;
+      padding: 0.25rem 0.6rem;
+      cursor: pointer;
+    }
+
+    .viewer-media-wrap {
+      position: relative;
+      width: 100%;
+      height: min(76vh, 720px);
+      border-radius: 10px;
+      border: 1px solid rgba(153, 197, 244, 0.2);
+      background: #02070d;
+      overflow: hidden;
+    }
+
+    .viewer-media {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #02070d;
+    }
+
+    .viewer-meta {
+      margin-top: 0.65rem;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .viewer-user {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: #eaf5ff;
+      text-decoration: none;
+      width: fit-content;
+    }
+
+    .viewer-user img {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(162, 211, 255, 0.42);
+    }
+
+    .viewer-caption {
+      color: #dceeff;
+      font-size: 0.88rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    .viewer-sub {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin: 0;
+    }
+
+    .viewer-meta .post-actions {
+      margin-top: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .viewer-meta .post-actions-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .viewer-meta .post-action-btn {
+      border: 1px solid rgba(153, 197, 244, 0.25);
+      border-radius: 999px;
+      background: rgba(12, 30, 52, 0.78);
+      color: #d8ecff;
+      font-size: 0.8rem;
+      padding: 0.28rem 0.58rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      cursor: pointer;
+    }
+
+    .viewer-meta .post-action-btn.active {
+      border-color: rgba(120, 235, 198, 0.45);
+      background: rgba(23, 68, 56, 0.55);
+    }
+
+    .viewer-meta .comment-form {
+      margin-top: 0.4rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .viewer-meta .btn-comment {
+      border: none;
+      min-width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(120deg, rgba(50, 191, 255, 0.8), rgba(70, 224, 182, 0.72));
+      color: #022037;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .viewer-meta .comments-list {
+      margin-top: 0.35rem;
+      display: grid;
+      gap: 0.36rem;
+      max-height: 220px;
+      overflow: auto;
+    }
+
+    .viewer-meta .comment-item {
+      border: 1px solid rgba(153, 197, 244, 0.16);
+      background: rgba(8, 22, 39, 0.78);
+      border-radius: 9px;
+      padding: 0.36rem 0.46rem;
+      font-size: 0.8rem;
+      color: #deefff;
+    }
+
+    .viewer-meta .comment-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.45rem;
+      align-items: flex-start;
+    }
+
+    .viewer-meta .comment-row span {
+      color: var(--muted);
+      margin-left: 0.4rem;
+      font-size: 0.72rem;
+    }
+
+    .viewer-meta .btn-delete {
+      border: 1px solid rgba(255, 160, 160, 0.35);
+      background: rgba(82, 32, 32, 0.52);
+      color: #ffd7d7;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      padding: 0.14rem 0.4rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .popup-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(2, 8, 16, 0.72);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .popup-backdrop.show {
+      display: flex;
+    }
+
+    /* Keep share modal above fullscreen post viewer */
+    #shareModal {
+      z-index: 160;
+    }
+
+    .popup-card {
+      width: min(560px, 96vw);
+      max-height: 78vh;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(14, 30, 51, 0.95), rgba(8, 20, 36, 0.94));
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popup-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .popup-head h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-family: "Sora", sans-serif;
+    }
+
+    .popup-close {
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      background: rgba(73, 111, 149, 0.25);
+      color: #eaf5ff;
+      border-radius: 8px;
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+    }
+
+    .popup-list {
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+  </style>
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/profile.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex user-search-form" role="search" onsubmit="return false;">
+              <input id="userSearchInput" class="form-control user-search-input" type="search" style="display: none;" placeholder="Search users...">
+              <button id="clearUserSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">x</button>
+            </form>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <!-- <li class="nav-item"><a class="nav-link" href="video-call.html">Video Call</a></li> -->
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+          <li class="nav-item"><a class="nav-link active" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main data-scroll-container>
+    <section class="profile-shell">
+      <div class="profile-actions">
+        <button id="profileMenuBtn" class="menu-trigger" style="border-radius: 12px;background-color: #16294094;" type="button" aria-label="Profile options" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+        <div id="profileMenu" class="profile-menu" role="menu" aria-hidden="true">
+          <button id="menuEditProfileBtn" class="menu-item" type="button" role="menuitem">Edit profile</button>
+          <button id="menuChangePasswordBtn" class="menu-item" type="button" role="menuitem">Change password</button>
+          <button id="menuSecurityBtn" class="menu-item" type="button" role="menuitem">Security activity</button>
+          <button id="menuSessionsBtn" class="menu-item" type="button" role="menuitem">Active sessions</button>
+          <button id="menuBlockedUsersBtn" class="menu-item" type="button" role="menuitem">Blocked users <span id="blockedUsersCountBadge" class="menu-count-badge">0</span></button>
+          <a href="settings.html" class="menu-item" role="menuitem" style="display:block;text-decoration:none;">Settings</a>
+          <a href="insights.html" class="menu-item" role="menuitem" style="display:block;text-decoration:none;">Insights</a>
+          <a href="manage-posts.html" class="menu-item" role="menuitem" style="display:block;text-decoration:none;">Manage Posts</a>
+          <button id="menuMyReportsBtn" class="menu-item" type="button" role="menuitem">My reports</button>
+          <button id="menuModerationBtn" class="menu-item" type="button" role="menuitem">Moderation panel</button>
+          <button id="menuExportDataBtn" class="menu-item" type="button" role="menuitem">Download my data</button>
+          <a id="menuAboutBtn" class="menu-item"style="text-decoration: none;padding-right: 6rem;" role="menuitem" href="projects/Aboutfull.html">About us</a>
+          <button id="menuDeleteAccountBtn" class="menu-item danger" type="button" role="menuitem">Delete account</button>
+        </div>
+      </div>
+
+      <div class="head">
+        <img id="previewCover" class="cover-preview" src="" alt="Profile cover preview" style="display:none;" role="button" tabindex="0" aria-label="Open cover fullscreen">
+        <img id="previewAvatar" class="avatar" src="assets/default-avatar.svg" alt="Profile avatar preview" role="button" tabindex="0" aria-label="Open avatar fullscreen">
+        <div>
+          <div id="previewName" class="name">Your Profile</div>
+          <p class="muted">Update your profile and follow people like Instagram style.</p>
+          <div id="previewLinks" class="profile-links"></div>
+          <div class="stats">
+            <div class="stat-box" id="postsStat"><strong id="postsCount">0</strong><span>Posts</span></div>
+            <div class="stat-box" id="followersStat"><strong id="followersCount">0</strong><span>Followers</span></div>
+            <div class="stat-box" id="followingStat"><strong id="followingCount">0</strong><span>Following</span></div>
+          </div>
+          <div class="quick-actions">
+            <button id="quickEditBtn" class="quick-btn" type="button">Edit profile</button>
+            <button id="quickSessionsBtn" class="quick-btn" type="button">Sessions</button>
+            <button id="quickSecurityBtn" class="quick-btn" type="button">Security</button>
+          </div>
+        </div>
+      </div>
+
+      <form id="profileForm" novalidate>
+        <div class="mb-3">
+          <label for="displayName" class="form-label">Display Name</label>
+          <input id="displayName" class="form-control" type="text" maxlength="50" placeholder="Your name">
+        </div>
+        <div class="mb-3">
+          <label for="bio" class="form-label">Bio</label>
+          <textarea id="bio" class="form-control" rows="3" maxlength="220" placeholder="A short intro about you"></textarea>
+        </div>
+        <div class="mb-3">
+          <label for="avatarUrl" class="form-label">Avatar URL</label>
+          <input id="avatarUrl" class="form-control" type="url" placeholder="https://example.com/avatar.png">
+        </div>
+        <div class="mb-3">
+          <label for="coverImageUrl" class="form-label">Cover Image URL</label>
+          <input id="coverImageUrl" class="form-control" type="url" placeholder="https://example.com/cover.jpg">
+        </div>
+        <div class="mb-3">
+          <label for="websiteUrl" class="form-label">Website</label>
+          <input id="websiteUrl" class="form-control" type="url" placeholder="https://your-portfolio.com">
+        </div>
+        <div class="mb-3">
+          <label for="socialInstagram" class="form-label">Instagram URL</label>
+          <input id="socialInstagram" class="form-control" type="url" placeholder="https://instagram.com/yourname">
+        </div>
+        <div class="mb-3">
+          <label for="socialLinkedin" class="form-label">LinkedIn URL</label>
+          <input id="socialLinkedin" class="form-control" type="url" placeholder="https://linkedin.com/in/yourname">
+        </div>
+        <div class="mb-3">
+          <label for="socialGithub" class="form-label">GitHub URL</label>
+          <input id="socialGithub" class="form-control" type="url" placeholder="https://github.com/yourname">
+        </div>
+        <div class="mb-3">
+          <label for="socialX" class="form-label">X URL</label>
+          <input id="socialX" class="form-control" type="url" placeholder="https://x.com/yourname">
+        </div>
+        <div class="mb-3">
+          <label for="themeColor" class="form-label">Theme Color</label>
+          <input id="themeColor" class="form-control form-control-color" type="color" value="#31c0ff" style="width:90px;">
+        </div>
+        <div class="mb-3 form-check">
+          <input id="showOnlineStatus" class="form-check-input" type="checkbox" checked>
+          <label for="showOnlineStatus" class="form-check-label">Show my online status to others</label>
+        </div>
+        <div class="mb-3">
+          <label for="pinnedPostId" class="form-label">Pinned Post</label>
+          <select id="pinnedPostId" class="form-control">
+            <option value="">No pinned post</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="avatarFile" class="form-label">Or Upload Avatar</label>
+          <input id="avatarFile" class="form-control" type="file" accept="image/*">
+        </div>
+        <div class="mb-3">
+          <label for="coverFile" class="form-label">Or Upload Cover</label>
+          <input id="coverFile" class="form-control" type="file" accept="image/*">
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn btn-save">Save Profile</button>
+          <button type="button" id="resetProfile" class="btn btn-outline-light">Reset</button>
+          <button type="button" id="logoutBtn" class="btn btn-outline-danger">Logout</button>
+        </div>
+        <div id="status" class="status"></div>
+      </form>
+
+      <section class="posts-panel">
+        <div class="posts-head">
+          <h2 id="profilePostsHeading">Your Posts</h2>
+          <div id="profilePostsFilters" class="posts-filters">
+            <button type="button" class="post-filter-chip active" data-post-filter="all">All</button>
+            <button type="button" class="post-filter-chip" data-post-filter="image">Images</button>
+            <button type="button" class="post-filter-chip" data-post-filter="video">Videos</button>
+          </div>
+        </div>
+        <div id="profilePostsList" class="posts-grid">
+          <p class="empty-text">Loading posts...</p>
+        </div>
+      </section>
+    </section>
+  </main>
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a class="mobile-bottom-link" href="index.html"><i class="bi bi-house-door"></i><span>Home</span></a>
+    <a class="mobile-bottom-link" href="chat.html"><i class="bi bi-chat-dots"></i><span>Chat</span></a>
+    <a class="mobile-bottom-link" href="posts.html"><i class="bi bi-grid"></i><span>Feed</span></a>
+    <a class="mobile-bottom-link" href="follow-people.html"><i class="bi bi-search"></i><span>People</span></a>
+    <a class="mobile-bottom-link active" href="profile.html"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+  </nav>
+
+  <div id="avatarMediaViewer" class="viewer-backdrop" aria-hidden="true">
+    <div class="viewer-card" role="dialog" aria-modal="true" aria-labelledby="avatarViewerTitle">
+      <div class="viewer-head">
+        <h3 id="avatarViewerTitle" style="margin:0;font-family:'Sora',sans-serif;">Profile Avatar</h3>
+        <button id="avatarViewerCloseBtn" class="viewer-close" type="button">Close</button>
+      </div>
+      <div id="avatarViewerBody"></div>
+    </div>
+  </div>
+
+  <div id="profilePostViewer" class="viewer-backdrop" aria-hidden="true">
+    <div class="viewer-card" role="dialog" aria-modal="true" aria-labelledby="profileViewerTitle">
+      <div class="viewer-head">
+        <h3 id="profileViewerTitle" style="margin:0;font-family:'Sora',sans-serif;">Post</h3>
+        <button id="profileViewerCloseBtn" class="viewer-close" type="button">Close</button>
+      </div>
+      <div id="profileViewerBody"></div>
+    </div>
+  </div>
+
+  <div id="shareModal" class="popup-backdrop" aria-hidden="true">
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="popup-head">
+        <h3 id="shareModalTitle">Share Post</h3>
+        <button id="closeShareModalBtn" class="popup-close" type="button">Close</button>
+      </div>
+      <div style="padding:0.75rem;">
+        <input id="shareSearchInput" class="form-control mb-2" type="search" placeholder="Search followers/following...">
+        <div id="shareUserList" class="popup-list" style="max-height:220px;"></div>
+        <div style="display:flex;gap:0.45rem;flex-wrap:wrap;margin-top:0.8rem;">
+          <button id="shareWhatsappBtn" class="btn btn-success btn-sm" type="button">Send to WhatsApp</button>
+          <button id="shareFacebookBtn" class="btn btn-primary btn-sm" type="button">Share to Facebook</button>
+          <button id="shareInstagramBtn" class="btn btn-secondary btn-sm" type="button">Share to Instagram</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="relationsPopup" class="popup-backdrop" aria-hidden="true">
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <div class="popup-head">
+        <h3 id="popupTitle">Connections</h3>
+        <button id="closePopupBtn" class="popup-close" type="button">Close</button>
+      </div>
+      <div id="popupList" class="popup-list"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/ui-feedback.js"></script>
+  <script>
+    const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+    const username = session ? session.username : "";
+    const userId = session ? session.userId : "";
+
+    const API_ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+    const API_BASE = `${API_ORIGIN}/api/users`;
+    const POSTS_API = `${API_ORIGIN}/api/posts`;
+    const REPORTS_API = `${API_ORIGIN}/api/reports`;
+    const UPLOAD_ENDPOINT = `${API_ORIGIN}/upload`;
+    const uiFeedback = window.UIFeedback || null;
+    const socket = io(API_ORIGIN, (window.APP_CONFIG && window.APP_CONFIG.getSocketOptions && window.APP_CONFIG.getSocketOptions()) || { withCredentials: true });
+
+    const profileForm = document.getElementById("profileForm");
+    const displayName = document.getElementById("displayName");
+    const bio = document.getElementById("bio");
+    const avatarUrl = document.getElementById("avatarUrl");
+    const coverImageUrl = document.getElementById("coverImageUrl");
+    const websiteUrl = document.getElementById("websiteUrl");
+    const socialInstagram = document.getElementById("socialInstagram");
+    const socialLinkedin = document.getElementById("socialLinkedin");
+    const socialGithub = document.getElementById("socialGithub");
+    const socialX = document.getElementById("socialX");
+    const themeColor = document.getElementById("themeColor");
+    const showOnlineStatus = document.getElementById("showOnlineStatus");
+    const pinnedPostId = document.getElementById("pinnedPostId");
+    const avatarFile = document.getElementById("avatarFile");
+    const coverFile = document.getElementById("coverFile");
+    const previewAvatar = document.getElementById("previewAvatar");
+    const previewCover = document.getElementById("previewCover");
+    const previewName = document.getElementById("previewName");
+    const previewLinks = document.getElementById("previewLinks");
+    const statusEl = document.getElementById("status");
+    const popup = document.getElementById("relationsPopup");
+    const popupTitle = document.getElementById("popupTitle");
+    const popupList = document.getElementById("popupList");
+    const profilePostsList = document.getElementById("profilePostsList");
+    const profilePostsHeading = document.getElementById("profilePostsHeading");
+    const avatarMediaViewer = document.getElementById("avatarMediaViewer");
+    const avatarViewerTitle = document.getElementById("avatarViewerTitle");
+    const avatarViewerCloseBtn = document.getElementById("avatarViewerCloseBtn");
+    const avatarViewerBody = document.getElementById("avatarViewerBody");
+    const profilePostViewer = document.getElementById("profilePostViewer");
+    const profileViewerCloseBtn = document.getElementById("profileViewerCloseBtn");
+    const profileViewerBody = document.getElementById("profileViewerBody");
+    const shareModal = document.getElementById("shareModal");
+    const closeShareModalBtn = document.getElementById("closeShareModalBtn");
+    const shareSearchInput = document.getElementById("shareSearchInput");
+    const shareUserList = document.getElementById("shareUserList");
+    const shareWhatsappBtn = document.getElementById("shareWhatsappBtn");
+    const shareFacebookBtn = document.getElementById("shareFacebookBtn");
+    const shareInstagramBtn = document.getElementById("shareInstagramBtn");
+    const profilePostsFilters = document.getElementById("profilePostsFilters");
+    const profileMenuBtn = document.getElementById("profileMenuBtn");
+    const profileMenu = document.getElementById("profileMenu");
+    const menuEditProfileBtn = document.getElementById("menuEditProfileBtn");
+    const menuChangePasswordBtn = document.getElementById("menuChangePasswordBtn");
+    const menuSecurityBtn = document.getElementById("menuSecurityBtn");
+    const menuSessionsBtn = document.getElementById("menuSessionsBtn");
+    const menuBlockedUsersBtn = document.getElementById("menuBlockedUsersBtn");
+    const menuMyReportsBtn = document.getElementById("menuMyReportsBtn");
+    const menuModerationBtn = document.getElementById("menuModerationBtn");
+    const menuExportDataBtn = document.getElementById("menuExportDataBtn");
+    const menuDeleteAccountBtn = document.getElementById("menuDeleteAccountBtn");
+    const blockedUsersCountBadge = document.getElementById("blockedUsersCountBadge");
+    const quickEditBtn = document.getElementById("quickEditBtn");
+    const quickSessionsBtn = document.getElementById("quickSessionsBtn");
+    const quickSecurityBtn = document.getElementById("quickSecurityBtn");
+
+    let currentProfile = null;
+    let selectedAvatarObjectUrl = "";
+    let isAvatarUploading = false;
+    let currentUserPosts = [];
+    let activePostFilter = "all";
+    let onlineUsersSet = new Set();
+    let blockedUsersList = [];
+    let sessionItems = [];
+    let currentProfileViewerPostId = "";
+    let savedPostIds = new Set();
+    let sharePostId = "";
+    let shareRecipients = [];
+
+    profileForm.classList.add("profile-form-hidden");
+
+    function setModerationVisibility(role) {
+      if (!menuModerationBtn) return;
+      menuModerationBtn.style.display = String(role || "user") === "admin" ? "block" : "none";
+    }
+
+    async function refreshCurrentRole() {
+      const storedRole = localStorage.getItem("userRole") || "user";
+      setModerationVisibility(storedRole);
+      try {
+        const me = await fetchJson(`${API_ORIGIN}/api/auth/session`);
+        const role = String((me && me.role) || "user");
+        localStorage.setItem("userRole", role);
+        setModerationVisibility(role);
+      } catch (err) {
+        setModerationVisibility(storedRole);
+      }
+    }
+
+    function updatePreview() {
+      const nameValue = displayName.value.trim() || username;
+      const avatarValue = avatarUrl.value.trim();
+      const coverValue = coverImageUrl.value.trim();
+      previewName.textContent = nameValue;
+      previewAvatar.src = avatarValue || "assets/default-avatar.svg";
+      previewAvatar.onerror = () => {
+        previewAvatar.src = "assets/default-avatar.svg";
+      };
+      if (coverValue) {
+        previewCover.style.display = "block";
+        previewCover.src = coverValue;
+      } else {
+        previewCover.style.display = "none";
+        previewCover.removeAttribute("src");
+      }
+      previewCover.onerror = () => {
+        previewCover.style.display = "none";
+      };
+      const chips = [];
+      const maybePush = (href, label) => {
+        const raw = String(href || "").trim();
+        if (!/^https?:\/\//i.test(raw)) return;
+        chips.push(`<a class="profile-link-chip" href="${escapeHtml(raw)}" target="_blank" rel="noopener noreferrer">${label}</a>`);
+      };
+      maybePush(websiteUrl.value, "Website");
+      maybePush(socialInstagram.value, "Instagram");
+      maybePush(socialLinkedin.value, "LinkedIn");
+      maybePush(socialGithub.value, "GitHub");
+      maybePush(socialX.value, "X");
+      previewLinks.innerHTML = chips.join("");
+
+      const color = String(themeColor.value || "#31c0ff");
+      document.documentElement.style.setProperty("--primary", color);
+      document.querySelector(".profile-shell").style.borderColor = `${color}66`;
+    }
+
+    function closeProfileMenu() {
+      profileMenu.classList.remove("show");
+      profileMenu.setAttribute("aria-hidden", "true");
+      profileMenuBtn.setAttribute("aria-expanded", "false");
+    }
+
+    function openProfileMenu() {
+      profileMenu.classList.add("show");
+      profileMenu.setAttribute("aria-hidden", "false");
+      profileMenuBtn.setAttribute("aria-expanded", "true");
+    }
+
+    function refreshStats() {
+      const followersCount = currentProfile ? currentProfile.followersCount : 0;
+      const followingCount = currentProfile ? currentProfile.followingCount : 0;
+      const scheduledCount = currentUserPosts.filter((post) => isScheduledPost(post)).length;
+      document.getElementById("followersCount").textContent = followersCount;
+      document.getElementById("followingCount").textContent = followingCount;
+      document.getElementById("postsCount").textContent = String(currentUserPosts.length);
+      if (profilePostsHeading) {
+        profilePostsHeading.textContent = scheduledCount > 0 ? `Your Posts (${scheduledCount} scheduled)` : "Your Posts";
+      }
+    }
+
+    function refreshBlockedMenuCount() {
+      if (!blockedUsersCountBadge) return;
+      blockedUsersCountBadge.textContent = String(blockedUsersList.length || 0);
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatPostDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function formatDateTime(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
+    }
+
+    function isScheduledPost(post) {
+      if (!post || !post.publishAt) return false;
+      if (post.isPublished === false) return true;
+      const publishAtTime = new Date(post.publishAt).getTime();
+      if (Number.isNaN(publishAtTime)) return false;
+      return publishAtTime > Date.now();
+    }
+
+    function timeAgo(value) {
+      if (!value) return "just now";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "just now";
+      const sec = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (sec < 60) return `${Math.max(sec, 1)}s ago`;
+      const min = Math.floor(sec / 60);
+      if (min < 60) return `${min}m ago`;
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return `${hr}h ago`;
+      const day = Math.floor(hr / 24);
+      return `${day}d ago`;
+    }
+
+    function getProfilePostById(postId) {
+      return currentUserPosts.find((post) => String(post.id || "") === String(postId || "")) || null;
+    }
+
+    function detectMediaKind(url) {
+      const raw = String(url || "").trim().toLowerCase();
+      if (!raw) return "image";
+      if (raw.startsWith("data:video/")) return "video";
+      if (raw.startsWith("data:image/")) return "image";
+      const clean = raw.split("?")[0].split("#")[0];
+      if (/\.(mp4|webm|ogg|mov|m4v|mkv)$/.test(clean)) return "video";
+      return "image";
+    }
+
+    function openProfileMediaViewer(options = {}) {
+      if (!avatarMediaViewer || !avatarViewerBody) return;
+      const source = String(options.source || "").trim();
+      const fallback = String(options.fallback || "assets/default-avatar.svg").trim();
+      const title = String(options.title || "Profile Media").trim();
+      const alt = String(options.alt || "Profile media").trim();
+      const mediaUrl = source || fallback;
+      const kind = detectMediaKind(mediaUrl);
+
+      avatarViewerBody.innerHTML = kind === "video"
+        ? `<div class="viewer-media-wrap"><video class="viewer-media" src="${escapeHtml(mediaUrl)}" controls loop playsinline preload="metadata"></video></div>`
+        : `<div class="viewer-media-wrap"><img class="viewer-media" src="${escapeHtml(mediaUrl)}" alt="${escapeHtml(alt)}" onerror="this.src='${escapeHtml(fallback)}'"></div>`;
+
+      if (avatarViewerTitle) avatarViewerTitle.textContent = title;
+      avatarMediaViewer.classList.add("show");
+      avatarMediaViewer.setAttribute("aria-hidden", "false");
+    }
+
+    function openAvatarViewer() {
+      openProfileMediaViewer({
+        source: String(avatarUrl.value || (currentProfile && currentProfile.avatarUrl) || previewAvatar.src || "").trim(),
+        fallback: "assets/default-avatar.svg",
+        title: "Profile Avatar",
+        alt: "Profile avatar"
+      });
+    }
+
+    function openCoverViewer() {
+      openProfileMediaViewer({
+        source: String(coverImageUrl.value || (currentProfile && currentProfile.coverImageUrl) || previewCover.src || "").trim(),
+        fallback: "assets/default-avatar.svg",
+        title: "Profile Cover",
+        alt: "Profile cover"
+      });
+    }
+
+    function closeAvatarViewer() {
+      if (!avatarMediaViewer || !avatarViewerBody) return;
+      avatarMediaViewer.classList.remove("show");
+      avatarMediaViewer.setAttribute("aria-hidden", "true");
+      avatarViewerBody.innerHTML = "";
+    }
+
+    function getPostShareUrl(postId) {
+      const baseUrl = new URL("posts.html", window.location.href);
+      return `${baseUrl.origin}${baseUrl.pathname}#post-${encodeURIComponent(String(postId || ""))}`;
+    }
+
+    function getRoom(user1, user2) {
+      return [String(user1 || ""), String(user2 || "")].sort().join("_");
+    }
+
+    function buildPostShareMessage(postId) {
+      const post = getProfilePostById(postId);
+      if (!post) return null;
+      const payload = {
+        type: "post_share",
+        postId: String(post.id || ""),
+        authorUsername: String(post.authorUsername || username),
+        authorDisplayName: String((currentProfile && currentProfile.name) || username),
+        authorVerified: !!(currentProfile && currentProfile.isVerified),
+        caption: String(post.caption || ""),
+        mediaUrl: String(post.mediaUrl || ""),
+        mediaType: post.mediaType === "video" ? "video" : "image",
+        createdAt: post.createdAt || null
+      };
+      return `__ASCAPDX_POST_SHARE__::${encodeURIComponent(JSON.stringify(payload))}`;
+    }
+
+    function getShareRecipients() {
+      const map = new Map();
+      const addUser = (raw) => {
+        if (!raw) return;
+        const uname = String(raw.username || "").trim();
+        if (!uname || uname === username) return;
+        if (!map.has(uname)) {
+          map.set(uname, {
+            username: uname,
+            name: String(raw.name || raw.displayName || uname),
+            avatarUrl: String(raw.avatarUrl || raw.profilePic || "assets/default-avatar.svg")
+          });
+        }
+      };
+
+      (currentProfile && currentProfile.followers ? currentProfile.followers : []).forEach(addUser);
+      (currentProfile && currentProfile.following ? currentProfile.following : []).forEach(addUser);
+      return Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    function renderShareRecipients(query = "") {
+      if (!shareUserList) return;
+      const q = String(query || "").trim().toLowerCase();
+      const shown = q
+        ? shareRecipients.filter((u) => String(u.username || "").toLowerCase().includes(q) || String(u.name || "").toLowerCase().includes(q))
+        : shareRecipients;
+      if (!shown.length) {
+        shareUserList.innerHTML = '<p class="empty-text">No users found.</p>';
+        return;
+      }
+      shareUserList.innerHTML = shown.map((u) => `
+        <div class="user-row">
+          <div class="user-main">
+            <img class="user-avatar" src="${escapeHtml(u.avatarUrl || "assets/default-avatar.svg")}" alt="${escapeHtml(u.username)} avatar" onerror="this.src='assets/default-avatar.svg'">
+            <div class="user-meta">
+              <strong>${escapeHtml(u.name || u.username)}</strong>
+              <span>@${escapeHtml(u.username)}</span>
+            </div>
+          </div>
+          <button class="btn-follow" type="button" data-share-user="${escapeHtml(u.username)}">Send</button>
+        </div>
+      `).join("");
+    }
+
+    function openShareModal(postId) {
+      sharePostId = String(postId || "");
+      if (!shareModal || !sharePostId) return;
+      shareRecipients = getShareRecipients();
+      if (shareSearchInput) shareSearchInput.value = "";
+      renderShareRecipients("");
+      shareModal.classList.add("show");
+      shareModal.setAttribute("aria-hidden", "false");
+    }
+
+    function closeShareModal() {
+      if (!shareModal) return;
+      shareModal.classList.remove("show");
+      shareModal.setAttribute("aria-hidden", "true");
+    }
+
+    function isDeletedUserError(payload) {
+      const text = String((payload && payload.error) || (payload && payload.message) || "").toLowerCase();
+      return text.includes("user not found") || text.includes("users not found");
+    }
+
+    function removeDeletedShareRecipient(targetUsername) {
+      const target = String(targetUsername || "").trim();
+      if (!target) return;
+      shareRecipients = (Array.isArray(shareRecipients) ? shareRecipients : []).filter((u) => String((u && u.username) || "") !== target);
+      renderShareRecipients(shareSearchInput ? shareSearchInput.value : "");
+    }
+
+    async function trackPostShare(postId) {
+      const id = String(postId || "");
+      if (!id) return;
+      try {
+        await fetchJson(`${POSTS_API}/${encodeURIComponent(id)}/share`, { method: "POST" });
+      } catch (err) {}
+    }
+
+    async function sendPostToUser(targetUsername, btn = null) {
+      const postId = String(sharePostId || "");
+      const target = String(targetUsername || "").trim();
+      if (!postId || !target) return;
+      const message = buildPostShareMessage(postId);
+      if (!message) return;
+      const room = getRoom(username, target);
+      if (btn) {
+        btn.disabled = true;
+        btn.textContent = "Sending...";
+      }
+      try {
+        socket.emit("joinRoom", room);
+        const ack = await new Promise((resolve) => {
+          socket.emit("sendMessage", {
+            sender: username,
+            receiver: target,
+            message,
+            room,
+            isFile: false
+          }, resolve);
+        });
+        if (!(ack && ack.ok)) {
+          if (isDeletedUserError(ack)) removeDeletedShareRecipient(target);
+          throw new Error((ack && ack.error) || "Could not send post in chat.");
+        }
+        await trackPostShare(postId);
+        statusEl.textContent = `Post sent to @${target}.`;
+        if (btn) btn.textContent = "Sent";
+      } catch (err) {
+        statusEl.textContent = String((err && err.message) || "Could not send post in chat.");
+        if (btn) btn.textContent = "Retry";
+      } finally {
+        if (btn) {
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.textContent = "Send";
+          }, 1200);
+        }
+      }
+    }
+
+    async function loadSavedPosts() {
+      try {
+        const posts = await fetchJson(`${POSTS_API}/saved`);
+        const ids = Array.isArray(posts) ? posts.map((p) => String(p.id || "")).filter(Boolean) : [];
+        savedPostIds = new Set(ids);
+      } catch (err) {
+        savedPostIds = new Set();
+      }
+    }
+
+    function updateProfilePostById(postId, updater) {
+      currentUserPosts = currentUserPosts.map((post) => {
+        if (String(post.id || "") !== String(postId || "")) return post;
+        const next = typeof updater === "function" ? updater(post) : post;
+        return {
+          ...next,
+          comments: Array.isArray(next.comments) ? next.comments : [],
+          likesCount: Number(next.likesCount || (Array.isArray(next.likedBy) ? next.likedBy.length : 0) || 0)
+        };
+      });
+    }
+
+    function renderProfileViewer() {
+      if (!profileViewerBody) return;
+      const post = getProfilePostById(currentProfileViewerPostId);
+      if (!post) {
+        profileViewerBody.innerHTML = '<p class="empty-text">Post not found.</p>';
+        return;
+      }
+      const likedByMe = Array.isArray(post.likedBy) && post.likedBy.includes(username);
+      const isSaved = savedPostIds.has(String(post.id || ""));
+      const comments = Array.isArray(post.comments) ? post.comments : [];
+      const isScheduled = isScheduledPost(post);
+      const scheduledLabel = isScheduled
+        ? ` - Scheduled${post.publishAt ? ` (${escapeHtml(formatDateTime(post.publishAt))})` : ""}`
+        : "";
+      const safeMediaUrl = escapeHtml(post.mediaUrl || "");
+      const mediaHtml = String(post.mediaType || "").toLowerCase() === "video"
+        ? `<div class="viewer-media-wrap"><video class="viewer-media" src="${safeMediaUrl}" playsinline controls preload="metadata" loop></video></div>`
+        : `<div class="viewer-media-wrap"><img class="viewer-media" src="${safeMediaUrl}" alt="Post media" onerror="this.src='assets/default-avatar.svg'"></div>`;
+
+      profileViewerBody.innerHTML = `
+        ${mediaHtml}
+        <div class="viewer-meta">
+          <a class="viewer-user" href="user-profile.html?u=${encodeURIComponent(username)}">
+            <img src="${escapeHtml(currentProfile && currentProfile.avatarUrl ? currentProfile.avatarUrl : "assets/default-avatar.svg")}" alt="${escapeHtml(username)} avatar" onerror="this.src='assets/default-avatar.svg'">
+            <span>${escapeHtml(currentProfile && currentProfile.name ? currentProfile.name : username)} <span class="viewer-sub">@${escapeHtml(username)}</span></span>
+          </a>
+          <p class="viewer-caption">${escapeHtml(post.caption || "") || "No caption."}</p>
+          <div class="post-actions">
+            <div class="post-actions-left">
+              <button type="button" class="post-action-btn ${likedByMe ? "active" : ""}" data-profile-viewer-like="${escapeHtml(post.id)}">
+                <i class="bi ${likedByMe ? "bi-heart-fill" : "bi-heart"}"></i><span>Like</span>
+              </button>
+              <button type="button" class="post-action-btn ${isSaved ? "active" : ""}" data-profile-viewer-save="${escapeHtml(post.id)}">
+                <i class="bi ${isSaved ? "bi-bookmark-fill" : "bi-bookmark"}"></i><span>${isSaved ? "Saved" : "Save"}</span>
+              </button>
+              <button type="button" class="post-action-btn" data-profile-viewer-share="${escapeHtml(post.id)}">
+                <i class="bi bi-send"></i><span>Share</span>
+              </button>
+            </div>
+          </div>
+          <p class="viewer-sub">${Number(post.likesCount || 0)} likes - ${comments.length} comments - ${timeAgo(post.createdAt)}${scheduledLabel}</p>
+          <form class="comment-form" data-profile-viewer-comment-form="${escapeHtml(post.id)}">
+            <input class="form-control" name="comment" maxlength="400" placeholder="Write a comment and press send..." required>
+            <button class="btn-comment" type="submit" aria-label="Send comment"><i class="bi bi-send-fill"></i></button>
+          </form>
+          <div class="comments-list">
+            ${comments.length ? comments.map((c) => `
+              <div class="comment-item">
+                <div class="comment-row">
+                  <div><strong>@${escapeHtml(c.username || "user")}</strong> ${escapeHtml(c.text || "")}<span>${timeAgo(c.createdAt)}</span></div>
+                  ${
+                    (String(c.username || "") === username || String(post.authorUsername || "") === username)
+                      ? `<button type="button" class="btn-delete" data-profile-viewer-delete-comment="${escapeHtml(post.id)}" data-comment-id="${escapeHtml(c.id || c._id || "")}">Delete</button>`
+                      : ""
+                  }
+                </div>
+              </div>
+            `).join("") : '<p class="empty-text" style="margin:0;">No comments yet.</p>'}
+          </div>
+          <p id="profileViewerStatus" class="viewer-sub"></p>
+        </div>
+      `;
+    }
+
+    function openProfileViewer(postId) {
+      if (!profilePostViewer || !profileViewerBody) return;
+      currentProfileViewerPostId = String(postId || "");
+      renderProfileViewer();
+      profilePostViewer.classList.add("show");
+      profilePostViewer.setAttribute("aria-hidden", "false");
+    }
+
+    function closeProfileViewer() {
+      if (!profilePostViewer) return;
+      profilePostViewer.classList.remove("show");
+      profilePostViewer.setAttribute("aria-hidden", "true");
+    }
+
+    function getFilteredProfilePosts() {
+      if (activePostFilter === "image") {
+        return currentUserPosts.filter((post) => String(post.mediaType || "").toLowerCase() !== "video");
+      }
+      if (activePostFilter === "video") {
+        return currentUserPosts.filter((post) => String(post.mediaType || "").toLowerCase() === "video");
+      }
+      return currentUserPosts;
+    }
+
+    function syncProfilePostFilterUi() {
+      if (!profilePostsFilters) return;
+      profilePostsFilters.querySelectorAll("[data-post-filter]").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-post-filter") === activePostFilter);
+      });
+    }
+
+    function renderProfilePosts() {
+      if (!currentUserPosts.length) {
+        profilePostsList.innerHTML = '<p class="empty-text">No posts yet.</p>';
+        refreshStats();
+        syncProfilePostFilterUi();
+        return;
+      }
+
+      const shownPosts = getFilteredProfilePosts();
+      if (!shownPosts.length) {
+        profilePostsList.innerHTML = '<p class="empty-text">No posts in this filter.</p>';
+        refreshStats();
+        refreshPinnedPostOptions();
+        syncProfilePostFilterUi();
+        return;
+      }
+
+      profilePostsList.innerHTML = shownPosts.map((post) => {
+        const caption = escapeHtml(post.caption || "");
+        const safeMediaUrl = escapeHtml(post.mediaUrl || "");
+        const mediaType = post.mediaType === "video" ? "video" : "image";
+        const likesCount = Number(post.likesCount || 0);
+        const createdLabel = formatPostDate(post.createdAt);
+        const postId = encodeURIComponent(String(post.id || ""));
+        const isPinned = currentProfile && String(currentProfile.pinnedPostId || "") === String(post.id || "");
+        const isScheduled = isScheduledPost(post);
+        const scheduledLabel = isScheduled
+          ? ` - Scheduled${post.publishAt ? ` (${escapeHtml(formatDateTime(post.publishAt))})` : ""}`
+          : "";
+
+        const mediaHtml = mediaType === "video"
+          ? `<video class="post-media" data-hover-play src="${safeMediaUrl}" muted playsinline preload="metadata" loop></video>`
+          : `<img class="post-media" src="${safeMediaUrl}" alt="Post media" loading="lazy" onerror="this.src='assets/default-avatar.svg'">`;
+
+        return `
+          <article class="post-card" data-post-id="${postId}" role="link" tabindex="0">
+            ${mediaHtml}
+            <div class="post-meta">
+              <p class="post-caption">${caption || "No caption"}</p>
+              <div class="post-sub">${likesCount} likes${createdLabel ? ` - ${escapeHtml(createdLabel)}` : ""}${isPinned ? " - Pinned" : ""}${scheduledLabel}</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      bindHoverVideos(profilePostsList);
+      refreshStats();
+      refreshPinnedPostOptions();
+      syncProfilePostFilterUi();
+    }
+
+    function bindHoverVideos(root = document) {
+      if (!root || typeof root.querySelectorAll !== "function") return;
+      root.querySelectorAll("video[data-hover-play]").forEach((video) => {
+        if (video.dataset.hoverBound === "1") return;
+        video.dataset.hoverBound = "1";
+        video.autoplay = false;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+
+        const startPlayback = () => {
+          const playPromise = video.play();
+          if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+        };
+
+        const stopPlayback = () => {
+          try {
+            video.pause();
+          } catch (err) {}
+          video.currentTime = 0;
+        };
+
+        video.addEventListener("mouseenter", startPlayback);
+        video.addEventListener("mouseleave", stopPlayback);
+        video.addEventListener("focusin", startPlayback);
+        video.addEventListener("focusout", stopPlayback);
+        video.addEventListener("touchstart", startPlayback, { passive: true });
+
+        stopPlayback();
+      });
+    }
+
+    function refreshPinnedPostOptions() {
+      if (!pinnedPostId) return;
+      const selected = String(pinnedPostId.value || (currentProfile && currentProfile.pinnedPostId) || "");
+      const options = ['<option value="">No pinned post</option>'];
+      currentUserPosts.forEach((post) => {
+        const id = String(post.id || "");
+        const caption = String(post.caption || post.createdAt || "Post").trim();
+        const label = caption.length > 50 ? `${caption.slice(0, 50)}...` : caption;
+        options.push(`<option value="${escapeHtml(id)}">${escapeHtml(label || `Post ${id.slice(-6)}`)}</option>`);
+      });
+      pinnedPostId.innerHTML = options.join("");
+      pinnedPostId.value = currentUserPosts.some((p) => String(p.id) === selected) ? selected : "";
+    }
+
+    async function loadUserPosts() {
+      try {
+        const posts = await fetchJson(`${API_ORIGIN}/api/posts/user/${encodeURIComponent(username)}`);
+        currentUserPosts = Array.isArray(posts) ? posts : [];
+        if (currentProfile && currentProfile.pinnedPostId) {
+          const pinId = String(currentProfile.pinnedPostId);
+          currentUserPosts.sort((a, b) => {
+            const aPinned = String(a.id || "") === pinId ? 1 : 0;
+            const bPinned = String(b.id || "") === pinId ? 1 : 0;
+            return bPinned - aPinned;
+          });
+        }
+        renderProfilePosts();
+      } catch (err) {
+        currentUserPosts = [];
+        profilePostsList.innerHTML = '<p class="empty-text">Could not load posts.</p>';
+        refreshStats();
+      }
+    }
+
+    function isFollowing(targetUser) {
+      if (!currentProfile) return false;
+      return (currentProfile.following || []).some((u) => u.username === targetUser);
+    }
+
+    function isRelationUser(targetUser) {
+      if (!currentProfile || !targetUser) return false;
+      const followers = currentProfile.followers || [];
+      const following = currentProfile.following || [];
+      return followers.some((u) => u.username === targetUser) || following.some((u) => u.username === targetUser);
+    }
+
+    function renderPresenceBadge(targetUser, onlyIfRelation = false) {
+      if (!targetUser) return "";
+      if (onlyIfRelation && !isRelationUser(targetUser)) return "";
+      const online = onlineUsersSet.has(targetUser);
+      return `<span class="presence-pill ${online ? "online" : ""}">${online ? "online" : "offline"}</span>`;
+    }
+
+    async function fetchJson(url, options = {}) {
+      const request = window.APP_CONFIG && window.APP_CONFIG.authFetch ? window.APP_CONFIG.authFetch : fetch;
+      const res = await request(url, options);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Request failed");
+      return data;
+    }
+
+    async function uiConfirm(message, options = {}) {
+      if (uiFeedback && typeof uiFeedback.confirm === "function") {
+        return uiFeedback.confirm(String(message || "Are you sure?"), options);
+      }
+      return window.confirm(String(message || "Are you sure?"));
+    }
+
+    async function logoutCurrentSessionAndRedirect() {
+      try {
+        await fetchJson(`${API_ORIGIN}/api/auth/logout`, { method: "POST" });
+      } catch (err) {
+        // no-op: local logout still applies
+      }
+      localStorage.removeItem("username");
+      localStorage.removeItem("userId");
+      localStorage.removeItem("userRole");
+      window.location.href = "login.html";
+    }
+
+    async function uploadAvatarFromDevice(file, onProgress) {
+      if (!file) return;
+      if (!file.type.startsWith("image/")) {
+        throw new Error("Please select an image file.");
+      }
+      if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Image is too large. Max size is 5MB.");
+      }
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      return await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", UPLOAD_ENDPOINT, true);
+        xhr.withCredentials = true;
+        
+        xhr.responseType = "json";
+        xhr.timeout = 60_000;
+
+        xhr.upload.onprogress = (event) => {
+          if (!event.lengthComputable || typeof onProgress !== "function") return;
+          const percent = Math.round((event.loaded / event.total) * 100);
+          onProgress(percent);
+        };
+
+        xhr.onerror = () => reject(new Error("Upload failed. Check server connection and try again."));
+        xhr.ontimeout = () => reject(new Error("Upload timed out. Try a smaller image or retry."));
+        xhr.onabort = () => reject(new Error("Upload was cancelled."));
+
+        xhr.onload = () => {
+          const data = xhr.response || {};
+          if (xhr.status >= 200 && xhr.status < 300 && data.fileUrl) {
+            resolve(data.fileUrl);
+            return;
+          }
+          reject(new Error(data.message || `Upload failed (HTTP ${xhr.status}).`));
+        };
+
+        xhr.send(formData);
+      });
+    }
+
+    async function saveProfile(payload) {
+      const data = await fetchJson(`${API_BASE}/profile/${encodeURIComponent(username)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      currentProfile = data.profile;
+      localStorage.setItem(`profile_${username}`, JSON.stringify({
+        name: currentProfile.name,
+        bio: currentProfile.bio,
+        avatarUrl: currentProfile.avatarUrl
+      }));
+
+      updatePreview();
+      refreshStats();
+      if (socket && socket.connected) {
+        socket.emit("refreshOnlineUsers");
+      }
+      return data;
+    }
+
+    function buildProfilePayload() {
+      return {
+        name: displayName.value.trim() || username,
+        bio: bio.value.trim(),
+        avatarUrl: avatarUrl.value.trim(),
+        coverImageUrl: coverImageUrl.value.trim(),
+        websiteUrl: websiteUrl.value.trim(),
+        socialLinks: {
+          instagram: socialInstagram.value.trim(),
+          linkedin: socialLinkedin.value.trim(),
+          github: socialGithub.value.trim(),
+          x: socialX.value.trim()
+        },
+        themeColor: themeColor.value || "#31c0ff",
+        showOnlineStatus: !!(showOnlineStatus && showOnlineStatus.checked),
+        pinnedPostId: pinnedPostId.value || ""
+      };
+    }
+
+    function getDisplayNameFromUser(user) {
+      return user.name || user.displayName || user.username;
+    }
+
+    function getAvatarFromUser(user) {
+      return user.avatarUrl || user.profilePic || "assets/default-avatar.svg";
+    }
+
+    async function setFollowState(targetUser, follow) {
+      if (!targetUser || targetUser === username) return;
+      const endpoint = follow ? "follow" : "unfollow";
+      const data = await fetchJson(`${API_BASE}/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetUsername: targetUser })
+      });
+      currentProfile = data.profile;
+      localStorage.setItem(`profile_${username}`, JSON.stringify({
+        name: currentProfile.name,
+        bio: currentProfile.bio,
+        avatarUrl: currentProfile.avatarUrl
+      }));
+
+      refreshStats();
+      if (popup.classList.contains("show")) {
+        const activeType = popup.getAttribute("data-type");
+        if (activeType === "blocked") {
+          await openBlockedUsersPopup();
+        } else if (activeType === "my-reports") {
+          await openMyReportsPopup();
+        } else if (activeType) {
+          openRelationsPopup(activeType);
+        }
+      }
+    }
+
+    async function loadBlockedUsers() {
+      const data = await fetchJson(`${API_BASE}/blocks`);
+      blockedUsersList = Array.isArray(data.items) ? data.items : [];
+      refreshBlockedMenuCount();
+      return blockedUsersList;
+    }
+
+    async function unblockUser(targetUser) {
+      if (!targetUser || targetUser === username) return;
+      const data = await fetchJson(`${API_BASE}/unblock`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetUsername: targetUser })
+      });
+      if (Array.isArray(data.items)) {
+        blockedUsersList = data.items;
+      } else if (Array.isArray(data.blocks)) {
+        const set = new Set(data.blocks.map((u) => String(u || "")));
+        blockedUsersList = blockedUsersList.filter((u) => set.has(String(u.username || "")));
+      } else {
+        blockedUsersList = blockedUsersList.filter((u) => u.username !== targetUser);
+      }
+      if (data.profile) {
+        currentProfile = data.profile;
+      }
+      refreshBlockedMenuCount();
+      refreshStats();
+    }
+
+    async function openBlockedUsersPopup() {
+      const users = await loadBlockedUsers();
+      popup.setAttribute("data-type", "blocked");
+      popupTitle.textContent = "Blocked Users";
+      if (!users.length) {
+        popupList.innerHTML = '<p class="empty-text">No blocked users.</p>';
+      } else {
+        popupList.innerHTML = users.map((user) => {
+          const targetUsername = String(user.username || "");
+          const safeUser = targetUsername.replace(/"/g, "&quot;");
+          const profileHref = `user-profile.html?u=${encodeURIComponent(targetUsername)}`;
+          return `
+            <div class="user-row">
+              <div class="user-main">
+                <img class="user-avatar" src="${getAvatarFromUser(user)}" alt="${safeUser} avatar" onerror="this.src='assets/default-avatar.svg'">
+                <div class="user-meta">
+                  <a class="user-link" href="${profileHref}">
+                    <strong>${getDisplayNameFromUser(user)}</strong>
+                    <span>@${targetUsername}</span>
+                  </a>
+                </div>
+              </div>
+              <button class="btn-unfollow" data-unblock-user="${safeUser}">Unblock</button>
+            </div>
+          `;
+        }).join("");
+      }
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+
+    async function openMyReportsPopup() {
+      const data = await fetchJson(`${REPORTS_API}/mine`);
+      const reports = Array.isArray(data.items) ? data.items : [];
+      popup.setAttribute("data-type", "my-reports");
+      popupTitle.textContent = "My Reports";
+
+      if (!reports.length) {
+        popupList.innerHTML = '<p class="empty-text">You have not submitted any reports yet.</p>';
+      } else {
+        popupList.innerHTML = reports.map((item) => {
+          const targetType = escapeHtml(String(item.targetType || "unknown"));
+          const targetUsername = escapeHtml(String(item.targetUsername || ""));
+          const targetId = escapeHtml(String(item.targetId || ""));
+          const reason = escapeHtml(String(item.reason || ""));
+          const status = escapeHtml(String(item.status || "open"));
+          const created = escapeHtml(formatDateTime(item.createdAt));
+          const targetLabel = targetUsername ? `@${targetUsername}` : (targetId ? `ID: ${targetId}` : "Unknown target");
+          return `
+            <article class="user-row" style="display:block;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;">
+                <strong style="font-size:0.9rem;">${targetType.toUpperCase()} - ${targetLabel}</strong>
+                <span class="presence-pill">${status}</span>
+              </div>
+              <div class="muted" style="font-size:0.84rem;margin-top:0.3rem;">Reason: ${reason}</div>
+              <div class="muted" style="font-size:0.76rem;margin-top:0.24rem;">Submitted: ${created}</div>
+            </article>
+          `;
+        }).join("");
+      }
+
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+
+    function formatShort(value) {
+      if (!value) return "Unknown";
+      const d = new Date(value);
+      if (Number.isNaN(d.getTime())) return "Unknown";
+      return d.toLocaleString();
+    }
+
+    function renderSessionActions(session) {
+      const sid = escapeHtml(String(session.id || ""));
+      const labelValue = escapeHtml(String(session.label || ""));
+      const labelInput = `<input type="text" maxlength="64" data-session-label-input="${sid}" value="${labelValue}" placeholder="Device label" style="max-width:180px;">`;
+      if (session.isCurrent) {
+        return `${labelInput}<button class="btn-unfollow" data-session-save-label="${sid}">Save Label</button><button class="btn-unfollow" data-session-revoke="current">Log out this device</button>`;
+      }
+      return `${labelInput}<button class="btn-unfollow" data-session-save-label="${sid}">Save Label</button><button class="btn-unfollow" data-session-revoke-id="${sid}">Revoke</button>`;
+    }
+
+    async function openSessionsPopup() {
+      const data = await fetchJson(`${API_BASE}/sessions`);
+      sessionItems = Array.isArray(data.items) ? data.items : [];
+
+      popup.setAttribute("data-type", "sessions");
+      popupTitle.textContent = "Active Sessions";
+
+      const revokeOthersButton = sessionItems.length > 1
+        ? '<button class="btn btn-outline-light btn-sm mb-2" data-session-revoke-others="1">Log out other devices</button>'
+        : "";
+
+      if (!sessionItems.length) {
+        popupList.innerHTML = '<p class="empty-text">No active sessions found.</p>';
+      } else {
+        popupList.innerHTML = `
+          ${revokeOthersButton}
+          ${sessionItems.map((session) => `
+            <article class="user-row" style="display:block;">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:0.6rem;">
+                <strong style="font-size:0.9rem;">${escapeHtml(session.device || "Device")}${session.isCurrent ? " (This device)" : ""}</strong>
+                ${renderSessionActions(session)}
+              </div>
+              <div class="muted" style="font-size:0.82rem;margin-top:0.2rem;">IP: ${escapeHtml(session.ip || "Unknown")}</div>
+              <div class="muted" style="font-size:0.78rem;margin-top:0.2rem;">Last active: ${escapeHtml(formatShort(session.lastSeenAt))}</div>
+            </article>
+          `).join("")}
+        `;
+      }
+
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+
+    async function exportMyDataFlow() {
+      const data = await fetchJson(`${API_BASE}/export-data`);
+      const pretty = JSON.stringify(data, null, 2);
+      const blob = new Blob([pretty], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `ascapdx-data-${username}-${stamp}.json`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 3000);
+      statusEl.textContent = "Your data export has been downloaded.";
+    }
+
+    function getRelationUsers(type) {
+      if (!currentProfile) return [];
+      if (type === "followers") return currentProfile.followers || [];
+      return currentProfile.following || [];
+    }
+
+    function openRelationsPopup(type) {
+      const isFollowers = type === "followers";
+      const users = getRelationUsers(type);
+      popup.setAttribute("data-type", type);
+      popupTitle.textContent = isFollowers ? "Followers" : "Following";
+      if (!users.length) {
+        popupList.innerHTML = `<p class="empty-text">No ${isFollowers ? "followers" : "following"} yet.</p>`;
+      } else {
+        popupList.innerHTML = users.map(user => {
+          const targetUsername = user.username;
+          const following = isFollowing(targetUsername);
+          const safeUser = targetUsername.replace(/"/g, "&quot;");
+          const profileHref = `user-profile.html?u=${encodeURIComponent(targetUsername)}`;
+          return `
+            <div class="user-row">
+              <div class="user-main">
+                <img class="user-avatar" src="${getAvatarFromUser(user)}" alt="${safeUser} avatar" onerror="this.src='assets/default-avatar.svg'">
+                <div class="user-meta">
+                  <a class="user-link" href="${profileHref}">
+                    <strong>${getDisplayNameFromUser(user)}</strong>
+                    <span>@${targetUsername}</span>
+                  </a>
+                  ${renderPresenceBadge(targetUsername, false)}
+                </div>
+              </div>
+              ${
+                targetUsername === username
+                  ? '<span class="muted" style="font-size:0.8rem;">You</span>'
+                  : `<button class="${following ? "btn-unfollow" : "btn-follow"}" data-user="${safeUser}" data-following="${following ? "1" : "0"}">${following ? "Following" : "Follow"}</button>`
+              }
+            </div>
+          `;
+        }).join("");
+      }
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+
+    function closeRelationsPopup() {
+      popup.classList.remove("show");
+      popup.setAttribute("aria-hidden", "true");
+      popup.removeAttribute("data-type");
+    }
+
+    async function loadProfile() {
+      currentProfile = await fetchJson(`${API_BASE}/profile/${encodeURIComponent(username)}`);
+      displayName.value = currentProfile.name || username;
+      bio.value = currentProfile.bio || "";
+      avatarUrl.value = currentProfile.avatarUrl || "";
+      coverImageUrl.value = currentProfile.coverImageUrl || "";
+      websiteUrl.value = currentProfile.websiteUrl || "";
+      socialInstagram.value = (currentProfile.socialLinks && currentProfile.socialLinks.instagram) || "";
+      socialLinkedin.value = (currentProfile.socialLinks && currentProfile.socialLinks.linkedin) || "";
+      socialGithub.value = (currentProfile.socialLinks && currentProfile.socialLinks.github) || "";
+      socialX.value = (currentProfile.socialLinks && currentProfile.socialLinks.x) || "";
+      themeColor.value = currentProfile.themeColor || "#31c0ff";
+      if (showOnlineStatus) showOnlineStatus.checked = currentProfile.showOnlineStatus !== false;
+      pinnedPostId.value = currentProfile.pinnedPostId || "";
+
+      localStorage.setItem(`profile_${username}`, JSON.stringify({
+        name: currentProfile.name || username,
+        bio: currentProfile.bio || "",
+        avatarUrl: currentProfile.avatarUrl || ""
+      }));
+
+      updatePreview();
+      refreshStats();
+      await loadBlockedUsers();
+      await loadSavedPosts();
+      await loadUserPosts();
+    }
+
+    profileForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (isAvatarUploading) {
+        statusEl.textContent = "Please wait for avatar upload to complete.";
+        return;
+      }
+      try {
+        const selectedFile = avatarFile.files && avatarFile.files[0];
+        if (selectedFile) {
+          isAvatarUploading = true;
+          statusEl.textContent = "Uploading avatar... 0%";
+          const uploadedUrl = await uploadAvatarFromDevice(selectedFile, (percent) => {
+            statusEl.textContent = `Uploading avatar... ${percent}%`;
+          });
+          avatarUrl.value = uploadedUrl;
+          avatarFile.value = "";
+          if (selectedAvatarObjectUrl) {
+            URL.revokeObjectURL(selectedAvatarObjectUrl);
+            selectedAvatarObjectUrl = "";
+          }
+          updatePreview();
+        }
+
+        await saveProfile(buildProfilePayload());
+        statusEl.textContent = "Profile saved.";
+        profileForm.classList.add("profile-form-hidden");
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to save profile.";
+      } finally {
+        isAvatarUploading = false;
+      }
+    });
+
+    document.getElementById("resetProfile").addEventListener("click", async () => {
+      try {
+        const data = await fetchJson(`${API_BASE}/profile/${encodeURIComponent(username)}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            name: username,
+            bio: "",
+            avatarUrl: "",
+            coverImageUrl: "",
+            websiteUrl: "",
+            socialLinks: { instagram: "", linkedin: "", github: "", x: "" },
+            themeColor: "#31c0ff",
+            pinnedPostId: ""
+          })
+        });
+        currentProfile = data.profile;
+        localStorage.setItem(`profile_${username}`, JSON.stringify({
+          name: currentProfile.name,
+          bio: currentProfile.bio,
+          avatarUrl: currentProfile.avatarUrl
+        }));
+        await loadProfile();
+        statusEl.textContent = "Profile reset.";
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to reset profile.";
+      }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      await logoutCurrentSessionAndRedirect();
+    });
+
+    popupList.addEventListener("click", async (event) => {
+      const unblockBtn = event.target.closest("button[data-unblock-user]");
+      if (unblockBtn) {
+        const target = unblockBtn.getAttribute("data-unblock-user");
+        if (!target) return;
+        try {
+          await unblockUser(target);
+          statusEl.textContent = `Unblocked @${target}.`;
+          await openBlockedUsersPopup();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to unblock user.";
+        }
+        return;
+      }
+
+      const button = event.target.closest("button[data-user]");
+      const revokeCurrentBtn = event.target.closest("button[data-session-revoke='current']");
+      if (revokeCurrentBtn) {
+        await logoutCurrentSessionAndRedirect();
+        return;
+      }
+
+      const revokeOtherBtn = event.target.closest("button[data-session-revoke-id]");
+      if (revokeOtherBtn) {
+        const sessionId = revokeOtherBtn.getAttribute("data-session-revoke-id");
+        if (!sessionId) return;
+        try {
+          await fetchJson(`${API_BASE}/sessions/${encodeURIComponent(sessionId)}`, { method: "DELETE" });
+          statusEl.textContent = "Session revoked.";
+          await openSessionsPopup();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to revoke session.";
+        }
+        return;
+      }
+
+      const saveLabelBtn = event.target.closest("button[data-session-save-label]");
+      if (saveLabelBtn) {
+        const sessionId = String(saveLabelBtn.getAttribute("data-session-save-label") || "");
+        if (!sessionId) return;
+        const input = popupList.querySelector(`[data-session-label-input="${sessionId}"]`);
+        const label = String((input && input.value) || "").trim();
+        if (!label) {
+          statusEl.textContent = "Session label cannot be empty.";
+          return;
+        }
+        try {
+          await fetchJson(`${API_BASE}/sessions/${encodeURIComponent(sessionId)}/label`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ label })
+          });
+          statusEl.textContent = "Session label updated.";
+          await openSessionsPopup();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to update session label.";
+        }
+        return;
+      }
+
+      const revokeOthersBtn = event.target.closest("button[data-session-revoke-others='1']");
+      if (revokeOthersBtn) {
+        try {
+          const confirmed = window.confirm("Log out all other devices?");
+          if (!confirmed) return;
+          await fetchJson(`${API_BASE}/sessions`, { method: "DELETE" });
+          statusEl.textContent = "Other sessions revoked.";
+          await openSessionsPopup();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to revoke other sessions.";
+        }
+        return;
+      }
+
+      if (!button) return;
+      const target = button.getAttribute("data-user");
+      const currentlyFollowing = button.getAttribute("data-following") === "1";
+      try {
+        await setFollowState(target, !currentlyFollowing);
+        statusEl.textContent = currentlyFollowing
+          ? `Unfollowed @${target}.`
+          : `You are now following @${target}.`;
+      } catch (err) {
+        statusEl.textContent = err.message || "Action failed.";
+      }
+    });
+
+    document.getElementById("followersStat").addEventListener("click", () => {
+      openRelationsPopup("followers");
+    });
+
+    document.getElementById("followingStat").addEventListener("click", () => {
+      openRelationsPopup("following");
+    });
+
+    document.getElementById("postsStat").addEventListener("click", () => {
+      window.location.href = "posts.html";
+    });
+
+    if (profilePostsFilters) {
+      profilePostsFilters.addEventListener("click", (event) => {
+        const chip = event.target.closest("[data-post-filter]");
+        if (!chip) return;
+        activePostFilter = chip.getAttribute("data-post-filter") || "all";
+        renderProfilePosts();
+      });
+    }
+
+    profilePostsList.addEventListener("click", (event) => {
+      if (event.target.closest("button,a,input,textarea")) return;
+      const card = event.target.closest("[data-post-id]");
+      if (!card) return;
+      const postId = card.getAttribute("data-post-id");
+      if (!postId) return;
+      openProfileViewer(decodeURIComponent(postId));
+    });
+
+    profilePostsList.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const card = event.target.closest("[data-post-id]");
+      if (!card) return;
+      event.preventDefault();
+      const postId = card.getAttribute("data-post-id");
+      if (!postId) return;
+      openProfileViewer(decodeURIComponent(postId));
+    });
+
+    if (profileViewerCloseBtn) {
+      profileViewerCloseBtn.addEventListener("click", closeProfileViewer);
+    }
+
+    if (profilePostViewer) {
+      profilePostViewer.addEventListener("click", (event) => {
+        if (event.target === profilePostViewer) closeProfileViewer();
+      });
+    }
+
+    if (profileViewerBody) {
+      profileViewerBody.addEventListener("click", async (event) => {
+        const likeBtn = event.target.closest("[data-profile-viewer-like]");
+        if (likeBtn) {
+          const postId = String(likeBtn.getAttribute("data-profile-viewer-like") || "");
+          if (!postId) return;
+          likeBtn.disabled = true;
+          try {
+            const data = await fetchJson(`${POSTS_API}/${encodeURIComponent(postId)}/like`, { method: "POST" });
+            updateProfilePostById(postId, (post) => {
+              const likedBy = Array.isArray(post.likedBy) ? [...post.likedBy] : [];
+              const hasLiked = likedBy.includes(username);
+              let nextLikedBy = likedBy;
+              if (data.liked && !hasLiked) nextLikedBy.push(username);
+              if (!data.liked && hasLiked) nextLikedBy = likedBy.filter((u) => u !== username);
+              return { ...post, likedBy: nextLikedBy, likesCount: Number(data.likesCount || nextLikedBy.length) };
+            });
+            renderProfilePosts();
+            renderProfileViewer();
+          } catch (err) {
+            const status = document.getElementById("profileViewerStatus");
+            if (status) status.textContent = err.message || "Could not like post.";
+          } finally {
+            likeBtn.disabled = false;
+          }
+          return;
+        }
+
+        const saveBtn = event.target.closest("[data-profile-viewer-save]");
+        if (saveBtn) {
+          const postId = String(saveBtn.getAttribute("data-profile-viewer-save") || "");
+          if (!postId) return;
+          saveBtn.disabled = true;
+          try {
+            const data = await fetchJson(`${POSTS_API}/${encodeURIComponent(postId)}/save`, { method: "POST" });
+            if (data.saved) savedPostIds.add(postId);
+            else savedPostIds.delete(postId);
+            updateProfilePostById(postId, (post) => ({ ...post, savesCount: Number(data.savesCount || post.savesCount || 0) }));
+            renderProfileViewer();
+          } catch (err) {
+            const status = document.getElementById("profileViewerStatus");
+            if (status) status.textContent = err.message || "Could not save post.";
+          } finally {
+            saveBtn.disabled = false;
+          }
+          return;
+        }
+
+        const shareBtn = event.target.closest("[data-profile-viewer-share]");
+        if (shareBtn) {
+          const postId = String(shareBtn.getAttribute("data-profile-viewer-share") || "");
+          if (!postId) return;
+          openShareModal(postId);
+          return;
+        }
+
+        const deleteCommentBtn = event.target.closest("[data-profile-viewer-delete-comment]");
+        if (deleteCommentBtn) {
+          const postId = String(deleteCommentBtn.getAttribute("data-profile-viewer-delete-comment") || "");
+          const commentId = String(deleteCommentBtn.getAttribute("data-comment-id") || "");
+          if (!postId || !commentId || !(await uiConfirm("Delete this comment?", { tone: "danger", okText: "Delete" }))) return;
+          deleteCommentBtn.disabled = true;
+          try {
+            await fetchJson(`${POSTS_API}/${encodeURIComponent(postId)}/comment/${encodeURIComponent(commentId)}`, { method: "DELETE" });
+            updateProfilePostById(postId, (post) => ({
+              ...post,
+              comments: (post.comments || []).filter((c) => String(c.id || c._id || "") !== commentId)
+            }));
+            renderProfilePosts();
+            renderProfileViewer();
+          } catch (err) {
+            const status = document.getElementById("profileViewerStatus");
+            if (status) status.textContent = err.message || "Could not delete comment.";
+          } finally {
+            deleteCommentBtn.disabled = false;
+          }
+        }
+      });
+
+      profileViewerBody.addEventListener("submit", async (event) => {
+        const form = event.target.closest("[data-profile-viewer-comment-form]");
+        if (!form) return;
+        event.preventDefault();
+        const postId = String(form.getAttribute("data-profile-viewer-comment-form") || "");
+        const input = form.querySelector('input[name="comment"]');
+        const text = String((input && input.value) || "").trim();
+        if (!postId || !text) return;
+        const submitBtn = form.querySelector("button[type='submit']");
+        if (submitBtn) submitBtn.disabled = true;
+        try {
+          const data = await fetchJson(`${POSTS_API}/${encodeURIComponent(postId)}/comment`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text })
+          });
+          if (input) input.value = "";
+          updateProfilePostById(postId, (post) => ({
+            ...post,
+            comments: [...(post.comments || []), data.comment]
+          }));
+          renderProfilePosts();
+          renderProfileViewer();
+        } catch (err) {
+          const status = document.getElementById("profileViewerStatus");
+          if (status) status.textContent = err.message || "Could not add comment.";
+        } finally {
+          if (submitBtn) submitBtn.disabled = false;
+        }
+      });
+    }
+
+    if (closeShareModalBtn) {
+      closeShareModalBtn.addEventListener("click", closeShareModal);
+    }
+
+    if (shareModal) {
+      shareModal.addEventListener("click", (event) => {
+        if (event.target === shareModal) closeShareModal();
+      });
+    }
+
+    if (shareSearchInput) {
+      shareSearchInput.addEventListener("input", () => {
+        renderShareRecipients(shareSearchInput.value);
+      });
+    }
+
+    if (shareUserList) {
+      shareUserList.addEventListener("click", async (event) => {
+        const sendBtn = event.target.closest("[data-share-user]");
+        if (!sendBtn) return;
+        const target = sendBtn.getAttribute("data-share-user");
+        if (!target) return;
+        await sendPostToUser(target, sendBtn);
+      });
+    }
+
+    if (shareWhatsappBtn) {
+      shareWhatsappBtn.addEventListener("click", async () => {
+        if (!sharePostId) return;
+        await trackPostShare(sharePostId);
+        const shareUrl = getPostShareUrl(sharePostId);
+        const text = `Check this post on ASCAPDX Digital: ${shareUrl}`;
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    if (shareFacebookBtn) {
+      shareFacebookBtn.addEventListener("click", async () => {
+        if (!sharePostId) return;
+        await trackPostShare(sharePostId);
+        const shareUrl = getPostShareUrl(sharePostId);
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        window.open(fbUrl, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    if (shareInstagramBtn) {
+      shareInstagramBtn.addEventListener("click", async () => {
+        if (!sharePostId) return;
+        await trackPostShare(sharePostId);
+        const shareUrl = getPostShareUrl(sharePostId);
+        const text = `Check this post on ASCAPDX Digital: ${shareUrl}`;
+        let copied = false;
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          }
+        } catch (err) {
+          copied = false;
+        }
+        window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
+        statusEl.textContent = copied
+          ? "Instagram opened. Link copied, paste it in your post or story."
+          : "Instagram opened. Copy the post link and paste it in your post or story.";
+      });
+    }
+
+    document.getElementById("closePopupBtn").addEventListener("click", closeRelationsPopup);
+
+    popup.addEventListener("click", (event) => {
+      if (event.target === popup) closeRelationsPopup();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && popup.classList.contains("show")) closeRelationsPopup();
+      if (event.key === "Escape" && profileMenu.classList.contains("show")) closeProfileMenu();
+      if (event.key === "Escape" && avatarMediaViewer && avatarMediaViewer.classList.contains("show")) closeAvatarViewer();
+      if (event.key === "Escape" && profilePostViewer && profilePostViewer.classList.contains("show")) closeProfileViewer();
+      if (event.key === "Escape" && shareModal && shareModal.classList.contains("show")) closeShareModal();
+    });
+
+    if (previewAvatar) {
+      previewAvatar.addEventListener("click", openAvatarViewer);
+      previewAvatar.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openAvatarViewer();
+      });
+    }
+
+    if (previewCover) {
+      previewCover.addEventListener("click", openCoverViewer);
+      previewCover.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openCoverViewer();
+      });
+    }
+
+    if (avatarViewerCloseBtn) {
+      avatarViewerCloseBtn.addEventListener("click", closeAvatarViewer);
+    }
+
+    if (avatarMediaViewer) {
+      avatarMediaViewer.addEventListener("click", (event) => {
+        if (event.target === avatarMediaViewer) closeAvatarViewer();
+      });
+    }
+
+    profileMenuBtn.addEventListener("click", () => {
+      if (profileMenu.classList.contains("show")) {
+        closeProfileMenu();
+      } else {
+        openProfileMenu();
+      }
+    });
+
+    function openEditProfileSection() {
+      profileForm.classList.remove("profile-form-hidden");
+      profileForm.scrollIntoView({ behavior: "smooth", block: "start" });
+      displayName.focus({ preventScroll: true });
+    }
+
+    menuEditProfileBtn.addEventListener("click", () => {
+      closeProfileMenu();
+      openEditProfileSection();
+    });
+
+    if (quickEditBtn) {
+      quickEditBtn.addEventListener("click", () => {
+        openEditProfileSection();
+      });
+    }
+
+    menuChangePasswordBtn.addEventListener("click", () => {
+      closeProfileMenu();
+      window.location.href = "change-password.html";
+    });
+    if (menuSecurityBtn) {
+      menuSecurityBtn.addEventListener("click", () => {
+        closeProfileMenu();
+        window.location.href = "security.html";
+      });
+    }
+
+    menuSessionsBtn.addEventListener("click", async () => {
+      closeProfileMenu();
+      try {
+        await openSessionsPopup();
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to load sessions.";
+      }
+    });
+
+    if (quickSessionsBtn) {
+      quickSessionsBtn.addEventListener("click", async () => {
+        try {
+          await openSessionsPopup();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to load sessions.";
+        }
+      });
+    }
+    if (quickSecurityBtn) {
+      quickSecurityBtn.addEventListener("click", () => {
+        window.location.href = "security.html";
+      });
+    }
+
+    menuBlockedUsersBtn.addEventListener("click", async () => {
+      closeProfileMenu();
+      try {
+        await openBlockedUsersPopup();
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to load blocked users.";
+      }
+    });
+
+    menuMyReportsBtn.addEventListener("click", async () => {
+      closeProfileMenu();
+      try {
+        await openMyReportsPopup();
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to load your reports.";
+      }
+    });
+
+    menuModerationBtn.addEventListener("click", () => {
+      closeProfileMenu();
+      if ((localStorage.getItem("userRole") || "user") !== "admin") {
+        statusEl.textContent = "Admin access required.";
+        return;
+      }
+      window.location.href = "admin-moderation.html";
+    });
+
+    menuExportDataBtn.addEventListener("click", async () => {
+      closeProfileMenu();
+      try {
+        await exportMyDataFlow();
+      } catch (err) {
+        statusEl.textContent = err.message || "Failed to export data.";
+      }
+    });
+
+    menuDeleteAccountBtn.addEventListener("click", () => {
+      closeProfileMenu();
+      window.location.href = "delete-account.html";
+    });
+
+    document.addEventListener("click", (event) => {
+      const inMenu = event.target.closest(".profile-actions");
+      if (!inMenu && profileMenu.classList.contains("show")) {
+        closeProfileMenu();
+      }
+    });
+
+    socket.on("connect", () => {
+      socket.emit("userOnline", username);
+    });
+
+    socket.on("onlineUsers", (users) => {
+      onlineUsersSet = new Set(Array.isArray(users) ? users : []);
+      if (popup.classList.contains("show")) {
+        const activeType = popup.getAttribute("data-type");
+        if (activeType === "blocked" || activeType === "my-reports" || activeType === "sessions") return;
+        if (activeType) openRelationsPopup(activeType);
+      }
+    });
+
+    displayName.addEventListener("input", updatePreview);
+    avatarUrl.addEventListener("input", updatePreview);
+    coverImageUrl.addEventListener("input", updatePreview);
+    websiteUrl.addEventListener("input", updatePreview);
+    socialInstagram.addEventListener("input", updatePreview);
+    socialLinkedin.addEventListener("input", updatePreview);
+    socialGithub.addEventListener("input", updatePreview);
+    socialX.addEventListener("input", updatePreview);
+    themeColor.addEventListener("input", updatePreview);
+    avatarFile.addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        if (isAvatarUploading) {
+          statusEl.textContent = "Upload already in progress. Please wait.";
+          return;
+        }
+        if (selectedAvatarObjectUrl) {
+          URL.revokeObjectURL(selectedAvatarObjectUrl);
+        }
+        selectedAvatarObjectUrl = URL.createObjectURL(file);
+        previewAvatar.src = selectedAvatarObjectUrl;
+        previewAvatar.onerror = () => {
+          previewAvatar.src = "assets/default-avatar.svg";
+        };
+
+        isAvatarUploading = true;
+        statusEl.textContent = "Uploading avatar... 0%";
+        const uploadedUrl = await uploadAvatarFromDevice(file, (percent) => {
+          statusEl.textContent = `Uploading avatar... ${percent}%`;
+        });
+        avatarUrl.value = uploadedUrl;
+        avatarFile.value = "";
+        if (selectedAvatarObjectUrl) {
+          URL.revokeObjectURL(selectedAvatarObjectUrl);
+          selectedAvatarObjectUrl = "";
+        }
+        await saveProfile(buildProfilePayload());
+        statusEl.textContent = "Avatar uploaded and profile updated.";
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not upload avatar.";
+      } finally {
+        isAvatarUploading = false;
+      }
+    });
+
+    coverFile.addEventListener("change", async (event) => {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      try {
+        if (isAvatarUploading) {
+          statusEl.textContent = "Upload already in progress. Please wait.";
+          return;
+        }
+        isAvatarUploading = true;
+        statusEl.textContent = "Uploading cover... 0%";
+        const uploadedUrl = await uploadAvatarFromDevice(file, (percent) => {
+          statusEl.textContent = `Uploading cover... ${percent}%`;
+        });
+        coverImageUrl.value = uploadedUrl;
+        coverFile.value = "";
+        await saveProfile(buildProfilePayload());
+        updatePreview();
+        statusEl.textContent = "Cover uploaded and profile updated.";
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not upload cover.";
+      } finally {
+        isAvatarUploading = false;
+      }
+    });
+
+    refreshCurrentRole();
+
+    loadProfile().catch((err) => {
+      statusEl.textContent = err.message || "Failed to load profile.";
+    });
+  </script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+  <script src="js/pwa-register.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASCAPDX Notes</title>
+<meta name="robots" content="index, follow">
+ <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="%234f9cff"/>
+      <stop offset="100%" stop-color="%231d2671"/>
+    </linearGradient>
+  </defs>
+  <rect width="100" height="100" rx="20" fill="url(%23g)"/>
+  <text x="50%" y="58%" text-anchor="middle"
+        font-size="48"
+        fill="white"
+        font-family="Arial, Helvetica, sans-serif"
+        font-weight="700">A-N</text>
+</svg>'>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Poppins",sans-serif;}
+
+:root{
+  --line:rgba(160,206,255,0.24);
+  --panel:rgba(10,24,43,0.66);
+  --text:#e9f4ff;
+  --muted:#a9c6e4;
+}
+
+body{
+  min-height:100vh;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 10%, rgba(88, 143, 255, 0.28), transparent 35%),
+    radial-gradient(circle at 85% 15%, rgba(67, 232, 199, 0.22), transparent 38%),
+    linear-gradient(140deg, #071324, #0f1f39 55%, #112948);
+}
+
+.glass-nav{
+  backdrop-filter: blur(12px);
+  background: linear-gradient(120deg, rgba(7, 18, 34, 0.88), rgba(11, 28, 52, 0.64));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 10px 8%;
+}
+
+.navbar-brand img.logo{height:35px;border-radius:4px;}
+.navbar-toggler{border:none;}
+.navbar-toggler-icon{color:#fff;}
+
+.navbar-nav .nav-link{
+  color:#eaeaea !important;
+  font-weight:500;
+  margin-left:14px;
+  border-radius:999px;
+  padding:6px 12px;
+  transition:0.25s;
+}
+
+.navbar-nav .nav-link:hover{
+  color:#fff !important;
+  background:rgba(72, 160, 255, 0.2);
+}
+
+.search-box{
+  background:rgba(255,255,255,0.95);
+  border-radius:25px;
+  padding:5px 12px;
+  display:flex;
+  align-items:center;
+  margin-right:12px;
+  width:230px;
+  height:36px;
+}
+
+.search-box input{
+  border:none;
+  outline:none;
+  width:100%;
+  font-size:13px;
+  padding-left:5px;
+}
+
+.search-icon{margin-right:8px;color:#777;font-size:14px;}
+
+.hero{
+  position:relative;
+  min-height:38vh;
+  width:100%;
+  padding-top:88px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.hero::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(circle at 78% 8%, rgba(64, 193, 255, 0.2), transparent 34%),
+    linear-gradient(180deg, rgba(3,9,18,0.28), rgba(3,9,18,0.64));
+}
+
+.hero-content{
+  position:relative;
+  z-index:2;
+  width:min(760px, 92vw);
+  border:1px solid rgba(157, 199, 241, 0.24);
+  border-radius:18px;
+  background:linear-gradient(145deg, rgba(10,24,44,0.75), rgba(8,18,33,0.62));
+  box-shadow:0 18px 38px rgba(2, 9, 18, 0.4);
+  padding:1.4rem 1rem;
+  backdrop-filter:blur(10px);
+}
+
+.heading1{
+  margin-top:0;
+  margin-bottom:14px;
+  font-size:clamp(2rem, 5vw, 3.1rem);
+  font-weight:700;
+}
+
+.hero-sub{
+  color:var(--muted);
+  margin-bottom:18px;
+  font-size:0.96rem;
+}
+
+.theme-toggle{
+  min-width:96px;
+  padding:10px 16px;
+  font-size:14px;
+  border-radius:999px;
+  border:none;
+  background:rgba(255,255,255,0.16);
+  color:white;
+  cursor:pointer;
+  font-weight:600;
+  transition:0.2s;
+}
+
+.theme-toggle:hover{background:rgba(255,255,255,0.28);}
+
+.add-btn{
+  background:linear-gradient(120deg,#53c3ff,#45e0bc);
+  color:#03213c;
+  font-weight:700;
+  padding:10px 22px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  transition:0.2s;
+}
+
+.add-btn:hover{
+  transform:translateY(-1px);
+  filter:brightness(1.05);
+}
+
+.container1{
+  width:100%;
+  min-height:42vh;
+  padding:32px 8% 72px;
+}
+
+.notes-area{
+  margin-top:2px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:16px;
+}
+
+.note{
+  background:rgba(245,251,255,0.92);
+  border:1px solid rgba(170,208,255,0.52);
+  border-radius:16px;
+  padding:14px 14px;
+  min-height:170px;
+  color:#07152b;
+  position:relative;
+  transition:0.2s;
+  overflow:hidden;
+  box-shadow:0 12px 28px rgba(2, 10, 24, 0.3);
+}
+
+.note:hover{transform:translateY(-2px);}
+
+.note-title,.note-content{outline:none;}
+
+.note-title{
+  margin-top:25px;
+  font-weight:600;
+  font-size:17px;
+  margin-bottom:6px;
+}
+
+.note-title:empty::before{content:"Title...";color:#567;}
+
+.note-content{
+  min-height:74px;
+  font-size:14px;
+  line-height:1.45;
+}
+
+.note-content:empty::before{content:"Write something...";color:#567;}
+
+.color-picker{
+  position:absolute;
+  top:10px;
+  right:10px;
+  display:flex;
+  gap:5px;
+}
+
+.color-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.5);
+  transition:0.2s;
+}
+
+.color-dot:hover{transform:scale(1.2);}
+
+.delete-btn{
+  position:absolute;
+  bottom:10px;
+  right:12px;
+  background:#e75252;
+  color:white;
+  font-size:12px;
+  padding:3px 8px;
+  border-radius:6px;
+  cursor:pointer;
+  display:none;
+}
+
+.note:hover .delete-btn{display:block;}
+.highlight{background:yellow;color:black;border-radius:3px;}
+
+body.dark{
+  background:
+    radial-gradient(circle at 10% 10%, rgba(88, 143, 255, 0.14), transparent 35%),
+    radial-gradient(circle at 85% 15%, rgba(67, 232, 199, 0.12), transparent 38%),
+    linear-gradient(140deg, #050910, #0b1322 55%, #101c31);
+}
+
+body.dark .glass-nav{
+  background:linear-gradient(120deg, rgba(4, 12, 24, 0.9), rgba(8, 20, 40, 0.75));
+}
+
+body.dark .note{
+  background:rgba(16, 33, 58, 0.86);
+  border:1px solid rgba(139, 191, 255, 0.28);
+  color:#eaf5ff;
+}
+
+body.dark .note-title:empty::before,
+body.dark .note-content:empty::before{color:#8eb1d6;}
+
+@media (max-width:900px){
+  .navbar-nav .nav-link{margin-left:0;}
+  .search-box{width:100%;margin:10px 0;}
+  .hero{min-height:34vh;padding-top:84px;}
+  .hero-content{padding:1.15rem 0.85rem;}
+  .container1{padding:22px 14px 56px;}
+}
+</style>
+
+</head>
+<body data-seo-path="/projects/NoteApp.html">
+<nav class="navbar navbar-expand-lg navbar-dark fixed-top glass-nav">
+  <div class="container">
+    <!-- Logo -->
+    <a class="navbar-brand fw-bold" href="#">
+      <img src="../assets/logo.png" class="logo" alt="ASCAPDX">
+    </a>
+
+    <!-- Mobile Toggle -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Navbar Links -->
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto align-items-center">
+
+        <!-- Search Box -->
+        <form class="d-flex ms-3 search-box">
+          <i class="bi bi-search search-icon"></i>
+          <input type="text" id="search" class="form-control form-control-sm search-input" placeholder="Search notes...">
+        </form>
+
+        <!-- Links -->
+        <li class="nav-item"><a class="nav-link" href="../index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li class="nav-item"><a class="nav-link" href="../index.html#services">Services</a></li>
+        <li class="nav-item"><a class="nav-link" href="../index.html#contact">Contact</a></li>
+
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<section class="hero d-flex align-items-center">
+    <div class="hero-content">
+        <h1 class="heading1">ASCAPDX Notes</h1>
+        <p class="hero-sub">Quick notes with autosave and a cleaner workspace.</p>
+        <button id="themeToggle" class="theme-toggle">Dark</button>
+        <button id="addNote" class="add-btn">+ Create Note</button>
+    </div>
+</section>
+
+<div class="container1">
+    <div id="notesArea" class="notes-area"></div>
+</div>
+
+<script>
+const notesArea=document.getElementById("notesArea");
+const addNote=document.getElementById("addNote");
+const search=document.getElementById("search");
+const themeBtn=document.getElementById("themeToggle");
+
+const colors=["#FFB3BA","#BAE1FF","#BAFFC9","#FFFFBA","#FFDFBA","#C7CEEA","#FFD6E0","#D1FFD6"];
+
+/* Load saved */
+function load(){notesArea.innerHTML=localStorage.getItem("notes_v2")||"";}
+load();
+
+/* Save */
+function save(){localStorage.setItem("notes_v2",notesArea.innerHTML);}
+
+/* Create Note */
+addNote.onclick=()=>{
+let note=document.createElement("div");
+note.className="note";
+
+note.innerHTML=`
+    <div class="color-picker">
+        ${colors.map(c=>`<span class="color-dot" style="background:${c}" data-color="${c}"></span>`).join("")}
+    </div>
+    <div contenteditable="true" class="note-title"></div>
+    <div contenteditable="true" class="note-content"></div>
+    <span class="delete-btn">Delete</span>
+`;
+
+notesArea.prepend(note);
+save();
+}
+
+/* Interactions */
+notesArea.addEventListener("click",e=>{
+if(e.target.classList.contains("delete-btn")){
+    e.target.parentElement.remove();save();
+}
+
+if(e.target.classList.contains("color-dot")){
+    e.target.parentElement.parentElement.style.background=e.target.dataset.color;
+    save();
+}
+});
+
+notesArea.addEventListener("input",save);
+
+/* SEARCH */
+search.onkeyup=()=>{
+const term=search.value.toLowerCase().trim();
+const escaped=term.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+const matcher=term?new RegExp(escaped,"gi"):null;
+document.querySelectorAll(".note").forEach(note=>{
+  const txt=note.innerText.toLowerCase();
+  note.style.display=txt.includes(term)?"block":"none";
+
+  note.querySelectorAll(".note-title,.note-content").forEach(el=>{
+    const raw=el.textContent;
+    el.innerHTML=matcher?raw.replace(matcher,m=>`<span class="highlight">${m}</span>`):raw;
+  });
+});
+};
+
+/* THEME AUTO + Toggle */
+if(window.matchMedia("(prefers-color-scheme: dark)").matches)document.body.classList.add("dark");
+themeBtn.textContent=document.body.classList.contains("dark")?"Light":"Dark";
+
+themeBtn.onclick=()=>{
+document.body.classList.toggle("dark");
+themeBtn.textContent=document.body.classList.contains("dark")?"Light":"Dark";
+}
+</script>
+
+  <script src="../js/seo-meta.js"></script>
+</body>
+</html>
+
+

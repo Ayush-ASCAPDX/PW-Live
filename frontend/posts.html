@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Feed | ASCAPDX Digital</title>
+  <meta name="description" content="Browse your feed, top creators, and popular hashtags on ASCAPDX Digital.">
+  <meta name="robots" content="index, follow">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="canonical" href="">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Feed | ASCAPDX Digital">
+  <meta property="og:description" content="Browse posts and discover creators on ASCAPDX Digital.">
+  <meta property="og:url" content="">
+  <meta property="og:image" content="assets/logo.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Feed | ASCAPDX Digital">
+  <meta name="twitter:description" content="Browse posts and discover creators on ASCAPDX Digital.">
+  <meta name="twitter:url" content="">
+  <meta name="twitter:image" content="assets/logo.png">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/explore.css">
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/posts.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex user-search-form" role="search" onsubmit="return false;">
+              <input id="userSearchInput" class="form-control user-search-input" type="search" placeholder="Search creators, #hashtags...">
+              <button id="clearUserSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">x</button>
+            </form>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link active" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main data-scroll-container>
+    <div class="shell">
+      <section class="panel">
+        <div class="feed-head">
+          <div>
+            <h1 class="feed-title">Feed</h1>
+            <p class="feed-sub">Ranked by likes, comments, and freshness.</p>
+          </div>
+          <div>
+            <button class="filter-chip active" data-explore-filter="all">All</button>
+            <button class="filter-chip" data-explore-filter="image">Images</button>
+            <button class="filter-chip" data-explore-filter="video">Videos</button>
+          </div>
+        </div>
+        <div id="exploreFeed"></div>
+      </section>
+
+      <aside class="panel">
+        <h2 class="feed-title" style="font-size:1rem;margin-bottom:0.6rem;">Top Creators</h2>
+        <div id="topCreators" class="rank-list"></div>
+        <h2 class="feed-title" style="font-size:1rem;margin:1rem 0 0.6rem;">Trending Hashtags</h2>
+        <div id="topHashtags" class="rank-list"></div>
+      </aside>
+    </div>
+  </main>
+  <nav class="mobile-bottom-nav" aria-label="Mobile navigation">
+    <a class="mobile-bottom-link" href="index.html"><i class="bi bi-house-door"></i><span>Home</span></a>
+    <a class="mobile-bottom-link" href="chat.html"><i class="bi bi-chat-dots"></i><span>Chat</span></a>
+    <a class="mobile-bottom-link active" href="posts.html"><i class="bi bi-grid"></i><span>Feed</span></a>
+    <a class="mobile-bottom-link" href="follow-people.html"><i class="bi bi-search"></i><span>People</span></a>
+    <a class="mobile-bottom-link" href="profile.html"><i class="bi bi-person-circle"></i><span>Profile</span></a>
+  </nav>
+
+  <div id="postViewer" class="viewer-backdrop" aria-hidden="true">
+    <div class="viewer-card" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+      <div class="viewer-head">
+        <h3 id="viewerTitle" style="margin:0;font-family:'Sora',sans-serif;">Post</h3>
+        <button id="viewerCloseBtn" class="viewer-close" type="button">Close</button>
+      </div>
+      <div id="viewerBody"></div>
+    </div>
+  </div>
+
+  <div id="shareModal" class="share-modal" aria-hidden="true">
+    <div class="share-modal-card" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="share-modal-head">
+        <h3 id="shareModalTitle">Share Post</h3>
+        <button id="closeShareModalBtn" class="share-close" type="button" aria-label="Close share">x</button>
+      </div>
+      <input id="shareSearchInput" class="form-control share-search" type="search" placeholder="Search followers/following...">
+      <div id="shareUserList" class="share-list"></div>
+      <div class="share-modal-actions">
+        <button id="shareWhatsappBtn" class="share-whatsapp-btn" type="button">Send to WhatsApp</button>
+        <button id="shareFacebookBtn" class="share-facebook-btn" type="button">Share to Facebook</button>
+        <button id="shareInstagramBtn" class="share-instagram-btn" type="button">Share to Instagram</button>
+        <p class="share-link-note">Or send directly to users here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="js/seo-meta.js"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/ui-feedback.js"></script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/explore.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+  <script src="js/pwa-register.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
+

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Posts | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body{margin:0;background:#071325;color:#e9f4ff;font-family:Arial,sans-serif}
+    .wrap{max-width:980px;margin:6rem auto 1rem;padding:0 1rem}
+    .rowx{border:1px solid rgba(153,197,244,.22);border-radius:10px;background:rgba(9,24,41,.86);padding:.5rem;display:flex;gap:.7rem;align-items:center}
+    .list{display:grid;gap:.45rem;margin-top:.7rem}
+    .muted{color:#9ec3e8;font-size:.82rem}
+  </style>
+</head>
+<body data-seo-path="/manage-posts.html">
+  <main class="wrap">
+    <h1 style="font-size:1.2rem;">Post Management</h1>
+    <div class="d-flex gap-2 flex-wrap">
+      <select id="statusFilter" class="form-select form-select-sm" style="max-width:180px;">
+        <option value="">All</option><option value="published">Published</option><option value="scheduled">Scheduled</option><option value="archived">Archived</option>
+      </select>
+      <button id="loadBtn" class="btn btn-sm btn-outline-light">Load</button>
+      <button id="archiveBtn" class="btn btn-sm btn-outline-warning">Archive</button>
+      <button id="unarchiveBtn" class="btn btn-sm btn-outline-info">Unarchive</button>
+      <button id="deleteBtn" class="btn btn-sm btn-outline-danger">Delete</button>
+      <a class="btn btn-sm btn-outline-light" href="profile.html">Back</a>
+    </div>
+    <div style="margin-top:.7rem;border:1px solid rgba(153,197,244,.22);border-radius:10px;background:rgba(9,24,41,.72);padding:.65rem;">
+      <div class="d-flex gap-2 flex-wrap">
+        <input id="editCaption" class="form-control form-control-sm" placeholder="Edit caption (optional)" style="max-width:260px;">
+        <select id="editPrivacy" class="form-select form-select-sm" style="max-width:170px;">
+          <option value="">Keep privacy</option>
+          <option value="public">Public</option>
+          <option value="followers">Followers</option>
+          <option value="private">Only me</option>
+        </select>
+        <input id="editPublishAt" class="form-control form-control-sm" type="datetime-local" style="max-width:220px;">
+        <button id="saveEditBtn" class="btn btn-sm btn-outline-success">Save Edit (1 selected)</button>
+      </div>
+      <div class="muted" style="margin-top:.35rem;">Select one post, then change caption/privacy/publish time to update scheduled publish.</div>
+    </div>
+    <div id="list" class="list"></div>
+    <p id="status" class="muted"></p>
+  </main>
+  <script src="js/app-config.js"></script>
+  <script>
+    const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+    const username = session ? session.username : "";
+    const ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+    const authFetch = (url, opts = {}) => (window.APP_CONFIG && window.APP_CONFIG.authFetch ? window.APP_CONFIG.authFetch(url, opts) : fetch(url, opts));
+    const list = document.getElementById("list");
+    const statusEl = document.getElementById("status");
+    function selectedIds(){return Array.from(document.querySelectorAll("input[data-post]:checked")).map((i)=>i.getAttribute("data-post"));}
+    async function load() {
+      const status = String(document.getElementById("statusFilter").value || "");
+      const q = status ? `?status=${encodeURIComponent(status)}` : "";
+      const res = await authFetch(`${ORIGIN}/api/posts/user/${encodeURIComponent(username)}${q}`);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      const posts = Array.isArray(data) ? data : [];
+      list.innerHTML = posts.map((p)=>`<label class="rowx"><input type="checkbox" data-post="${String(p.id||"")}"><div><div>${String(p.caption||"No caption").slice(0,80)}</div><div class="muted">${p.isPublished ? "Published" : "Scheduled"} ${p.archived ? " - Archived": ""}</div></div></label>`).join("") || '<p class="muted">No posts.</p>';
+    }
+    async function bulk(action){
+      const postIds = selectedIds(); if(!postIds.length) return;
+      const res = await authFetch(`${ORIGIN}/api/posts/manage/bulk`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action,postIds})});
+      const data = await res.json(); if(!res.ok) throw new Error(data.message||"Failed");
+      statusEl.textContent = data.message || "Done";
+      await load();
+    }
+    async function editOneSelected() {
+      const ids = selectedIds();
+      if (ids.length !== 1) throw new Error("Select exactly 1 post to edit.");
+      const postId = ids[0];
+      const captionInput = document.getElementById("editCaption");
+      const privacyInput = document.getElementById("editPrivacy");
+      const publishInput = document.getElementById("editPublishAt");
+      const payload = {};
+      if (String(captionInput.value || "").trim()) payload.caption = String(captionInput.value || "").trim();
+      if (String(privacyInput.value || "").trim()) payload.privacy = String(privacyInput.value || "").trim();
+      if (String(publishInput.value || "").trim()) payload.publishAt = String(publishInput.value || "").trim();
+      if (!Object.keys(payload).length) throw new Error("Enter at least one change.");
+      const res = await authFetch(`${ORIGIN}/api/posts/${encodeURIComponent(postId)}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Failed");
+      statusEl.textContent = data.message || "Post updated";
+      await load();
+    }
+    document.getElementById("loadBtn").addEventListener("click",()=>load().catch((e)=>statusEl.textContent=e.message));
+    document.getElementById("archiveBtn").addEventListener("click",()=>bulk("archive").catch((e)=>statusEl.textContent=e.message));
+    document.getElementById("unarchiveBtn").addEventListener("click",()=>bulk("unarchive").catch((e)=>statusEl.textContent=e.message));
+    document.getElementById("deleteBtn").addEventListener("click",()=>bulk("delete").catch((e)=>statusEl.textContent=e.message));
+    document.getElementById("saveEditBtn").addEventListener("click",()=>editOneSelected().catch((e)=>statusEl.textContent=e.message));
+    load().catch((e)=>statusEl.textContent=e.message);
+  </script>
+  <script src="js/pwa-register.js"></script>
+</body>
+</html>

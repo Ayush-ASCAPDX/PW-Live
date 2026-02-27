@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Profile | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap");
+
+    :root {
+      --panel: rgba(14, 30, 51, 0.78);
+      --line: rgba(153, 197, 244, 0.22);
+      --text: #eaf5ff;
+      --muted: #a8c3de;
+      --focus: rgba(88, 189, 255, 0.95);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      background: radial-gradient(circle at 80% -25%, #1b3c65 0%, #0a1528 45%, #050a12 100%);
+    }
+
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 40;
+      background: linear-gradient(120deg, rgba(7, 18, 34, 0.86), rgba(11, 26, 46, 0.62));
+      border-bottom: 1px solid rgba(196, 220, 250, 0.16);
+      backdrop-filter: blur(14px);
+    }
+
+    .navbar-brand,
+    h1,
+    h2 {
+      font-family: "Sora", sans-serif;
+    }
+
+    .nav-link {
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      color: #e8f3ff !important;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(64, 168, 255, 0.2);
+    }
+
+    .user-search-form {
+      position: relative;
+      margin-right: 0.55rem;
+      min-width: 220px;
+    }
+
+    .user-search-input {
+      border-radius: 999px;
+      padding-left: 0.85rem;
+      padding-right: 2rem;
+      font-size: 0.88rem;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(98, 130, 166, 0.28);
+      color: #dcedff;
+      font-size: 0.9rem;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .clear-search-btn.show {
+      display: inline-flex;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 6.5rem 1rem 1.2rem;
+    }
+
+    .posts-shell {
+      width: min(980px, 96vw);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(145deg, var(--panel), rgba(8, 20, 36, 0.7));
+      box-shadow: 0 20px 45px rgba(2, 8, 16, 0.4);
+      padding: 1rem;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    .head h1 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .head .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .user-actions-wrap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .user-actions-toggle {
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      background: rgba(73, 111, 149, 0.25);
+      color: #eaf5ff;
+      border-radius: 9px;
+      width: 38px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .user-actions-menu {
+      position: absolute;
+      right: 0;
+      top: calc(100% + 6px);
+      min-width: 130px;
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      border-radius: 10px;
+      background: rgba(7, 22, 39, 0.95);
+      box-shadow: 0 14px 30px rgba(2, 8, 16, 0.45);
+      padding: 0.35rem;
+      display: none;
+      z-index: 12;
+    }
+
+    .user-actions-menu.show {
+      display: block;
+    }
+
+    .user-actions-item {
+      width: 100%;
+      border: 1px solid rgba(153, 197, 244, 0.26);
+      border-radius: 8px;
+      background: rgba(23, 56, 87, 0.35);
+      color: #eaf5ff;
+      text-align: left;
+      font-size: 0.8rem;
+      padding: 0.3rem 0.45rem;
+      cursor: pointer;
+    }
+
+    .user-actions-item + .user-actions-item {
+      margin-top: 0.28rem;
+    }
+
+    .user-actions-item.danger {
+      border-color: rgba(255, 158, 158, 0.35);
+      color: #ffd7d7;
+      background: rgba(122, 52, 52, 0.3);
+    }
+
+    .profile-summary {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(9, 25, 45, 0.72);
+      padding: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.85rem;
+    }
+
+    .profile-cover {
+      width: 100%;
+      height: 170px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 1px solid rgba(153, 197, 244, 0.25);
+      background: #081a2f;
+      margin-bottom: 0.55rem;
+    }
+
+    .profile-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid rgba(163, 214, 255, 0.5);
+      background: #0b223c;
+    }
+
+    .avatar-stack {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.42rem;
+    }
+
+    .profile-avatar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-action-btn {
+      border: 1px solid rgba(153, 197, 244, 0.34);
+      background: rgba(16, 45, 73, 0.72);
+      color: #eaf5ff;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.28rem 0.72rem;
+      cursor: pointer;
+    }
+
+    .profile-action-btn:hover {
+      background: rgba(30, 72, 112, 0.82);
+    }
+
+    .profile-action-btn.following {
+      background: rgba(34, 106, 74, 0.6);
+      border-color: rgba(130, 235, 186, 0.42);
+      color: #d7ffe8;
+    }
+
+    .profile-action-btn.requested {
+      background: rgba(90, 72, 28, 0.58);
+      border-color: rgba(237, 205, 121, 0.45);
+      color: #fff3cf;
+    }
+
+    .profile-action-btn:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    .profile-details {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .profile-name {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      font-family: "Sora", sans-serif;
+    }
+
+    .profile-username {
+      margin: 0.1rem 0 0.28rem;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .profile-bio {
+      margin: 0;
+      color: #d8ebff;
+      font-size: 0.86rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .profile-links {
+      margin-top: 0.35rem;
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .profile-link-chip {
+      border: 1px solid rgba(153, 197, 244, 0.28);
+      border-radius: 999px;
+      background: rgba(9, 25, 45, 0.62);
+      color: #d8ecff;
+      font-size: 0.73rem;
+      padding: 0.16rem 0.48rem;
+      text-decoration: none;
+    }
+
+    .stats {
+      display: flex;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .stat-box {
+      border: 1px solid var(--line);
+      background: rgba(8, 24, 42, 0.72);
+      border-radius: 10px;
+      padding: 0.35rem 0.7rem;
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .stat-box.clickable {
+      cursor: pointer;
+    }
+
+    .stat-box strong {
+      display: block;
+      line-height: 1.05;
+    }
+
+    .stat-box span {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.7rem;
+      align-items: start;
+    }
+
+    .feed-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      margin: 0.9rem 0 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .feed-head-right {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .sort-select {
+      min-width: 158px;
+      border-radius: 999px;
+      padding: 0.3rem 0.75rem;
+      border: 1px solid rgba(153, 197, 244, 0.3);
+      background: rgba(10, 26, 45, 0.8);
+      color: #dff0ff;
+      font-size: 0.82rem;
+    }
+
+    .feed-filters {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-chip {
+      border: 1px solid rgba(153, 197, 244, 0.28);
+      border-radius: 999px;
+      background: rgba(11, 29, 50, 0.72);
+      color: #daeeff;
+      font-size: 0.78rem;
+      padding: 0.32rem 0.62rem;
+      cursor: pointer;
+    }
+
+    .filter-chip.active {
+      background: linear-gradient(120deg, rgba(50, 191, 255, 0.27), rgba(70, 224, 182, 0.2));
+      border-color: rgba(112, 214, 255, 0.56);
+      color: #f5feff;
+    }
+
+    .post-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(9, 25, 45, 0.82);
+      padding: 0.6rem;
+      transition: transform 170ms ease, box-shadow 170ms ease, border-color 170ms ease;
+    }
+
+    .post-card.highlight {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px var(--focus);
+    }
+
+    .post-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(162, 212, 255, 0.48);
+      box-shadow: 0 16px 28px rgba(3, 12, 24, 0.35);
+    }
+
+    .post-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.35rem;
+    }
+
+    .post-user {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      min-width: 0;
+    }
+
+    .post-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(162, 211, 255, 0.42);
+    }
+
+    .post-user strong {
+      display: block;
+      line-height: 1.15;
+      font-size: 0.93rem;
+    }
+
+    .post-user span,
+    .post-time {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .post-media {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      max-height: none;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      border-radius: 12px;
+      border: 1px solid rgba(157, 199, 241, 0.25);
+      background: #071426;
+    }
+
+    .post-meta {
+      padding-top: 0.45rem;
+    }
+
+    .post-caption {
+      margin: 0;
+      font-size: 0.78rem;
+      line-height: 1.3;
+      color: #dceeff;
+      word-break: break-word;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .post-actions {
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      flex-wrap: wrap;
+    }
+
+    .post-action-btn {
+      border: 1px solid rgba(153, 197, 244, 0.25);
+      border-radius: 999px;
+      background: rgba(12, 30, 52, 0.78);
+      color: #d8ecff;
+      font-size: 0.8rem;
+      padding: 0.28rem 0.58rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.32rem;
+      cursor: pointer;
+      transition: background-color 130ms ease, border-color 130ms ease;
+    }
+
+    .post-action-btn:hover {
+      background: rgba(56, 122, 192, 0.24);
+      border-color: rgba(134, 207, 255, 0.5);
+    }
+
+    .post-action-btn.action-like.active {
+      color: #ffb5be;
+      border-color: rgba(255, 144, 164, 0.45);
+      background: rgba(75, 31, 42, 0.55);
+    }
+
+    .post-action-btn.action-save.active {
+      color: #8af0d1;
+      border-color: rgba(120, 235, 198, 0.45);
+      background: rgba(23, 68, 56, 0.55);
+    }
+
+    .post-sub {
+      margin-top: 0.35rem;
+      font-size: 0.72rem;
+      color: var(--muted);
+    }
+
+    .post-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.45rem;
+      margin-top: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-toggle-comments {
+      border: none;
+      background: transparent;
+      color: #8fceff;
+      font-size: 0.78rem;
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .comment-form {
+      margin-top: 0.4rem;
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .btn-comment {
+      border: none;
+      min-width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(21, 55, 86, 0.88);
+      color: #cfe8ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 130ms ease;
+    }
+
+    .btn-comment.is-active {
+      background: linear-gradient(120deg, rgba(50, 191, 255, 0.8), rgba(70, 224, 182, 0.72));
+      color: #022037;
+    }
+
+    .btn-comment:disabled {
+      opacity: 0.55;
+      cursor: default;
+    }
+
+    .comments-list {
+      margin-top: 0.35rem;
+      display: grid;
+      gap: 0.36rem;
+      max-height: 110px;
+      overflow: auto;
+    }
+
+    .comment-item {
+      border: 1px solid rgba(153, 197, 244, 0.16);
+      background: rgba(8, 22, 39, 0.78);
+      border-radius: 9px;
+      padding: 0.36rem 0.46rem;
+      font-size: 0.8rem;
+      color: #deefff;
+    }
+
+    .comment-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.45rem;
+      align-items: flex-start;
+    }
+
+    .comment-row span {
+      color: var(--muted);
+      margin-left: 0.4rem;
+      font-size: 0.72rem;
+    }
+
+    .btn-delete {
+      border: 1px solid rgba(255, 160, 160, 0.35);
+      background: rgba(82, 32, 32, 0.52);
+      color: #ffd7d7;
+      border-radius: 7px;
+      font-size: 0.72rem;
+      padding: 0.14rem 0.4rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .status {
+      min-height: 1.2rem;
+      font-size: 0.93rem;
+      color: #8cefc5;
+      margin-top: 0.4rem;
+    }
+
+    .popup-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 120;
+      background: rgba(2, 8, 16, 0.72);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .popup-backdrop.show {
+      display: flex;
+    }
+
+    .popup-card {
+      width: min(560px, 96vw);
+      max-height: 78vh;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(14, 30, 51, 0.95), rgba(8, 20, 36, 0.94));
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .popup-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 0.9rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .popup-head h3 {
+      margin: 0;
+      font-size: 1rem;
+      font-family: "Sora", sans-serif;
+    }
+
+    .popup-close {
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      background: rgba(73, 111, 149, 0.25);
+      color: #eaf5ff;
+      border-radius: 8px;
+      padding: 0.2rem 0.55rem;
+      cursor: pointer;
+    }
+
+    .popup-list {
+      overflow-y: auto;
+      padding: 0.75rem;
+      display: grid;
+      gap: 0.5rem;
+    }
+
+    .user-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      border: 1px solid var(--line);
+      background: rgba(9, 25, 45, 0.8);
+      border-radius: 12px;
+      padding: 0.45rem 0.55rem;
+    }
+
+    .user-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(162, 211, 255, 0.42);
+    }
+
+    .user-meta {
+      line-height: 1.1;
+      min-width: 0;
+    }
+
+    .user-meta strong {
+      display: block;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 230px;
+    }
+
+    .user-meta span {
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .viewer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 130;
+      background: rgba(1, 7, 14, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .viewer-backdrop.show {
+      display: flex;
+    }
+
+    .viewer-card {
+      width: min(1100px, 96vw);
+      max-height: 95vh;
+      border: 1px solid rgba(153, 197, 244, 0.3);
+      border-radius: 14px;
+      background: rgba(5, 16, 29, 0.96);
+      overflow: auto;
+      padding: 0.75rem;
+    }
+
+    .viewer-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.55rem;
+    }
+
+    .viewer-close {
+      border: 1px solid rgba(173, 205, 241, 0.4);
+      border-radius: 9px;
+      background: rgba(36, 70, 104, 0.4);
+      color: #e8f3ff;
+      padding: 0.25rem 0.6rem;
+      cursor: pointer;
+    }
+
+    .viewer-media-wrap {
+      position: relative;
+      width: 100%;
+      height: min(76vh, 720px);
+      border-radius: 10px;
+      border: 1px solid rgba(153, 197, 244, 0.2);
+      background: #02070d;
+      overflow: hidden;
+    }
+
+    .viewer-media {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #02070d;
+    }
+
+    .viewer-media-wrap video.viewer-media {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      will-change: transform;
+    }
+
+    .viewer-stage {
+      position: relative;
+    }
+
+    .viewer-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(173, 211, 251, 0.44);
+      background: rgba(6, 20, 38, 0.82);
+      color: #e9f4ff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    .viewer-nav-btn.left {
+      left: 5px;
+          border-radius: 0px;
+    width: 20px;
+    }
+
+    .viewer-nav-btn.right {
+          border-radius: 0px;
+    width: 20px;
+    right: 5px;
+    }
+
+    .viewer-nav-btn:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+
+    .share-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      display: none;
+      place-items: center;
+      background: rgba(2, 9, 18, 0.76);
+      backdrop-filter: blur(4px);
+      padding: 1rem;
+    }
+
+    .share-modal.show {
+      display: grid;
+    }
+
+    .share-modal-card {
+      width: min(520px, 96vw);
+      border: 1px solid rgba(158, 204, 250, 0.26);
+      border-radius: 16px;
+      background: linear-gradient(150deg, rgba(9, 24, 42, 0.98), rgba(4, 14, 28, 0.98));
+      box-shadow: 0 20px 46px rgba(2, 8, 16, 0.5);
+      padding: 0.95rem;
+    }
+
+    .share-modal-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .share-modal-head h3 {
+      margin: 0;
+      font-family: "Sora", sans-serif;
+      font-size: 1rem;
+    }
+
+    .share-close {
+      border: 1px solid rgba(162, 208, 252, 0.3);
+      background: rgba(35, 71, 108, 0.34);
+      color: #d8ecff;
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      line-height: 1;
+      font-size: 1.05rem;
+      cursor: pointer;
+    }
+
+    .share-search {
+      margin-bottom: 0.6rem;
+    }
+
+    .share-list {
+      max-height: 240px;
+      overflow: auto;
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .share-user {
+      border: 1px solid rgba(157, 202, 248, 0.24);
+      border-radius: 10px;
+      background: rgba(8, 26, 46, 0.62);
+      padding: 0.38rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+    }
+
+    .share-user-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      min-width: 0;
+    }
+
+    .share-user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(162, 208, 252, 0.42);
+      background: rgba(12, 38, 66, 0.72);
+      flex: 0 0 auto;
+    }
+
+    .share-user-name {
+      font-size: 0.86rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 210px;
+    }
+
+    .share-send-btn {
+      border: 1px solid rgba(139, 210, 255, 0.48);
+      background: linear-gradient(120deg, rgba(58, 186, 255, 0.26), rgba(73, 232, 183, 0.2));
+      color: #dcf6ff;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 0.22rem 0.64rem;
+      cursor: pointer;
+    }
+
+    .share-send-btn:disabled {
+      opacity: 0.65;
+      cursor: default;
+    }
+
+    .share-modal-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+
+    .share-whatsapp-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 0.4rem 0.8rem;
+      background: #25d366;
+      color: #032413;
+      font-weight: 700;
+      font-size: 0.83rem;
+      cursor: pointer;
+    }
+  </style>
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/user-profile.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex user-search-form" role="search" onsubmit="return false;">
+              <input id="userSearchInput" class="form-control user-search-input" type="search" placeholder="Search users...">
+              <button id="clearUserSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">x</button>
+            </form>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="posts-shell">
+      <div class="head">
+        <div>
+          <h1 id="pageTitle">User Posts</h1>
+          <div id="metaText" class="meta">Loading...</div>
+        </div>
+        <div id="userActionsWrap" class="user-actions-wrap" style="display:none;">
+          <button id="userActionsToggle" class="user-actions-toggle" type="button" aria-label="User actions" aria-expanded="false">
+            <i class="bi bi-list"></i>
+          </button>
+          <div id="userActionsMenu" class="user-actions-menu" aria-hidden="true">
+            <button id="blockUserBtn" class="user-actions-item danger" type="button">Block</button>
+            <button id="reportUserBtn" class="user-actions-item" type="button">Report</button>
+          </div>
+        </div>
+      </div>
+      <div class="profile-summary">
+        <img id="profileCover" class="profile-cover" src="" alt="Profile cover" style="display:none;">
+        <div class="avatar-stack">
+          <img id="profileAvatar" class="profile-avatar" src="assets/default-avatar.svg" alt="User avatar">
+          <div id="profileAvatarActions" class="profile-avatar-actions" style="display:none;">
+            <button id="profileFollowBtn" class="profile-action-btn" type="button">Follow</button>
+            <button id="profileChatBtn" class="profile-action-btn" type="button">Chat</button>
+          </div>
+        </div>
+        <div class="profile-details">
+          <p id="profileName" class="profile-name">User</p>
+          <p id="profileUsername" class="profile-username">@username</p>
+          <p id="profileBio" class="profile-bio">No bio yet.</p>
+          <div id="profileLinks" class="profile-links"></div>
+        </div>
+        <div class="stats">
+          <div class="stat-box"><strong id="postsCount">0</strong><span>Posts</span></div>
+          <div id="followersStat" class="stat-box clickable"><strong id="followersCount">0</strong><span>Followers</span></div>
+          <div id="followingStat" class="stat-box clickable"><strong id="followingCount">0</strong><span>Following</span></div>
+        </div>
+      </div>
+      <div class="feed-head">
+        <div class="feed-head-right">
+          <select id="feedSortSelect" class="sort-select" aria-label="Sort posts">
+            <option value="newest">Sort: Newest</option>
+            <option value="liked">Sort: Most liked</option>
+            <option value="commented">Sort: Most commented</option>
+          </select>
+          <div id="feedFilters" class="feed-filters">
+            <button type="button" class="filter-chip active" data-type-filter="all">All</button>
+            <button type="button" class="filter-chip" data-type-filter="image">Images</button>
+            <button type="button" class="filter-chip" data-type-filter="video">Videos</button>
+          </div>
+        </div>
+      </div>
+      <div id="postsList" class="posts-grid"></div>
+      <div id="status" class="status"></div>
+    </section>
+  </main>
+
+  <div id="relationsPopup" class="popup-backdrop" aria-hidden="true">
+    <div class="popup-card" role="dialog" aria-modal="true" aria-labelledby="popupTitle">
+      <div class="popup-head">
+        <h3 id="popupTitle">Connections</h3>
+        <button id="closePopupBtn" class="popup-close" type="button">Close</button>
+      </div>
+      <div id="popupList" class="popup-list"></div>
+    </div>
+  </div>
+
+  <div id="postViewer" class="viewer-backdrop" aria-hidden="true">
+    <div class="viewer-card" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+      <div class="viewer-head">
+        <h3 id="viewerTitle" style="margin:0;font-family:'Sora',sans-serif;">Post</h3>
+        <button id="viewerCloseBtn" class="viewer-close" type="button">Close</button>
+      </div>
+      <div id="viewerBody"></div>
+    </div>
+  </div>
+
+  <div id="shareModal" class="share-modal" aria-hidden="true">
+    <div class="share-modal-card" role="dialog" aria-modal="true" aria-labelledby="shareModalTitle">
+      <div class="share-modal-head">
+        <h3 id="shareModalTitle">Share Post</h3>
+        <button id="closeShareModalBtn" class="share-close" type="button" aria-label="Close share">x</button>
+      </div>
+      <input id="shareSearchInput" class="form-control share-search" type="search" placeholder="Search followers/following...">
+      <div id="shareUserList" class="share-list"></div>
+      <div class="share-modal-actions">
+        <button id="shareWhatsappBtn" class="share-whatsapp-btn" type="button">Send to WhatsApp</button>
+        <button id="shareFacebookBtn" class="share-whatsapp-btn" type="button" style="background:#4f9cff;color:#031c31;">Share to Facebook</button>
+        <button id="shareInstagramBtn" class="share-whatsapp-btn" type="button" style="background:linear-gradient(120deg,#f58529,#dd2a7b,#8134af);color:#fff;">Share to Instagram</button>
+        <p class="post-time" style="margin:0;">Or send directly to users here.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/ui-feedback.js"></script>
+  <script>
+    const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+    const username = session ? session.username : "";
+    const userId = session ? session.userId : "";
+
+    const API_ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+    const params = new URLSearchParams(window.location.search);
+    const targetUsername = (params.get("u") || "").trim();
+    const isOwnerView = !!targetUsername && String(targetUsername).toLowerCase() === String(username || "").toLowerCase();
+    const targetPostId = (params.get("post") || "").trim();
+
+    const pageTitle = document.getElementById("pageTitle");
+    const metaText = document.getElementById("metaText");
+    const postsList = document.getElementById("postsList");
+    const statusEl = document.getElementById("status");
+    const feedSortSelect = document.getElementById("feedSortSelect");
+    const feedFilters = document.getElementById("feedFilters");
+    const profileAvatar = document.getElementById("profileAvatar");
+    const profileCover = document.getElementById("profileCover");
+    const profileName = document.getElementById("profileName");
+    const profileUsername = document.getElementById("profileUsername");
+    const profileBio = document.getElementById("profileBio");
+    const profileLinks = document.getElementById("profileLinks");
+    const postsCount = document.getElementById("postsCount");
+    const followersCount = document.getElementById("followersCount");
+    const followingCount = document.getElementById("followingCount");
+    const followersStat = document.getElementById("followersStat");
+    const followingStat = document.getElementById("followingStat");
+    const profileAvatarActions = document.getElementById("profileAvatarActions");
+    const profileFollowBtn = document.getElementById("profileFollowBtn");
+    const profileChatBtn = document.getElementById("profileChatBtn");
+    const popup = document.getElementById("relationsPopup");
+    const popupTitle = document.getElementById("popupTitle");
+    const popupList = document.getElementById("popupList");
+    const closePopupBtn = document.getElementById("closePopupBtn");
+    const postViewer = document.getElementById("postViewer");
+    const viewerBody = document.getElementById("viewerBody");
+    const viewerCloseBtn = document.getElementById("viewerCloseBtn");
+    const shareModal = document.getElementById("shareModal");
+    const closeShareModalBtn = document.getElementById("closeShareModalBtn");
+    const shareSearchInput = document.getElementById("shareSearchInput");
+    const shareUserList = document.getElementById("shareUserList");
+    const shareWhatsappBtn = document.getElementById("shareWhatsappBtn");
+    const shareFacebookBtn = document.getElementById("shareFacebookBtn");
+    const shareInstagramBtn = document.getElementById("shareInstagramBtn");
+    const userActionsWrap = document.getElementById("userActionsWrap");
+    const userActionsToggle = document.getElementById("userActionsToggle");
+    const userActionsMenu = document.getElementById("userActionsMenu");
+    const blockUserBtn = document.getElementById("blockUserBtn");
+    const reportUserBtn = document.getElementById("reportUserBtn");
+    const POSTS_API = `${API_ORIGIN}/api/posts`;
+    const USERS_API = `${API_ORIGIN}/api/users`;
+    const REPORTS_API = `${API_ORIGIN}/api/reports`;
+    const POST_SHARE_PREFIX = "__ASCAPDX_POST_SHARE__::";
+    const uiFeedback = window.UIFeedback || null;
+    const socket = io(API_ORIGIN, (window.APP_CONFIG && window.APP_CONFIG.getSocketOptions && window.APP_CONFIG.getSocketOptions()) || { withCredentials: true });
+    let allUserPosts = [];
+    let currentProfile = null;
+    let activeTypeFilter = "all";
+    let activeSort = "newest";
+    let didScrollToTargetPost = false;
+    let savedPostIds = new Set();
+    let currentViewerPostId = "";
+    let shareRecipients = [];
+    let isTargetBlocked = false;
+    let isFollowingTarget = false;
+    let isRequestedTarget = false;
+    const targetUsernameKey = String(targetUsername || "").trim().toLowerCase();
+    const followPendingStorageKey = `follow_pending_${username || "guest"}`;
+
+    if (!targetUsername) {
+      statusEl.textContent = "No user selected.";
+      metaText.textContent = "Missing username.";
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function shortAlphabetName(name, fallback = "User") {
+      const raw = String(name || "").replace(/[^A-Za-z]/g, "");
+      if (raw) return raw.slice(0, 8);
+      const fallbackRaw = String(fallback || "User").replace(/[^A-Za-z]/g, "");
+      return (fallbackRaw || "User").slice(0, 8);
+    }
+
+    function formatPostDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function isScheduledPost(post) {
+      if (!post || !post.publishAt) return false;
+      if (post.isPublished === false) return true;
+      const publishAtTime = new Date(post.publishAt).getTime();
+      if (Number.isNaN(publishAtTime)) return false;
+      return publishAtTime > Date.now();
+    }
+
+    function timeAgo(value) {
+      if (!value) return "just now";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "just now";
+      const sec = Math.floor((Date.now() - date.getTime()) / 1000);
+      if (sec < 60) return `${Math.max(sec, 1)}s ago`;
+      const min = Math.floor(sec / 60);
+      if (min < 60) return `${min}m ago`;
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return `${hr}h ago`;
+      const day = Math.floor(hr / 24);
+      if (day < 7) return `${day}d ago`;
+      return formatPostDate(value);
+    }
+
+    async function fetchJson(url, options = {}) {
+      const request = (window.APP_CONFIG && window.APP_CONFIG.authFetch) || fetch;
+      const merged = { ...options };
+      merged.headers = {
+        ...(options.headers || {}),
+        
+      };
+      if (!(window.APP_CONFIG && window.APP_CONFIG.authFetch)) {
+        merged.credentials = "include";
+      }
+      const res = await request(url, merged);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Request failed");
+      return data;
+    }
+
+    async function uiConfirm(message, options = {}) {
+      if (uiFeedback && typeof uiFeedback.confirm === "function") {
+        return uiFeedback.confirm(String(message || "Are you sure?"), options);
+      }
+      return window.confirm(String(message || "Are you sure?"));
+    }
+
+    function readPendingFollowState() {
+      try {
+        const raw = localStorage.getItem(followPendingStorageKey);
+        const list = raw ? JSON.parse(raw) : [];
+        if (!Array.isArray(list)) return new Set();
+        return new Set(list.map((v) => String(v || "").trim().toLowerCase()).filter(Boolean));
+      } catch (err) {
+        return new Set();
+      }
+    }
+
+    function savePendingFollowState(set) {
+      localStorage.setItem(followPendingStorageKey, JSON.stringify(Array.from(set || [])));
+    }
+
+    function renderProfileActionButtons() {
+      if (!profileAvatarActions || !profileFollowBtn || !profileChatBtn) return;
+      const isSelf = !targetUsername || String(targetUsername).toLowerCase() === String(username || "").toLowerCase();
+      const show = !!targetUsername && !isSelf;
+      profileAvatarActions.style.display = show ? "flex" : "none";
+      if (!show) return;
+
+      profileFollowBtn.classList.remove("following", "requested");
+      if (isFollowingTarget) {
+        profileFollowBtn.textContent = "Following";
+        profileFollowBtn.classList.add("following");
+      } else if (isRequestedTarget) {
+        profileFollowBtn.textContent = "Requested";
+        profileFollowBtn.classList.add("requested");
+      } else {
+        profileFollowBtn.textContent = "Follow";
+      }
+      profileFollowBtn.disabled = !username;
+      profileChatBtn.disabled = !username;
+    }
+
+    async function refreshFollowStateForTarget() {
+      if (!targetUsernameKey || !username || targetUsernameKey === String(username || "").trim().toLowerCase()) {
+        isFollowingTarget = false;
+        isRequestedTarget = false;
+        renderProfileActionButtons();
+        return;
+      }
+      try {
+        const viewer = await fetchJson(`${USERS_API}/profile/${encodeURIComponent(username)}`);
+        const following = Array.isArray(viewer.following) ? viewer.following : [];
+        isFollowingTarget = following.some((u) => String((u && u.username) || "").trim().toLowerCase() === targetUsernameKey);
+        const pending = readPendingFollowState();
+        isRequestedTarget = !isFollowingTarget && pending.has(targetUsernameKey);
+      } catch (err) {
+        isFollowingTarget = false;
+        isRequestedTarget = false;
+      }
+      renderProfileActionButtons();
+    }
+
+    async function toggleFollowTarget() {
+      if (!targetUsername || !username || !profileFollowBtn) return;
+      const targetIsSelf = String(targetUsername).toLowerCase() === String(username).toLowerCase();
+      if (targetIsSelf) return;
+
+      const wasFollowing = !!isFollowingTarget;
+      const wasRequested = !!isRequestedTarget;
+      const shouldUnfollow = wasFollowing || wasRequested;
+      const endpoint = shouldUnfollow ? "unfollow" : "follow";
+      profileFollowBtn.disabled = true;
+      try {
+        const data = await fetchJson(`${USERS_API}/${endpoint}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ targetUsername })
+        });
+
+        const pending = readPendingFollowState();
+        if (shouldUnfollow) {
+          isFollowingTarget = false;
+          isRequestedTarget = false;
+          pending.delete(targetUsernameKey);
+          statusEl.textContent = `Unfollowed @${targetUsername}.`;
+        } else if (data && data.followed) {
+          isFollowingTarget = true;
+          isRequestedTarget = false;
+          pending.delete(targetUsernameKey);
+          statusEl.textContent = `Following @${targetUsername}.`;
+        } else if (data && data.requested) {
+          isFollowingTarget = false;
+          isRequestedTarget = true;
+          pending.add(targetUsernameKey);
+          statusEl.textContent = `Follow request sent to @${targetUsername}.`;
+        } else {
+          isFollowingTarget = false;
+          isRequestedTarget = false;
+          pending.delete(targetUsernameKey);
+        }
+        savePendingFollowState(pending);
+
+        if (currentProfile) {
+          const count = Number(currentProfile.followersCount || 0);
+          if (shouldUnfollow && wasFollowing) {
+            currentProfile.followersCount = Math.max(0, count - 1);
+          } else if (!shouldUnfollow && data && data.followed) {
+            currentProfile.followersCount = Math.max(0, count + 1);
+          }
+          followersCount.textContent = String(currentProfile.followersCount || 0);
+        }
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not update follow state.";
+      } finally {
+        renderProfileActionButtons();
+      }
+    }
+
+    function openChatWithTargetUser() {
+      if (!targetUsername || !username) return;
+      if (String(targetUsername).toLowerCase() === String(username).toLowerCase()) return;
+      localStorage.setItem("receiver", targetUsername);
+      window.location.href = "chat.html";
+    }
+
+    function closeUserActionsMenu() {
+      if (!userActionsMenu || !userActionsToggle) return;
+      userActionsMenu.classList.remove("show");
+      userActionsMenu.setAttribute("aria-hidden", "true");
+      userActionsToggle.setAttribute("aria-expanded", "false");
+    }
+
+    function openUserActionsMenu() {
+      if (!userActionsMenu || !userActionsToggle) return;
+      userActionsMenu.classList.add("show");
+      userActionsMenu.setAttribute("aria-hidden", "false");
+      userActionsToggle.setAttribute("aria-expanded", "true");
+    }
+
+    function renderUserActionsState() {
+      if (!userActionsWrap || !blockUserBtn || !reportUserBtn) return;
+      const isSelf = !targetUsername || targetUsername === username;
+      userActionsWrap.style.display = isSelf ? "none" : "inline-flex";
+      blockUserBtn.textContent = isTargetBlocked ? "Unblock" : "Block";
+      reportUserBtn.textContent = "Report";
+    }
+
+    async function refreshTargetBlockState() {
+      if (!targetUsername || targetUsername === username) {
+        isTargetBlocked = false;
+        renderUserActionsState();
+        return;
+      }
+      try {
+        const data = await fetchJson(`${USERS_API}/blocks`);
+        const items = Array.isArray(data.items) ? data.items : [];
+        isTargetBlocked = items.some((u) => String((u && u.username) || "") === targetUsername);
+      } catch (err) {
+        isTargetBlocked = false;
+      }
+      renderUserActionsState();
+    }
+
+    async function toggleTargetBlock() {
+      if (!targetUsername || targetUsername === username || !blockUserBtn) return;
+      const endpoint = isTargetBlocked ? "unblock" : "block";
+      blockUserBtn.disabled = true;
+      try {
+        const data = await fetchJson(`${USERS_API}/${endpoint}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ targetUsername })
+        });
+        const blocks = Array.isArray(data.blocks) ? data.blocks : [];
+        isTargetBlocked = blocks.includes(targetUsername);
+        renderUserActionsState();
+        statusEl.textContent = isTargetBlocked ? `Blocked @${targetUsername}.` : `Unblocked @${targetUsername}.`;
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not update block state.";
+      } finally {
+        blockUserBtn.disabled = false;
+      }
+    }
+
+    async function reportTargetUser() {
+      if (!targetUsername || targetUsername === username || !reportUserBtn) return;
+      const reason = window.prompt("Why are you reporting this user? (e.g. spam, abuse, fake profile)");
+      if (reason === null) return;
+      const cleanReason = String(reason || "").trim();
+      if (!cleanReason) {
+        statusEl.textContent = "Report reason is required.";
+        return;
+      }
+      reportUserBtn.disabled = true;
+      try {
+        await fetchJson(`${REPORTS_API}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            targetType: "user",
+            targetUsername,
+            reason: cleanReason
+          })
+        });
+        statusEl.textContent = `Reported @${targetUsername}.`;
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not report user.";
+      } finally {
+        reportUserBtn.disabled = false;
+      }
+    }
+
+    function getRoom(user1, user2) {
+      return [String(user1 || ""), String(user2 || "")].sort().join("_");
+    }
+
+    function sanitizeUrl(url, fallback = "") {
+      const raw = String(url ?? "").trim();
+      if (!raw) return fallback;
+      const allowed = ["http://", "https://", "/", "assets/", "./assets/", "blob:", "data:image/", "data:video/"];
+      return allowed.some((prefix) => raw.startsWith(prefix)) ? raw : fallback;
+    }
+
+    function getDisplayNameFromUser(user) {
+      return user.name || user.displayName || user.username;
+    }
+
+    function getAvatarFromUser(user) {
+      return user.avatarUrl || user.profilePic || "assets/default-avatar.svg";
+    }
+
+    function getRelationUsers(type) {
+      if (!currentProfile) return [];
+      if (type === "followers") return currentProfile.followers || [];
+      return currentProfile.following || [];
+    }
+
+    function openRelationsPopup(type) {
+      const isFollowers = type === "followers";
+      const users = getRelationUsers(type);
+      popupTitle.textContent = isFollowers ? "Followers" : "Following";
+      if (!users.length) {
+        popupList.innerHTML = `<p>No ${isFollowers ? "followers" : "following"} yet.</p>`;
+      } else {
+        popupList.innerHTML = users.map((user) => {
+          const uname = escapeHtml(user.username || "");
+          const name = escapeHtml(getDisplayNameFromUser(user));
+          const avatar = escapeHtml(getAvatarFromUser(user));
+          return `
+            <div class="user-row">
+              <img class="user-avatar" src="${avatar}" alt="${uname} avatar" onerror="this.src='assets/default-avatar.svg'">
+              <div class="user-meta">
+                <strong>${name}</strong>
+                <span>@${uname}</span>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+      popup.classList.add("show");
+      popup.setAttribute("aria-hidden", "false");
+    }
+
+    function closeRelationsPopup() {
+      popup.classList.remove("show");
+      popup.setAttribute("aria-hidden", "true");
+    }
+
+    function updateViewerSendButtonState(form) {
+      if (!form) return;
+      const input = form.querySelector('input[name="comment"]');
+      const submitBtn = form.querySelector("button[type='submit']");
+      if (!input || !submitBtn) return;
+      const hasText = (input.value || "").trim().length > 0;
+      submitBtn.disabled = !hasText;
+      submitBtn.classList.toggle("is-active", hasText);
+    }
+
+    function renderViewerContent() {
+      const post = allUserPosts.find((p) => String(p.id) === String(currentViewerPostId));
+      if (!post) {
+        closePostViewer();
+        return;
+      }
+      const sequence = getViewerPostsSequence();
+      const currentIndex = sequence.findIndex((p) => String(p.id) === String(currentViewerPostId));
+      const hasPrev = currentIndex > 0;
+      const hasNext = currentIndex >= 0 && currentIndex < sequence.length - 1;
+      const safeMediaUrl = escapeHtml(sanitizeUrl(post.mediaUrl, ""));
+      const author = escapeHtml(shortAlphabetName(post.authorDisplayName || post.authorUsername || targetUsername || "User", post.authorUsername || targetUsername || "User"));
+      const likesCount = Number(post.likesCount || 0);
+      const comments = Array.isArray(post.comments) ? post.comments : [];
+      const commentsCount = comments.length;
+      const isScheduled = isOwnerView && isScheduledPost(post);
+      const scheduledLabel = isScheduled ? " - Scheduled" : "";
+      const likedByMe = Array.isArray(post.likedBy) && post.likedBy.includes(username);
+      const isSaved = savedPostIds.has(String(post.id));
+      const mediaHtml = post.mediaType === "video"
+        ? `<div class="viewer-media-wrap"><video class="viewer-media" src="${safeMediaUrl}" playsinline controls preload="metadata" loop></video></div>`
+        : `<div class="viewer-media-wrap"><img class="viewer-media" src="${safeMediaUrl}" alt="Post media" onerror="this.src='assets/default-avatar.svg'"></div>`;
+      const commentsHtml = comments.length
+        ? comments.map((c) => `
+            <div class="comment-item">
+              <div class="comment-row">
+                <div><strong>@${escapeHtml(c.username || "user")}</strong> ${escapeHtml(c.text || "")}<span>${timeAgo(c.createdAt)}</span></div>
+                ${
+                  c.username === username
+                    ? `<button class="btn-delete" data-viewer-delete-comment="${escapeHtml(c.id)}">Delete</button>`
+                    : ""
+                }
+              </div>
+            </div>
+          `).join("")
+        : '<p class="post-time">No comments yet.</p>';
+
+      viewerBody.innerHTML = `
+        <div class="viewer-stage">
+          <button class="viewer-nav-btn left" type="button" data-viewer-prev ${hasPrev ? "" : "disabled"} aria-label="Previous post">&#8249;</button>
+          ${mediaHtml}
+          <button class="viewer-nav-btn right" type="button" data-viewer-next ${hasNext ? "" : "disabled"} aria-label="Next post">&#8250;</button>
+        </div>
+        <div style="margin-top:0.6rem;">
+          <div style="color:#b8d6f4;font-size:0.83rem;">${author}</div>
+          <div class="post-actions" style="margin-top:0.55rem;">
+            <button class="post-action-btn action-like ${likedByMe ? "active" : ""}" data-viewer-like="${escapeHtml(post.id)}" aria-label="Like post">
+              <i class="bi ${likedByMe ? "bi-heart-fill" : "bi-heart"}"></i><span>Like</span>
+            </button>
+            <button class="post-action-btn action-save ${isSaved ? "active" : ""}" data-viewer-save="${escapeHtml(post.id)}" aria-label="Save post">
+              <i class="bi ${isSaved ? "bi-bookmark-fill" : "bi-bookmark"}"></i><span>${isSaved ? "Saved" : "Save"}</span>
+            </button>
+            <button class="post-action-btn action-share" data-viewer-share="${escapeHtml(post.id)}" aria-label="Share post">
+              <i class="bi bi-send"></i><span>Share</span>
+            </button>
+          </div>
+          <div class="post-sub">${likesCount} likes - ${commentsCount} comments${scheduledLabel}</div>
+          <form class="comment-form" id="viewerCommentForm">
+            <input class="form-control" name="comment" maxlength="400" placeholder="Write a comment and press send..." required>
+            <button class="btn-comment" type="submit" aria-label="Send comment" disabled><i class="bi bi-send-fill"></i></button>
+          </form>
+          <div class="comments-list" style="max-height:240px;overflow:auto;">
+            ${commentsHtml}
+          </div>
+        </div>
+      `;
+      const commentForm = document.getElementById("viewerCommentForm");
+      if (commentForm) {
+        const input = commentForm.querySelector('input[name="comment"]');
+        if (input) input.addEventListener("input", () => updateViewerSendButtonState(commentForm));
+        updateViewerSendButtonState(commentForm);
+      }
+    }
+
+    function openPostViewer(postId) {
+      currentViewerPostId = String(postId || "");
+      renderViewerContent();
+      postViewer.classList.add("show");
+      postViewer.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closePostViewer() {
+      currentViewerPostId = "";
+      postViewer.classList.remove("show");
+      postViewer.setAttribute("aria-hidden", "true");
+      viewerBody.innerHTML = "";
+      document.body.style.overflow = "";
+    }
+
+    function getShareUrl(postId) {
+      return `${window.location.origin}${window.location.pathname}?u=${encodeURIComponent(targetUsername)}&post=${encodeURIComponent(String(postId || ""))}`;
+    }
+
+    function buildPostShareMessage(postId) {
+      const post = allUserPosts.find((p) => String(p.id) === String(postId));
+      if (!post) return null;
+      const payload = {
+        type: "post_share",
+        postId: String(post.id),
+        authorUsername: String(post.authorUsername || ""),
+        authorDisplayName: String(post.authorDisplayName || post.authorUsername || "User"),
+        caption: String(post.caption || ""),
+        mediaUrl: sanitizeUrl(post.mediaUrl, ""),
+        mediaType: post.mediaType === "video" ? "video" : "image",
+        createdAt: post.createdAt || null
+      };
+      return `${POST_SHARE_PREFIX}${encodeURIComponent(JSON.stringify(payload))}`;
+    }
+
+    async function loadShareRelations() {
+      try {
+        const res = await fetch(`${USERS_API}/profile/${encodeURIComponent(username)}`, { credentials: "include" });
+        const data = await res.json();
+        if (!res.ok) return;
+        const followers = Array.isArray(data.followers) ? data.followers : [];
+        const following = Array.isArray(data.following) ? data.following : [];
+        const map = new Map();
+        const addUser = (raw) => {
+          if (!raw) return;
+          const uname = String(raw.username || raw.name || raw || "").trim();
+          if (!uname || uname === username) return;
+          if (!map.has(uname)) {
+            map.set(uname, {
+              username: uname,
+              name: String(raw.name || raw.username || raw || uname),
+              avatarUrl: sanitizeUrl(raw.avatarUrl, "assets/default-avatar.svg")
+            });
+          }
+        };
+        followers.forEach(addUser);
+        following.forEach(addUser);
+        shareRecipients = Array.from(map.values()).sort((a, b) => a.name.localeCompare(b.name));
+      } catch (err) {}
+    }
+
+    function renderShareRecipients(query = "") {
+      if (!shareUserList) return;
+      const q = String(query || "").trim().toLowerCase();
+      const shown = q
+        ? shareRecipients.filter((u) => String(u.username || "").toLowerCase().includes(q) || String(u.name || "").toLowerCase().includes(q))
+        : shareRecipients;
+      if (!shown.length) {
+        shareUserList.innerHTML = '<p class="post-time" style="margin:0;">No users found.</p>';
+        return;
+      }
+      shareUserList.innerHTML = shown.map((u) => `
+        <div class="share-user">
+          <div class="share-user-main">
+            <img class="share-user-avatar" src="${escapeHtml(u.avatarUrl || "assets/default-avatar.svg")}" alt="${escapeHtml(u.username)} avatar" onerror="this.src='assets/default-avatar.svg'">
+            <div class="share-user-name">${escapeHtml(u.name || u.username)} <span class="post-time">@${escapeHtml(u.username)}</span></div>
+          </div>
+          <button class="share-send-btn" type="button" data-share-user="${escapeHtml(u.username)}">Send</button>
+        </div>
+      `).join("");
+    }
+
+    function openShareModal(postId) {
+      currentViewerPostId = String(postId || currentViewerPostId || "");
+      if (!shareModal || !currentViewerPostId) return;
+      if (shareSearchInput) shareSearchInput.value = "";
+      renderShareRecipients("");
+      shareModal.classList.add("show");
+      shareModal.setAttribute("aria-hidden", "false");
+      if (shareSearchInput) setTimeout(() => shareSearchInput.focus(), 20);
+    }
+
+    function closeShareModal() {
+      if (!shareModal) return;
+      shareModal.classList.remove("show");
+      shareModal.setAttribute("aria-hidden", "true");
+    }
+
+    function isDeletedUserError(payload) {
+      const text = String((payload && payload.error) || (payload && payload.message) || "").toLowerCase();
+      return text.includes("user not found") || text.includes("users not found");
+    }
+
+    function removeDeletedShareRecipient(targetUsername) {
+      const target = String(targetUsername || "").trim();
+      if (!target) return;
+      shareRecipients = (Array.isArray(shareRecipients) ? shareRecipients : []).filter((u) => String((u && u.username) || "") !== target);
+      renderShareRecipients(shareSearchInput ? shareSearchInput.value : "");
+    }
+
+    async function trackPostShare(postId) {
+      const id = String(postId || "");
+      if (!id) return;
+      try {
+        await fetchJson(`${POSTS_API}/${encodeURIComponent(id)}/share`, { method: "POST" });
+      } catch (err) {}
+    }
+
+    async function sendPostToUser(targetUser, triggerBtn = null) {
+      if (!targetUser || !currentViewerPostId) return;
+      const room = getRoom(username, targetUser);
+      const shareMessage = buildPostShareMessage(currentViewerPostId);
+      if (!shareMessage) {
+        statusEl.textContent = "Could not find this post to share.";
+        return;
+      }
+      if (triggerBtn) {
+        triggerBtn.disabled = true;
+        triggerBtn.textContent = "Sending...";
+      }
+      try {
+        socket.emit("joinRoom", room);
+        const ack = await new Promise((resolve) => {
+          socket.emit("sendMessage", {
+            sender: username,
+            receiver: targetUser,
+            message: shareMessage,
+            room,
+            isFile: false
+          }, resolve);
+        });
+        if (!(ack && ack.ok)) {
+          if (isDeletedUserError(ack)) removeDeletedShareRecipient(targetUser);
+          throw new Error((ack && ack.error) || "Could not send post in chat.");
+        }
+        await trackPostShare(currentViewerPostId);
+        statusEl.textContent = `Post sent to @${targetUser}.`;
+        if (triggerBtn) triggerBtn.textContent = "Sent";
+      } catch (err) {
+        statusEl.textContent = String((err && err.message) || "Could not send post in chat.");
+        if (triggerBtn) triggerBtn.textContent = "Retry";
+      } finally {
+        if (triggerBtn) {
+          setTimeout(() => {
+            triggerBtn.disabled = false;
+            triggerBtn.textContent = "Send";
+          }, 1200);
+        }
+      }
+    }
+
+    async function loadSavedPosts() {
+      try {
+        const posts = await fetchJson(`${POSTS_API}/saved`);
+        const ids = Array.isArray(posts) ? posts.map((p) => String(p.id)) : [];
+        savedPostIds = new Set(ids);
+      } catch (err) {}
+    }
+
+    async function fetchBookmarkCollections() {
+      const data = await fetchJson(`${USERS_API}/bookmarks/collections`);
+      return Array.isArray(data.items) ? data.items : [];
+    }
+
+    async function savePostToCollection(postId) {
+      const collections = await fetchBookmarkCollections();
+      if (!collections.length) throw new Error("No collections yet. Create one in Settings.");
+      const names = collections.map((c) => String(c.name || "")).filter(Boolean);
+      const picked = window.prompt(`Save to collection:\n${names.join(", ")}`, names[0] || "");
+      if (picked === null) return false;
+      const target = String(picked || "").trim();
+      if (!target) return false;
+      const exact = names.find((n) => n.toLowerCase() === target.toLowerCase()) || target;
+      await fetchJson(`${USERS_API}/bookmarks/collections/${encodeURIComponent(exact)}/posts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ postId })
+      });
+      return true;
+    }
+
+    function getTypeFilteredPosts(posts) {
+      if (activeTypeFilter === "image") return posts.filter((post) => post.mediaType === "image");
+      if (activeTypeFilter === "video") return posts.filter((post) => post.mediaType === "video");
+      return posts;
+    }
+
+    function getSortedPosts(posts) {
+      const list = [...posts];
+      if (activeSort === "liked") {
+        list.sort((a, b) => Number(b.likesCount || 0) - Number(a.likesCount || 0));
+        return list;
+      }
+      if (activeSort === "commented") {
+        const commentsLen = (p) => (Array.isArray(p.comments) ? p.comments.length : 0);
+        list.sort((a, b) => commentsLen(b) - commentsLen(a));
+        return list;
+      }
+      list.sort((a, b) => (new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+      return list;
+    }
+
+    function applyFilters() {
+      const typed = getTypeFilteredPosts(allUserPosts);
+      const sorted = getSortedPosts(typed);
+      renderPosts(sorted);
+    }
+
+    function getViewerPostsSequence() {
+      const typed = getTypeFilteredPosts(allUserPosts);
+      return getSortedPosts(typed);
+    }
+
+    function renderPosts(posts) {
+      if (!posts.length) {
+        postsList.innerHTML = "<p>No posts yet.</p>";
+        return;
+      }
+
+      postsList.innerHTML = posts.map((post) => {
+        const postId = String(post.id);
+        const safeMediaUrl = escapeHtml(post.mediaUrl || "");
+        const mediaType = post.mediaType === "video" ? "video" : "image";
+        const likesCount = Number(post.likesCount || 0);
+        const comments = Array.isArray(post.comments) ? post.comments : [];
+        const commentsCount = comments.length;
+        const isScheduled = isOwnerView && isScheduledPost(post);
+        const scheduledLabel = isScheduled ? " - Scheduled" : "";
+        const isTarget = String(post.id) === targetPostId;
+        const isPinned = currentProfile && String(currentProfile.pinnedPostId || "") === String(post.id || "");
+        const authorDisplay = escapeHtml(shortAlphabetName(post.authorDisplayName || profileNameFromPost(post) || targetUsername, post.authorUsername || targetUsername || "User"));
+        const authorUser = escapeHtml(post.authorUsername || targetUsername);
+        const authorAvatar = escapeHtml(post.authorAvatarUrl || "assets/default-avatar.svg");
+        const isSaved = savedPostIds.has(postId);
+
+        const mediaHtml = mediaType === "video"
+          ? `<video class="post-media" data-hover-play src="${safeMediaUrl}" muted playsinline preload="metadata" loop></video>`
+          : `<img class="post-media" src="${safeMediaUrl}" alt="Post media" loading="lazy" onerror="this.src='assets/default-avatar.svg'">`;
+
+        return `
+          <article id="post-${escapeHtml(post.id)}" class="post-card${isTarget ? " highlight" : ""}" data-open-post="${escapeHtml(post.id)}">
+            <div class="post-head">
+              <div class="post-user">
+                <img class="post-avatar" src="${authorAvatar}" alt="${authorUser} avatar" onerror="this.src='assets/default-avatar.svg'">
+                <div>
+                  <strong>${authorDisplay}</strong>
+                </div>
+              </div>
+            </div>
+            ${mediaHtml}
+            <div class="post-meta">
+              <div class="post-actions">
+                <span class="post-sub">${isPinned ? "Pinned post - " : ""}Open post for actions</span>
+              </div>
+              <div class="post-meta-row">
+                <div class="post-sub">${likesCount} likes - ${commentsCount} comments${scheduledLabel}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      bindHoverVideos(postsList);
+
+      if (targetPostId && !didScrollToTargetPost) {
+        const target = document.getElementById(`post-${targetPostId}`);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+          didScrollToTargetPost = true;
+        }
+      }
+    }
+
+    function bindHoverVideos(root = document) {
+      if (!root || typeof root.querySelectorAll !== "function") return;
+      root.querySelectorAll("video[data-hover-play]").forEach((video) => {
+        if (video.dataset.hoverBound === "1") return;
+        video.dataset.hoverBound = "1";
+        video.autoplay = false;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+
+        const startPlayback = () => {
+          const playPromise = video.play();
+          if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+        };
+
+        const stopPlayback = () => {
+          try {
+            video.pause();
+          } catch (err) {}
+          video.currentTime = 0;
+        };
+
+        video.addEventListener("mouseenter", startPlayback);
+        video.addEventListener("mouseleave", stopPlayback);
+        video.addEventListener("focusin", startPlayback);
+        video.addEventListener("focusout", stopPlayback);
+        video.addEventListener("touchstart", startPlayback, { passive: true });
+
+        stopPlayback();
+      });
+    }
+
+    async function loadUserPostsPage() {
+      if (!targetUsername) return;
+      try {
+        await refreshTargetBlockState();
+        const [profile, posts] = await Promise.all([
+          fetchJson(`${API_ORIGIN}/api/users/profile/${encodeURIComponent(targetUsername)}`),
+          fetchJson(`${API_ORIGIN}/api/posts/user/${encodeURIComponent(targetUsername)}`)
+        ]);
+        await loadSavedPosts();
+        currentProfile = profile;
+        const displayName = profile.name || profile.username || targetUsername;
+        pageTitle.textContent = `${displayName}'s Posts`;
+        const totalPosts = Array.isArray(posts) ? posts.length : 0;
+        const scheduledPosts = isOwnerView ? posts.filter((post) => isScheduledPost(post)).length : 0;
+        metaText.textContent = isOwnerView && scheduledPosts > 0
+          ? `@${profile.username || targetUsername} - ${totalPosts} posts (${scheduledPosts} scheduled)`
+          : `@${profile.username || targetUsername} - ${totalPosts} posts`;
+        profileName.textContent = displayName;
+        profileUsername.textContent = `@${profile.username || targetUsername}`;
+        profileBio.textContent = profile.bio || "No bio yet.";
+        if (profile.coverImageUrl) {
+          profileCover.style.display = "block";
+          profileCover.src = profile.coverImageUrl;
+        } else {
+          profileCover.style.display = "none";
+          profileCover.removeAttribute("src");
+        }
+        profileCover.onerror = () => {
+          profileCover.style.display = "none";
+        };
+        const links = [];
+        const addLink = (href, label) => {
+          const raw = String(href || "").trim();
+          if (!/^https?:\/\//i.test(raw)) return;
+          links.push(`<a class="profile-link-chip" href="${escapeHtml(raw)}" target="_blank" rel="noopener noreferrer">${label}</a>`);
+        };
+        addLink(profile.websiteUrl, "Website");
+        addLink(profile.socialLinks && profile.socialLinks.instagram, "Instagram");
+        addLink(profile.socialLinks && profile.socialLinks.linkedin, "LinkedIn");
+        addLink(profile.socialLinks && profile.socialLinks.github, "GitHub");
+        addLink(profile.socialLinks && profile.socialLinks.x, "X");
+        profileLinks.innerHTML = links.join("");
+        profileAvatar.src = profile.avatarUrl || "assets/default-avatar.svg";
+        profileAvatar.onerror = () => { profileAvatar.src = "assets/default-avatar.svg"; };
+        document.documentElement.style.setProperty("--focus", (profile.themeColor || "#58bdff"));
+        followersCount.textContent = String(profile.followersCount || 0);
+        followingCount.textContent = String(profile.followingCount || 0);
+        await refreshFollowStateForTarget();
+        allUserPosts = Array.isArray(posts) ? posts : [];
+        if (profile.pinnedPostId) {
+          const pinId = String(profile.pinnedPostId);
+          allUserPosts.sort((a, b) => {
+            const aPinned = String(a.id || "") === pinId ? 1 : 0;
+            const bPinned = String(b.id || "") === pinId ? 1 : 0;
+            return bPinned - aPinned;
+          });
+        }
+        postsCount.textContent = String(allUserPosts.length);
+        applyFilters();
+        statusEl.textContent = "";
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not load user posts.";
+        postsList.innerHTML = "";
+        renderProfileActionButtons();
+      }
+    }
+
+    function profileNameFromPost(post) {
+      return post && post.authorDisplayName ? post.authorDisplayName : "";
+    }
+
+    feedFilters.addEventListener("click", (event) => {
+      const chip = event.target.closest("[data-type-filter]");
+      if (!chip) return;
+      activeTypeFilter = chip.getAttribute("data-type-filter") || "all";
+      Array.from(feedFilters.querySelectorAll("[data-type-filter]")).forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-type-filter") === activeTypeFilter);
+      });
+      applyFilters();
+    });
+
+    feedSortSelect.addEventListener("change", () => {
+      activeSort = feedSortSelect.value || "newest";
+      applyFilters();
+    });
+
+    postsList.addEventListener("click", async (event) => {
+      const openCard = event.target.closest("[data-open-post]");
+      const clickedInteractive = event.target.closest("button,input,textarea,form,a");
+      if (openCard && !clickedInteractive) {
+        openPostViewer(openCard.getAttribute("data-open-post"));
+        return;
+      }
+
+    });
+
+    viewerBody.addEventListener("click", async (event) => {
+      const prevBtn = event.target.closest("[data-viewer-prev]");
+      if (prevBtn) {
+        const sequence = getViewerPostsSequence();
+        const currentIndex = sequence.findIndex((p) => String(p.id) === String(currentViewerPostId));
+        if (currentIndex > 0) {
+          currentViewerPostId = String(sequence[currentIndex - 1].id);
+          renderViewerContent();
+        }
+        return;
+      }
+
+      const nextBtn = event.target.closest("[data-viewer-next]");
+      if (nextBtn) {
+        const sequence = getViewerPostsSequence();
+        const currentIndex = sequence.findIndex((p) => String(p.id) === String(currentViewerPostId));
+        if (currentIndex >= 0 && currentIndex < sequence.length - 1) {
+          currentViewerPostId = String(sequence[currentIndex + 1].id);
+          renderViewerContent();
+        }
+        return;
+      }
+
+      const likeBtn = event.target.closest("[data-viewer-like]");
+      if (likeBtn) {
+        const postId = String(likeBtn.getAttribute("data-viewer-like"));
+        likeBtn.disabled = true;
+        try {
+          const res = await fetch(`${POSTS_API}/${postId}/like`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ username })
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.message || "Could not update like");
+
+          allUserPosts = allUserPosts.map((post) => {
+            if (String(post.id) !== postId) return post;
+            const likedBy = Array.isArray(post.likedBy) ? [...post.likedBy] : [];
+            const hasLiked = likedBy.includes(username);
+            let nextLikedBy = likedBy;
+            if (data.liked && !hasLiked) nextLikedBy.push(username);
+            if (!data.liked && hasLiked) nextLikedBy = likedBy.filter((u) => u !== username);
+            return { ...post, likedBy: nextLikedBy, likesCount: data.likesCount };
+          });
+          applyFilters();
+          renderViewerContent();
+        } catch (err) {
+          statusEl.textContent = err.message || "Could not like post.";
+        } finally {
+          likeBtn.disabled = false;
+        }
+        return;
+      }
+
+      const saveBtn = event.target.closest("[data-viewer-save]");
+      if (saveBtn) {
+        const postId = String(saveBtn.getAttribute("data-viewer-save"));
+        saveBtn.disabled = true;
+        try {
+          const res = await fetch(`${POSTS_API}/${postId}/save`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ username })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.saved) savedPostIds.add(postId);
+            else savedPostIds.delete(postId);
+            if (data.saved) {
+              const alsoSave = await uiConfirm("Save to one of your collections too?");
+              if (alsoSave) {
+                try {
+                  const added = await savePostToCollection(postId);
+                  if (added) statusEl.textContent = "Saved to collection.";
+                } catch (collectionErr) {
+                  statusEl.textContent = collectionErr.message || "Could not save to collection.";
+                }
+              }
+            }
+          } else {
+            if (savedPostIds.has(postId)) savedPostIds.delete(postId);
+            else savedPostIds.add(postId);
+          }
+          applyFilters();
+          renderViewerContent();
+        } catch (err) {
+          if (savedPostIds.has(postId)) savedPostIds.delete(postId);
+          else savedPostIds.add(postId);
+          applyFilters();
+          renderViewerContent();
+        } finally {
+          saveBtn.disabled = false;
+        }
+        return;
+      }
+
+      const shareBtn = event.target.closest("[data-viewer-share]");
+      if (shareBtn) {
+        const postId = String(shareBtn.getAttribute("data-viewer-share"));
+        openShareModal(postId);
+        return;
+      }
+
+      const deleteBtn = event.target.closest("[data-viewer-delete-comment]");
+      if (!deleteBtn) return;
+      const commentId = String(deleteBtn.getAttribute("data-viewer-delete-comment"));
+      if (!currentViewerPostId || !commentId || !(await uiConfirm("Delete this comment?", { tone: "danger", okText: "Delete" }))) return;
+
+      deleteBtn.disabled = true;
+      try {
+        const res = await fetch(`${POSTS_API}/${currentViewerPostId}/comment/${commentId}`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Could not delete comment");
+        allUserPosts = allUserPosts.map((post) => {
+          if (String(post.id) !== String(currentViewerPostId)) return post;
+          return {
+            ...post,
+            comments: (post.comments || []).filter((c) => String(c.id) !== String(commentId))
+          };
+        });
+        applyFilters();
+        renderViewerContent();
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not delete comment.";
+      } finally {
+        deleteBtn.disabled = false;
+      }
+    });
+
+    viewerBody.addEventListener("submit", async (event) => {
+      const form = event.target.closest("#viewerCommentForm");
+      if (!form) return;
+      event.preventDefault();
+      if (!currentViewerPostId) return;
+
+      const input = form.querySelector('input[name="comment"]');
+      const commentText = (input && input.value ? input.value : "").trim();
+      if (!commentText) return;
+
+      const submitBtn = form.querySelector("button[type='submit']");
+      submitBtn.disabled = true;
+      try {
+        const res = await fetch(`${POSTS_API}/${currentViewerPostId}/comment`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ username, text: commentText })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Could not add comment");
+        allUserPosts = allUserPosts.map((post) => {
+          if (String(post.id) !== String(currentViewerPostId)) return post;
+          return { ...post, comments: [...(post.comments || []), data.comment] };
+        });
+        applyFilters();
+        renderViewerContent();
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not add comment.";
+      }
+    });
+
+    followersStat.addEventListener("click", () => openRelationsPopup("followers"));
+    followingStat.addEventListener("click", () => openRelationsPopup("following"));
+    closePopupBtn.addEventListener("click", closeRelationsPopup);
+    popup.addEventListener("click", (event) => {
+      if (event.target === popup) closeRelationsPopup();
+    });
+
+    viewerCloseBtn.addEventListener("click", closePostViewer);
+    postViewer.addEventListener("click", (event) => {
+      if (event.target === postViewer) closePostViewer();
+    });
+
+    if (closeShareModalBtn) {
+      closeShareModalBtn.addEventListener("click", closeShareModal);
+    }
+
+    if (shareModal) {
+      shareModal.addEventListener("click", (event) => {
+        if (event.target === shareModal) closeShareModal();
+      });
+    }
+
+    if (shareSearchInput) {
+      shareSearchInput.addEventListener("input", () => {
+        renderShareRecipients(shareSearchInput.value);
+      });
+    }
+
+    if (shareUserList) {
+      shareUserList.addEventListener("click", async (event) => {
+        const sendBtn = event.target.closest("[data-share-user]");
+        if (!sendBtn) return;
+        const targetUser = sendBtn.getAttribute("data-share-user");
+        if (!targetUser) return;
+        await sendPostToUser(targetUser, sendBtn);
+      });
+    }
+
+    if (shareWhatsappBtn) {
+      shareWhatsappBtn.addEventListener("click", async () => {
+        if (!currentViewerPostId) return;
+        await trackPostShare(currentViewerPostId);
+        const shareUrl = getShareUrl(currentViewerPostId);
+        const text = `Check this post on ASCAPDX Digital: ${shareUrl}`;
+        const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+        window.open(waUrl, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    if (shareFacebookBtn) {
+      shareFacebookBtn.addEventListener("click", async () => {
+        if (!currentViewerPostId) return;
+        await trackPostShare(currentViewerPostId);
+        const shareUrl = getShareUrl(currentViewerPostId);
+        const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`;
+        window.open(fbUrl, "_blank", "noopener,noreferrer");
+      });
+    }
+
+    if (shareInstagramBtn) {
+      shareInstagramBtn.addEventListener("click", async () => {
+        if (!currentViewerPostId) return;
+        await trackPostShare(currentViewerPostId);
+        const shareUrl = getShareUrl(currentViewerPostId);
+        const text = `Check this post on ASCAPDX Digital: ${shareUrl}`;
+        let copied = false;
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(text);
+            copied = true;
+          }
+        } catch (err) {
+          copied = false;
+        }
+        window.open("https://www.instagram.com/", "_blank", "noopener,noreferrer");
+        statusEl.textContent = copied
+          ? "Instagram opened. Link copied, paste it in your post or story."
+          : "Instagram opened. Copy the post link and paste it in your post or story.";
+      });
+    }
+
+    if (userActionsToggle) {
+      userActionsToggle.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (userActionsMenu && userActionsMenu.classList.contains("show")) {
+          closeUserActionsMenu();
+        } else {
+          openUserActionsMenu();
+        }
+      });
+    }
+
+    if (blockUserBtn) {
+      blockUserBtn.addEventListener("click", async () => {
+        await toggleTargetBlock();
+        closeUserActionsMenu();
+      });
+    }
+
+    if (reportUserBtn) {
+      reportUserBtn.addEventListener("click", async () => {
+        await reportTargetUser();
+        closeUserActionsMenu();
+      });
+    }
+
+    if (profileFollowBtn) {
+      profileFollowBtn.addEventListener("click", async () => {
+        await toggleFollowTarget();
+      });
+    }
+
+    if (profileChatBtn) {
+      profileChatBtn.addEventListener("click", () => {
+        openChatWithTargetUser();
+      });
+    }
+
+    document.addEventListener("click", (event) => {
+      if (!event.target.closest("#userActionsWrap")) closeUserActionsMenu();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && popup.classList.contains("show")) closeRelationsPopup();
+      if (event.key === "Escape" && postViewer.classList.contains("show")) closePostViewer();
+      if (event.key === "Escape" && shareModal && shareModal.classList.contains("show")) closeShareModal();
+      if (event.key === "Escape" && userActionsMenu && userActionsMenu.classList.contains("show")) closeUserActionsMenu();
+    });
+
+    renderProfileActionButtons();
+    loadShareRelations();
+    loadUserPostsPage();
+  </script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

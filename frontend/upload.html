@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Upload posts and stories on ASCAPDX Digital.">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/upload.css">
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/upload.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link active" href="upload.html"><i class="bi bi-cloud-arrow-up me-1"></i> Upload</a></li>
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container py-4">
+    <div class="upload-shell">
+      <section id="postUploadSection" class="upload-card">
+        <h1 class="upload-title">Upload Post</h1>
+        <p class="upload-sub">Image or video post with caption and privacy.</p>
+
+        <form id="postUploadForm" novalidate>
+          <div class="mb-3">
+            <label for="postMediaInput" class="form-label">Media</label>
+            <input id="postMediaInput" class="form-control" type="file" accept="image/*,video/*" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="postCaptionInput" class="form-label">Caption</label>
+            <textarea id="postCaptionInput" class="form-control" rows="3" maxlength="500" placeholder="Write a caption..."></textarea>
+          </div>
+
+          <div class="mb-3">
+            <label for="postPrivacyInput" class="form-label">Privacy</label>
+            <select id="postPrivacyInput" class="form-select">
+              <option value="public">Public</option>
+              <option value="followers">Followers only</option>
+              <option value="private">Only me</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="postPublishAtInput" class="form-label">Publish at (optional)</label>
+            <input id="postPublishAtInput" class="form-control" type="datetime-local">
+          </div>
+
+          <div class="mb-3 d-flex gap-2">
+            <button id="saveDraftBtn" class="btn btn-outline-info flex-fill" type="button">Save Draft</button>
+            <button id="loadDraftBtn" class="btn btn-outline-light flex-fill" type="button">Load Draft</button>
+            <button id="clearDraftBtn" class="btn btn-outline-danger flex-fill" type="button">Clear Draft</button>
+          </div>
+          <p id="draftStatus" class="status-line" aria-live="polite"></p>
+
+          <button id="postUploadBtn" class="btn btn-primary w-100" type="submit">Upload Post</button>
+        </form>
+
+        <div id="postProgressWrap" class="progress-wrap" aria-hidden="true">
+          <div class="progress"><div id="postProgressBar" class="progress-bar" style="width: 0%;"></div></div>
+          <p id="postProgressText" class="progress-text">Uploading... 0%</p>
+        </div>
+        <p id="postStatus" class="status-line" aria-live="polite"></p>
+      </section>
+
+      <section id="storyUploadSection" class="upload-card">
+        <h2 class="upload-title">Upload Story</h2>
+        <p class="upload-sub">Stories disappear in 24 hours.</p>
+
+        <form id="storyUploadForm" novalidate>
+          <div class="mb-3">
+            <label for="storyMediaInputPage" class="form-label">Story media</label>
+            <input id="storyMediaInputPage" class="form-control" type="file" accept="image/*,video/*" required>
+          </div>
+          <button id="storyUploadBtn" class="btn btn-success w-100" type="submit">Upload Story</button>
+        </form>
+
+        <div id="storyProgressWrapPage" class="progress-wrap" aria-hidden="true">
+          <div class="progress"><div id="storyProgressBarPage" class="progress-bar bg-success" style="width: 0%;"></div></div>
+          <p id="storyProgressTextPage" class="progress-text">Uploading... 0%</p>
+        </div>
+        <p id="storyStatusPage" class="status-line" aria-live="polite"></p>
+      </section>
+    </div>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script src="js/upload.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>
+
+

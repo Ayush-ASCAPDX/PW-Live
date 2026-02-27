@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Security | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap");
+    :root {
+      --panel: rgba(14, 30, 51, 0.78);
+      --line: rgba(153, 197, 244, 0.22);
+      --text: #eaf5ff;
+      --muted: #a8c3de;
+      --primary: #31c0ff;
+      --secondary: #46e0b6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      background: radial-gradient(circle at 80% -25%, #1b3c65 0%, #0a1528 45%, #050a12 100%);
+    }
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 40;
+      background: linear-gradient(120deg, rgba(7, 18, 34, 0.86), rgba(11, 26, 46, 0.62));
+      border-bottom: 1px solid rgba(196, 220, 250, 0.16);
+      backdrop-filter: blur(14px);
+    }
+    .nav-link {
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      color: #e8f3ff !important;
+    }
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(64, 168, 255, 0.2);
+    }
+    main {
+      min-height: 100vh;
+      padding: 6.6rem 1rem 1rem;
+      display: grid;
+      place-items: start center;
+    }
+    .shell {
+      width: min(1000px, 96vw);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: linear-gradient(145deg, var(--panel), rgba(8, 20, 36, 0.72));
+      box-shadow: 0 20px 45px rgba(2, 8, 16, 0.4);
+      padding: 1rem;
+    }
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      margin-bottom: 0.8rem;
+    }
+    .head h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      font-family: "Sora", sans-serif;
+    }
+    .stats {
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(8, 24, 42, 0.65);
+      color: #dff0ff;
+      padding: 0.22rem 0.58rem;
+      font-size: 0.78rem;
+    }
+    .list {
+      display: grid;
+      gap: 0.6rem;
+    }
+    .row-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(9, 25, 45, 0.8);
+      padding: 0.7rem;
+    }
+    .row-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    .badge-soft {
+      border: 1px solid rgba(153, 197, 244, 0.36);
+      border-radius: 999px;
+      padding: 0.14rem 0.46rem;
+      font-size: 0.72rem;
+      color: #cde6ff;
+      background: rgba(25, 64, 98, 0.35);
+    }
+    .muted {
+      color: var(--muted);
+      font-size: 0.82rem;
+      margin-top: 0.32rem;
+    }
+    .actions {
+      margin-top: 0.55rem;
+      display: flex;
+      gap: 0.45rem;
+      flex-wrap: wrap;
+    }
+    .actions.tight {
+      margin-top: 0;
+    }
+    .actions select,
+    .actions input {
+      border: 1px solid rgba(153, 197, 244, 0.26);
+      border-radius: 9px;
+      background: rgba(7, 20, 36, 0.88);
+      color: #eaf5ff;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.5rem;
+    }
+    .actions button {
+      border: 0;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #03263f;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+      padding: 0.33rem 0.72rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .panel-card {
+      margin-bottom: 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 0.65rem;
+      background: rgba(9, 25, 45, 0.74);
+    }
+    .card-title {
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-bottom: 0.42rem;
+    }
+    .link-stat {
+      text-decoration: none;
+    }
+    .input-hours {
+      max-width: 130px;
+    }
+    .status {
+      min-height: 1.25rem;
+      margin-top: 0.6rem;
+      color: #93f1c8;
+      font-size: 0.85rem;
+    }
+  </style>
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/admin-security.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Posts</a></li>
+          <li class="nav-item"><a class="nav-link" href="admin-moderation.html"><i class="bi bi-shield-check me-1"></i> Moderation</a></li>
+          <li class="nav-item"><a class="nav-link active" href="admin-security.html"><i class="bi bi-shield-lock me-1"></i> Security</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main id="adminMain" style="display:none;">
+    <section class="shell">
+      <div class="head">
+        <h1>Admin Security Panel</h1>
+        <div class="stats">
+          <a class="stat link-stat" href="admin-moderation.html">Open Moderation</a>
+        </div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">Platform Analytics</div>
+        <div id="analyticsSummary" class="muted">Loading analytics...</div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">Security Events</div>
+        <div class="actions tight">
+          <input id="securityFilterUser" type="text" maxlength="40" placeholder="filter by username">
+          <select id="securityFilterType">
+            <option value="">all event types</option>
+            <option value="login_locked">login_locked</option>
+            <option value="login_locked_attempt">login_locked_attempt</option>
+            <option value="otp_verify_failed">otp_verify_failed</option>
+            <option value="otp_verify_failed_limit">otp_verify_failed_limit</option>
+            <option value="login_success">login_success</option>
+            <option value="password_reset_requested">password_reset_requested</option>
+            <option value="password_reset_completed">password_reset_completed</option>
+          </select>
+          <button type="button" id="loadSecurityBtn">Load Events</button>
+        </div>
+        <div id="securityEventsList" class="list"></div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">Active Lockouts</div>
+        <div id="lockoutsList" class="list"></div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">User Risk Lookup</div>
+        <div class="actions tight">
+          <input id="riskUsernameInput" type="text" maxlength="40" placeholder="username risk lookup">
+          <button type="button" id="riskLookupBtn">Lookup Risk</button>
+        </div>
+        <div id="riskResult" class="muted"></div>
+      </div>
+
+      <div class="panel-card">
+        <div class="card-title">OTP Delivery Telemetry</div>
+        <div class="actions tight">
+          <input id="otpHoursInput" class="input-hours" type="number" min="1" max="336" value="24" placeholder="hours">
+          <button type="button" id="otpTelemetryBtn">Load OTP Telemetry</button>
+        </div>
+        <div id="otpSummary" class="muted"></div>
+        <div id="otpTelemetryList" class="list"></div>
+      </div>
+
+      <div id="status" class="status"></div>
+    </section>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script>
+    (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth());
+    const API_ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+    const API_ADMIN = `${API_ORIGIN}/api/admin`;
+    const statusEl = document.getElementById("status");
+    const analyticsSummaryEl = document.getElementById("analyticsSummary");
+    const securityFilterUser = document.getElementById("securityFilterUser");
+    const securityFilterType = document.getElementById("securityFilterType");
+    const loadSecurityBtn = document.getElementById("loadSecurityBtn");
+    const securityEventsList = document.getElementById("securityEventsList");
+    const lockoutsList = document.getElementById("lockoutsList");
+    const riskUsernameInput = document.getElementById("riskUsernameInput");
+    const riskLookupBtn = document.getElementById("riskLookupBtn");
+    const riskResult = document.getElementById("riskResult");
+    const otpHoursInput = document.getElementById("otpHoursInput");
+    const otpTelemetryBtn = document.getElementById("otpTelemetryBtn");
+    const otpSummary = document.getElementById("otpSummary");
+    const otpTelemetryList = document.getElementById("otpTelemetryList");
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    async function authFetchJson(url, options = {}) {
+      const fetcher = window.APP_CONFIG && window.APP_CONFIG.authFetch ? window.APP_CONFIG.authFetch : fetch;
+      const res = await fetcher(url, options);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || "Request failed");
+      return data;
+    }
+
+    function formatDateTime(value) {
+      const d = new Date(value || 0);
+      if (!d.getTime()) return "";
+      return d.toLocaleString();
+    }
+
+    async function loadAnalyticsSummary() {
+      const data = await authFetchJson(`${API_ADMIN}/analytics/summary`);
+      analyticsSummaryEl.innerHTML = `
+        <span class="stat">Users: ${Number(data.users || 0)}</span>
+        <span class="stat">Posts: ${Number(data.posts || 0)}</span>
+        <span class="stat">Stories: ${Number(data.stories || 0)}</span>
+        <span class="stat">Messages: ${Number(data.messages || 0)}</span>
+        <span class="stat">Calls: ${Number(data.calls || 0)}</span>
+        <span class="stat">Reports Open: ${Number((data.reports && data.reports.open) || 0)}</span>
+      `;
+    }
+
+    function renderLockouts(payload) {
+      const active = Array.isArray(payload && payload.active) ? payload.active : [];
+      if (!active.length) {
+        lockoutsList.innerHTML = '<p class="muted">No active lockouts.</p>';
+        return;
+      }
+      lockoutsList.innerHTML = active.map((item) => `
+        <article class="row-card">
+          <div class="row-head">
+            <strong>@${escapeHtml(item.username || "")}</strong>
+            <span class="badge-soft">locked</span>
+          </div>
+          <div class="muted">Email: ${escapeHtml(item.email || "")}</div>
+          <div class="muted">Until: ${escapeHtml(formatDateTime(item.loginLockedUntil))}</div>
+        </article>
+      `).join("");
+    }
+
+    function renderSecurityEvents(items) {
+      if (!Array.isArray(items) || !items.length) {
+        securityEventsList.innerHTML = '<p class="muted">No security events found.</p>';
+        return;
+      }
+      securityEventsList.innerHTML = items.map((item) => `
+        <article class="row-card">
+          <div class="row-head">
+            <strong>${escapeHtml(item.type || "event")}</strong>
+            <small class="muted">${escapeHtml(formatDateTime(item.createdAt))}</small>
+          </div>
+          <div class="muted">User: @${escapeHtml(item.username || "unknown")} | IP: ${escapeHtml(item.ip || "unknown")}</div>
+          <div class="muted">UA: ${escapeHtml(item.userAgent || "unknown")}</div>
+        </article>
+      `).join("");
+    }
+
+    async function loadSecurityEventsAndLockouts() {
+      const usernameQ = String((securityFilterUser && securityFilterUser.value) || "").trim();
+      const typeQ = String((securityFilterType && securityFilterType.value) || "").trim();
+      const query = new URLSearchParams();
+      query.set("limit", "160");
+      if (usernameQ) query.set("username", usernameQ);
+      if (typeQ) query.set("type", typeQ);
+      const [events, lockouts] = await Promise.all([
+        authFetchJson(`${API_ADMIN}/security-events?${query.toString()}`),
+        authFetchJson(`${API_ADMIN}/lockouts`)
+      ]);
+      renderSecurityEvents(events.items || []);
+      renderLockouts(lockouts || {});
+    }
+
+    async function lookupRisk() {
+      const uname = String((riskUsernameInput && riskUsernameInput.value) || "").trim();
+      if (!uname) throw new Error("Enter a username to lookup risk");
+      const data = await authFetchJson(`${API_ADMIN}/users/${encodeURIComponent(uname)}/risk`);
+      riskResult.innerHTML = `
+        <span class="stat">Risk: ${escapeHtml(String((data.risk && data.risk.level) || "low"))}</span>
+        <span class="stat">Score: ${Number((data.risk && data.risk.score) || 0)}</span>
+        <span class="stat">Reports: ${Number((data.signals && data.signals.reportsAsTarget) || 0)}</span>
+        <span class="stat">Failed Logins: ${Number((data.signals && data.signals.failedLoginCount) || 0)}</span>
+      `;
+    }
+
+    function renderOtpTelemetry(payload) {
+      const summary = (payload && payload.summary) || {};
+      const byPurpose = summary.byPurpose || {};
+      otpSummary.innerHTML = `
+        <span class="stat">Total: ${Number(summary.total || 0)}</span>
+        <span class="stat">Delivered: ${Number(summary.delivered || 0)}</span>
+        <span class="stat">Failed: ${Number(summary.failed || 0)}</span>
+        <span class="stat">Register: ${Number((byPurpose.register && byPurpose.register.delivered) || 0)}/${Number((byPurpose.register && byPurpose.register.failed) || 0)}</span>
+        <span class="stat">Login: ${Number((byPurpose.login && byPurpose.login.delivered) || 0)}/${Number((byPurpose.login && byPurpose.login.failed) || 0)}</span>
+      `;
+      const items = Array.isArray(payload && payload.items) ? payload.items : [];
+      if (!items.length) {
+        otpTelemetryList.innerHTML = '<p class="muted">No OTP delivery records in this range.</p>';
+        return;
+      }
+      otpTelemetryList.innerHTML = items.map((item) => `
+        <article class="row-card">
+          <div class="row-head">
+            <strong>${escapeHtml(item.purpose || "register")}</strong>
+            <span class="badge-soft">${item.delivered ? "delivered" : "failed"}</span>
+          </div>
+          <div class="muted">${escapeHtml(item.email || "")} | ${escapeHtml(item.provider || "smtp")}</div>
+          <div class="muted">${escapeHtml(item.errorCode || "")} ${item.errorMessage ? `- ${escapeHtml(item.errorMessage)}` : ""}</div>
+          <div class="muted">${escapeHtml(formatDateTime(item.createdAt))}</div>
+        </article>
+      `).join("");
+    }
+
+    async function loadOtpTelemetry() {
+      const hours = Math.max(1, Math.min(336, Number((otpHoursInput && otpHoursInput.value) || 24) || 24));
+      const payload = await authFetchJson(`${API_ADMIN}/otp-telemetry?hours=${encodeURIComponent(String(hours))}`);
+      renderOtpTelemetry(payload || {});
+    }
+
+    if (loadSecurityBtn) {
+      loadSecurityBtn.addEventListener("click", async () => {
+        loadSecurityBtn.disabled = true;
+        try {
+          await loadSecurityEventsAndLockouts();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to load security events.";
+        } finally {
+          loadSecurityBtn.disabled = false;
+        }
+      });
+    }
+
+    if (riskLookupBtn) {
+      riskLookupBtn.addEventListener("click", async () => {
+        riskLookupBtn.disabled = true;
+        try {
+          await lookupRisk();
+        } catch (err) {
+          statusEl.textContent = err.message || "Risk lookup failed.";
+        } finally {
+          riskLookupBtn.disabled = false;
+        }
+      });
+    }
+
+    if (otpTelemetryBtn) {
+      otpTelemetryBtn.addEventListener("click", async () => {
+        otpTelemetryBtn.disabled = true;
+        try {
+          await loadOtpTelemetry();
+        } catch (err) {
+          statusEl.textContent = err.message || "Failed to load OTP telemetry.";
+        } finally {
+          otpTelemetryBtn.disabled = false;
+        }
+      });
+    }
+
+    async function resolveCurrentRole() {
+      const me = await authFetchJson(`${API_ORIGIN}/api/auth/session`);
+      const role = String((me && me.role) || "user");
+      localStorage.setItem("userRole", role);
+      return role;
+    }
+
+    (async () => {
+      try {
+        const role = await resolveCurrentRole();
+        if (role !== "admin") {
+          window.location.href = "index.html";
+          return;
+        }
+        if (document.getElementById("adminMain")) {
+          document.getElementById("adminMain").style.display = "";
+        }
+        await loadAnalyticsSummary();
+        await loadSecurityEventsAndLockouts();
+        await loadOtpTelemetry();
+      } catch (err) {
+        statusEl.textContent = err.message || "Admin access required.";
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 700);
+      }
+    })();
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>

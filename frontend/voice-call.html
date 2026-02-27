@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCAPDX Voice Call</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap");
+
+    :root {
+      --bg: #050d18;
+      --panel: rgba(10, 27, 49, 0.72);
+      --line: rgba(154, 204, 255, 0.25);
+      --text: #eaf5ff;
+      --muted: #9fc3e4;
+      --primary: #45c3ff;
+      --secondary: #39f1cf;
+      --danger: #ff6f7f;
+      --radius: 16px;
+      --shadow: 0 24px 45px rgba(2, 8, 16, 0.52);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Outfit", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 85% -15%, rgba(44, 124, 198, 0.68), transparent 38%),
+        radial-gradient(circle at 12% 100%, rgba(41, 156, 139, 0.35), transparent 36%),
+        linear-gradient(180deg, #071325 0%, #030a13 100%);
+      padding: 6rem 1rem 1.5rem;
+    }
+
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.9rem 1.25rem;
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(182, 214, 250, 0.2);
+      background: linear-gradient(120deg, rgba(7, 18, 32, 0.88), rgba(8, 30, 52, 0.64));
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #deeeff;
+      text-decoration: none;
+      font-family: "Space Grotesk", sans-serif;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+    }
+
+    .brand img {
+      border-radius: 10px;
+      box-shadow: 0 0 0 1px rgba(172, 210, 255, 0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 0.45rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #dceaff;
+      font-size: 0.92rem;
+      font-weight: 500;
+      letter-spacing: 0.03em;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
+      transition: background-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+      background: rgba(74, 166, 255, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .nav-links a.active {
+      background: rgba(55, 197, 255, 0.2);
+      color: #ecfbff;
+      border: 1px solid rgba(154, 220, 255, 0.28);
+    }
+
+    .call-shell {
+      width: min(980px, 96vw);
+      margin: 0 auto;
+      background: linear-gradient(145deg, var(--panel), rgba(8, 24, 42, 0.7));
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius) + 4px);
+      box-shadow: var(--shadow);
+      padding: 1.2rem;
+    }
+
+    h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.35rem, 2.4vw, 1.95rem);
+      margin-bottom: 0.8rem;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      color: var(--muted);
+    }
+
+    .pill {
+      border: 1px solid rgba(166, 205, 247, 0.3);
+      border-radius: 999px;
+      padding: 0.4rem 0.75rem;
+      background: rgba(9, 29, 54, 0.55);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1rem;
+    }
+
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(7, 23, 40, 0.62);
+      padding: 1rem;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.65rem;
+      margin-top: 0.8rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.4rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      height: 2.7rem;
+      border-radius: 12px;
+      border: 1px solid rgba(167, 208, 253, 0.24);
+      background: rgba(4, 17, 31, 0.88);
+      color: var(--text);
+      padding: 0 0.8rem;
+      font-family: inherit;
+    }
+
+    .target-chip {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.55rem;
+      border: 1px solid rgba(157, 208, 252, 0.34);
+      border-radius: 12px;
+      background: rgba(8, 31, 54, 0.58);
+      color: #d9eeff;
+      padding: 0.5rem 0.65rem;
+      margin-bottom: 0.55rem;
+      min-height: 2.7rem;
+    }
+
+    .target-chip.show {
+      display: flex;
+    }
+
+    .target-change-btn {
+      height: auto;
+      border: 1px solid rgba(153, 197, 244, 0.35);
+      border-radius: 999px;
+      background: rgba(57, 143, 255, 0.2);
+      color: #eaf3ff;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 0.24rem 0.62rem;
+      cursor: pointer;
+    }
+
+    button {
+      height: 2.7rem;
+      border: none;
+      border-radius: 12px;
+      font-weight: 600;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .btn-call {
+      color: #052035;
+      background: linear-gradient(120deg, var(--primary), var(--secondary));
+    }
+
+    .btn-mute {
+      color: #e9f6ff;
+      border: 1px solid rgba(157, 211, 255, 0.38);
+      background: rgba(20, 56, 92, 0.55);
+    }
+
+    .btn-hang {
+      color: #fff;
+      background: rgba(255, 111, 127, 0.23);
+      border: 1px solid rgba(255, 152, 164, 0.35);
+    }
+
+    .btn-hang:disabled,
+    .btn-mute:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .status {
+      margin-top: 0.9rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 12px;
+      border: 1px solid rgba(167, 208, 253, 0.22);
+      background: rgba(8, 31, 54, 0.58);
+      color: #d9eeff;
+      min-height: 2.85rem;
+    }
+
+    .call-timer {
+      margin-top: 0.6rem;
+      color: #b6d8f8;
+      font-size: 0.92rem;
+      letter-spacing: 0.04em;
+    }
+
+    .incoming-card {
+      margin-top: 0.9rem;
+      padding: 0.85rem;
+      border-radius: 12px;
+      border: 1px solid rgba(170, 211, 255, 0.3);
+      background: rgba(8, 33, 58, 0.65);
+      display: none;
+    }
+
+    .incoming-card.show {
+      display: block;
+      animation: pulseRing 1.15s ease-in-out infinite;
+    }
+
+    .incoming-title {
+      font-weight: 600;
+      margin-bottom: 0.62rem;
+    }
+
+    .incoming-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .btn-accept {
+      background: linear-gradient(120deg, #50d0ff, #49f1d0);
+      color: #062237;
+    }
+
+    .btn-reject {
+      background: rgba(255, 113, 127, 0.26);
+      border: 1px solid rgba(255, 160, 171, 0.4);
+      color: #fff;
+    }
+
+    .online-list {
+      list-style: none;
+      display: grid;
+      gap: 0.45rem;
+      max-height: 300px;
+      overflow: auto;
+      padding-right: 0.2rem;
+    }
+
+    .online-list li {
+      border: 1px solid rgba(158, 204, 253, 0.23);
+      border-radius: 10px;
+      padding: 0.48rem 0.62rem;
+      background: rgba(8, 29, 53, 0.52);
+      font-size: 0.95rem;
+      color: #d9ebff;
+      cursor: pointer;
+    }
+
+    .online-list li:hover {
+      background: rgba(39, 126, 199, 0.35);
+    }
+
+    .online-list .you {
+      opacity: 0.78;
+      cursor: default;
+    }
+
+    .history-wrap {
+      margin-top: 1rem;
+      border-top: 1px solid rgba(169, 207, 250, 0.2);
+      padding-top: 0.85rem;
+    }
+
+    .history-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+      align-items: center;
+    }
+
+    .history-search {
+      width: 100%;
+      margin-top: 0.55rem;
+      height: 2.05rem;
+      border-radius: 10px;
+      border: 1px solid rgba(157, 211, 255, 0.28);
+      background: rgba(8, 30, 54, 0.7);
+      color: #eaf5ff;
+      padding: 0 0.62rem;
+      font-size: 0.85rem;
+    }
+
+    .filter-btn {
+      height: 2rem;
+      padding: 0 0.65rem;
+      border-radius: 999px;
+      border: 1px solid rgba(156, 207, 255, 0.32);
+      background: rgba(15, 44, 76, 0.55);
+      color: #dff1ff;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .filter-btn.active {
+      background: rgba(71, 189, 255, 0.3);
+      border-color: rgba(157, 223, 255, 0.52);
+    }
+
+    .clear-history-btn {
+      margin-left: auto;
+      height: 2rem;
+      padding: 0 0.7rem;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 167, 178, 0.38);
+      background: rgba(255, 114, 132, 0.2);
+      color: #fff;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .export-history-btn {
+      height: 2rem;
+      padding: 0 0.7rem;
+      border-radius: 10px;
+      border: 1px solid rgba(164, 213, 255, 0.38);
+      background: rgba(64, 143, 212, 0.26);
+      color: #eaf6ff;
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .history-list {
+      list-style: none;
+      margin-top: 0.6rem;
+      display: grid;
+      gap: 0.5rem;
+      max-height: 230px;
+      overflow: auto;
+      padding-right: 0.2rem;
+    }
+
+    .history-item {
+      border: 1px solid rgba(157, 203, 250, 0.24);
+      border-radius: 10px;
+      background: rgba(9, 28, 51, 0.55);
+      padding: 0.5rem 0.6rem;
+    }
+
+    .history-item strong {
+      color: #eef8ff;
+      font-size: 0.92rem;
+    }
+
+    .history-meta {
+      margin-top: 0.2rem;
+      color: #9fc2e0;
+      font-size: 0.82rem;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 0.85rem;
+    }
+
+    @media (max-width: 880px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .controls {
+        grid-template-columns: 1fr;
+      }
+
+      .incoming-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .glass-nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.55rem;
+      }
+
+      body {
+        padding-top: 7.6rem;
+      }
+    }
+
+    @keyframes pulseRing {
+      0% { box-shadow: 0 0 0 0 rgba(84, 194, 255, 0.33); }
+      100% { box-shadow: 0 0 0 14px rgba(84, 194, 255, 0); }
+    }
+  </style>
+</head>
+<body data-seo-path="/voice-call.html">
+  <nav class="glass-nav">
+    <a class="brand" href="index.html">
+      <img src="assets/logo.png" height="34" alt="ASCAPDX">
+      <span>ASCAPDX</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li><a href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+      <li><a href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+      <li><a href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+      <li><a href="profile.html">Profile</a></li>
+    </ul>
+  </nav>
+
+  <main class="call-shell">
+    <h1>ASCAPDX Voice Call</h1>
+    <div class="meta">
+      <div class="pill">You: <strong id="usernameDisplay"></strong></div>
+      <div class="pill">State: <strong id="callState">Idle</strong></div>
+    </div>
+
+    <div class="grid">
+      <section class="panel">
+        <div id="targetUserChip" class="target-chip" aria-live="polite">
+          <span id="targetUserText">Target</span>
+          <button id="targetChangeBtn" class="target-change-btn" type="button">Change</button>
+        </div>
+        <label id="targetUserLabel" for="targetUser">Call username</label>
+        <input id="targetUser" placeholder="Enter username to call">
+        <label for="audioQuality" style="margin-top:0.65rem;">Audio quality</label>
+        <select id="audioQuality" style="width:100%;height:2.7rem;border-radius:12px;border:1px solid rgba(167, 208, 253, 0.24);background:rgba(4, 17, 31, 0.88);color:var(--text);padding:0 0.8rem;font-family:inherit;">
+          <option value="best">Best Clarity</option>
+          <option value="standard">Standard</option>
+        </select>
+
+        <div class="controls">
+          <button id="callBtn" class="btn-call" type="button">Start Call</button>
+          <button id="muteBtn" class="btn-mute" type="button" disabled>Mute Mic</button>
+          <button id="hangupBtn" class="btn-hang" type="button" disabled>End Call</button>
+        </div>
+
+        <div id="statusBox" class="status">Ready.</div>
+        <div id="callTimer" class="call-timer">Duration: 00:00</div>
+
+        <div id="incomingCard" class="incoming-card">
+          <div id="incomingText" class="incoming-title">Incoming call...</div>
+          <div class="incoming-actions">
+            <button id="acceptBtn" type="button" class="btn-accept">Accept</button>
+            <button id="rejectBtn" type="button" class="btn-reject">Reject</button>
+          </div>
+        </div>
+
+        <audio id="remoteAudio" autoplay></audio>
+        <audio id="localAudio" autoplay muted></audio>
+      </section>
+
+      <aside class="panel">
+        <div class="history-wrap">
+          <h3 style="margin-bottom:0.2rem;">Recent Calls</h3>
+          <div class="history-actions">
+            <button type="button" class="filter-btn active" data-filter="all">All</button>
+            <button type="button" class="filter-btn" data-filter="missed">Missed</button>
+            <button type="button" class="filter-btn" data-filter="completed">Completed</button>
+            <button type="button" id="exportHistoryBtn" class="export-history-btn">Export CSV</button>
+            <button type="button" id="clearHistoryBtn" class="clear-history-btn">Clear History</button>
+          </div>
+          <input id="historySearchInput" class="history-search" type="text" placeholder="Search by username...">
+          <ul id="callHistory" class="history-list"></ul>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/ui-feedback.js"></script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/voice-call.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>
+
+
+

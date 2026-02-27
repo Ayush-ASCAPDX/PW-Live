@@ -1,0 +1,158 @@
+:root {
+  --text-primary: #f8fbff;
+  --text-muted: #c6d3e8;
+  --label-color: #9ad7eb;
+  --surface: rgba(8, 16, 36, 0.55);
+  --surface-strong: rgba(10, 24, 52, 0.82);
+  --border: rgba(158, 191, 238, 0.24);
+  --accent: #59b3ff;
+  --accent-strong: #2a75e6;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  width: 100%;
+  font-family: "Outfit", sans-serif;
+}
+
+body {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 28px 16px;
+  overflow-x: hidden;
+}
+
+.video-bg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  filter: brightness(0.46) saturate(1.05);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 14% 18%, rgba(74, 154, 255, 0.28), transparent 36%),
+    radial-gradient(circle at 86% 84%, rgba(43, 88, 165, 0.22), transparent 40%),
+    linear-gradient(140deg, rgba(3, 10, 25, 0.8), rgba(4, 20, 44, 0.7));
+}
+
+.glass-card {
+  width: min(92vw, 500px);
+  border-radius: 26px;
+  padding: 34px 30px 28px;
+  color: var(--text-primary);
+  background: linear-gradient(160deg, var(--surface) 6%, var(--surface-strong) 96%);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 24px 60px rgba(2, 7, 20, 0.46);
+}
+
+.login-heading {
+  margin: 0 0 8px;
+  color: var(--text-primary);
+  font-size: clamp(1.6rem, 4vw, 2rem);
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.2px;
+}
+
+.login-subtitle {
+  margin: 0 0 24px;
+  color: var(--text-muted);
+  text-align: center;
+  font-size: 0.96rem;
+}
+
+.form-label {
+  color: var(--label-color);
+  margin-bottom: 0.42rem;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+}
+
+#login-form .form-control {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-primary);
+  border: 1px solid rgba(151, 187, 243, 0.25);
+  border-radius: 12px;
+  padding: 11px 13px;
+  margin-bottom: 12px;
+}
+
+#login-form .form-control::placeholder {
+  color: rgba(217, 230, 250, 0.58);
+}
+
+#login-form .form-control:focus {
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(113, 176, 255, 0.72);
+  box-shadow: 0 0 0 0.2rem rgba(59, 132, 236, 0.22);
+}
+
+#loginBtn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 11px 14px;
+  border: 0;
+  margin-top: 4px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  background: linear-gradient(140deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 8px 24px rgba(44, 120, 220, 0.38);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+#loginBtn:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.04);
+  box-shadow: 0 12px 28px rgba(44, 120, 220, 0.45);
+}
+
+.login-footer {
+  margin-top: 0.9rem;
+  text-align: center;
+  color: var(--text-muted);
+}
+
+.login-footer a {
+  color: #ffffff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+.status-msg {
+  margin: 12px 0 0;
+  min-height: 24px;
+  text-align: center;
+  font-weight: 500;
+  color: #ff9ca8;
+}
+
+@media (max-width: 576px) {
+  .glass-card {
+    width: 100%;
+    border-radius: 20px;
+    padding: 24px 18px 20px;
+  }
+
+  .login-subtitle {
+    margin-bottom: 20px;
+  }
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Activity | ASCAPDX Digital</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-dark text-light">
+  <div class="container py-4" style="max-width:900px;">
+    <h1 class="h4 mb-3">Security Activity</h1>
+    <p class="text-secondary">Recent login, OTP, and account security events.</p>
+    <div class="mb-3">
+      <a href="profile.html" class="btn btn-outline-light btn-sm">Back to Profile</a>
+    </div>
+    <div id="status" class="small text-info mb-2"></div>
+    <div id="list" class="list-group"></div>
+  </div>
+
+  <script src="js/app-config.js"></script>
+  <script>
+    const app = window.APP_CONFIG || null;
+    if (!(app && app.requireAuth && app.requireAuth())) {}
+
+    const API = (app && app.backendOrigin) || "http://localhost:5000";
+    const listEl = document.getElementById("list");
+    const statusEl = document.getElementById("status");
+
+    function escapeHtml(value) {
+      return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    async function load() {
+      try {
+        const request = (app && app.authFetch) || fetch;
+        const res = await request(`${API}/api/users/security-events?limit=120`);
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.message || "Failed to load");
+        const items = Array.isArray(data.items) ? data.items : [];
+        if (!items.length) {
+          listEl.innerHTML = '<div class="list-group-item bg-black text-secondary border-secondary">No security events yet.</div>';
+          return;
+        }
+        listEl.innerHTML = items.map((item) => `
+          <div class="list-group-item bg-black text-light border-secondary">
+            <div><strong>${escapeHtml(item.type || "event")}</strong></div>
+            <div class="small text-secondary">IP: ${escapeHtml(item.ip || "unknown")} | ${escapeHtml(item.userAgent || "unknown device")}</div>
+            <div class="small text-secondary">${escapeHtml(new Date(item.createdAt).toLocaleString())}</div>
+          </div>
+        `).join("");
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not load security activity.";
+      }
+    }
+
+    load();
+  </script>
+</body>
+</html>

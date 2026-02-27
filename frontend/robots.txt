@@ -1,0 +1,62 @@
+# ==============================================================
+#     █████╗ ███████╗ ██████╗ █████╗ ██████╗ ██████╗ ██╗  ██╗  ||
+#    ██╔══██╗██╔════╝██╔════╝██╔══██╗██╔══██╗██╔══██╗╚██╗██╔╝  ||
+#    ███████║███████╗██║     ███████║██████╔╝██║  ██║ ╚███╔╝   ||
+#    ██╔══██║╚════██║██║     ██╔══██║██╔═══╝ ██║  ██║ ██╔██╗   ||
+#    ██║  ██║███████║╚██████╗██║  ██║██║     ██████╔╝██╔╝ ██╗  ||
+#    ╚═╝  ╚═╝╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝     ╚═════╝ ╚═╝  ╚═╝  || 
+#                                                              ||
+#                 ASCAPDX — Social media Platform       ||
+#                 https://yourdomain.com                       ||
+# ==============================================================
+
+# =========================
+# Global Rules
+# =========================
+User-agent: *
+Allow: /
+
+
+# ------------------------------------------------------------
+# Authentication Pages (Private)
+# ------------------------------------------------------------
+Disallow: /login.html
+Disallow: /signup.html
+Disallow: /change-password.html
+Disallow: /delete-account.html
+
+# ------------------------------------------------------------
+# User Private Features
+# ------------------------------------------------------------
+Disallow: /chat.html
+Disallow: /follow-people.html
+Disallow: /profile.html
+Disallow: /user-profile.html
+Disallow: /user-posts.html
+Disallow: /upload.html
+Disallow: /notifications.html
+Disallow: /settings.html
+Disallow: /insights.html
+Disallow: /manage-posts.html
+
+# ------------------------------------------------------------
+# Real-Time Communication
+# ------------------------------------------------------------
+Disallow: /voice-call.html
+Disallow: /video-call.html
+Disallow: /media-viewer.html
+
+# ------------------------------------------------------------
+# Admin & Moderation
+# ------------------------------------------------------------
+Disallow: /admin-moderation.html
+
+# ------------------------------------------------------------
+# SEO
+# ------------------------------------------------------------
+Sitemap: https://yourdomain.com/sitemap.xml
+
+# ============================================================
+#     Built by ASCAPDX Engineering Team
+#     © 2026 ASCAPDX. All rights reserved.
+# ============================================================

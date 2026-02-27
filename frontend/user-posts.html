@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Posts | ASCAPDX Digital</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@600;700&display=swap");
+
+    :root {
+      --panel: rgba(14, 30, 51, 0.78);
+      --line: rgba(153, 197, 244, 0.22);
+      --text: #eaf5ff;
+      --muted: #a8c3de;
+      --focus: rgba(88, 189, 255, 0.95);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      font-family: "Manrope", sans-serif;
+      background: radial-gradient(circle at 80% -25%, #1b3c65 0%, #0a1528 45%, #050a12 100%);
+    }
+
+    .glass-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 40;
+      background: linear-gradient(120deg, rgba(7, 18, 34, 0.86), rgba(11, 26, 46, 0.62));
+      border-bottom: 1px solid rgba(196, 220, 250, 0.16);
+      backdrop-filter: blur(14px);
+    }
+
+    .navbar-brand,
+    h1,
+    h2 {
+      font-family: "Sora", sans-serif;
+    }
+
+    .nav-link {
+      border-radius: 999px;
+      padding: 0.5rem 0.8rem;
+      color: #e8f3ff !important;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      background: rgba(64, 168, 255, 0.2);
+    }
+
+    .user-search-form {
+      position: relative;
+      margin-right: 0.55rem;
+      min-width: 220px;
+    }
+
+    .user-search-input {
+      border-radius: 999px;
+      padding-left: 0.85rem;
+      padding-right: 2rem;
+      font-size: 0.88rem;
+    }
+
+    .clear-search-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: rgba(98, 130, 166, 0.28);
+      color: #dcedff;
+      font-size: 0.9rem;
+      line-height: 1;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .clear-search-btn.show {
+      display: inline-flex;
+    }
+
+    main {
+      min-height: 100vh;
+      display: grid;
+      place-items: start center;
+      padding: 6.5rem 1rem 1.2rem;
+    }
+
+    .posts-shell {
+      width: min(980px, 96vw);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(145deg, var(--panel), rgba(8, 20, 36, 0.7));
+      box-shadow: 0 20px 45px rgba(2, 8, 16, 0.4);
+      padding: 1rem;
+    }
+
+    .head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      margin-bottom: 0.9rem;
+      flex-wrap: wrap;
+    }
+
+    .head h1 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .head .meta {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .btn-back {
+      border: 1px solid rgba(172, 205, 242, 0.35);
+      background: rgba(73, 111, 149, 0.25);
+      color: #eaf5ff;
+      border-radius: 9px;
+      padding: 0.35rem 0.7rem;
+      text-decoration: none;
+    }
+
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 0.7rem;
+    }
+
+    .post-card {
+      border: 1px solid var(--line);
+      background: rgba(9, 25, 45, 0.84);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .post-card.highlight {
+      border-color: var(--focus);
+      box-shadow: 0 0 0 2px var(--focus);
+    }
+
+    .post-media {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      object-fit: cover;
+      display: block;
+      background: #071426;
+    }
+
+    .post-meta {
+      padding: 0.56rem 0.65rem 0.62rem;
+    }
+
+    .post-caption {
+      margin: 0;
+      font-size: 0.84rem;
+      line-height: 1.3;
+      color: #dceeff;
+      word-break: break-word;
+    }
+
+    .post-sub {
+      margin-top: 0.35rem;
+      font-size: 0.76rem;
+      color: var(--muted);
+    }
+
+    .status {
+      min-height: 1.2rem;
+      font-size: 0.93rem;
+      color: #8cefc5;
+      margin-top: 0.4rem;
+    }
+  </style>
+  <link rel="stylesheet" href="css/navbar-chat-theme.css">
+</head>
+<body data-seo-path="/user-posts.html">
+  <nav class="navbar navbar-expand-lg navbar-dark glass-nav">
+    <div class="container">
+      <a class="navbar-brand fw-bold" href="index.html">
+        <img src="assets/logo.png" height="35" class="logo" alt="ASCAPDX">
+      </a>
+      <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#nav" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div id="nav" class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <form class="d-flex user-search-form" role="search" onsubmit="return false;">
+              <input id="userSearchInput" class="form-control user-search-input" type="search" placeholder="Search users...">
+              <button id="clearUserSearchBtn" class="clear-search-btn" type="button" aria-label="Clear search">x</button>
+            </form>
+          </li>
+          <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-door me-1"></i> Home</a></li>
+<li class="nav-item"><a class="nav-link" href="chat.html"><i class="bi bi-chat-dots me-1"></i> Chat</a></li>
+          <li class="nav-item"><a class="nav-link" href="posts.html"><i class="bi bi-grid me-1"></i> Feed</a></li>
+          <li class="nav-item"><a class="nav-link" href="follow-people.html"><i class="bi bi-search me-1"></i> People</a></li>
+          <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="posts-shell">
+      <div class="head">
+        <div>
+          <h1 id="pageTitle">User Posts</h1>
+          <div id="metaText" class="meta">Loading...</div>
+        </div>
+        <a id="backBtn" class="btn-back" href="follow-people.html">Back</a>
+      </div>
+      <div id="postsList" class="posts-grid"></div>
+      <div id="status" class="status"></div>
+    </section>
+  </main>
+
+  <script src="js/app-config.js"></script>
+  <script>
+    const session = (window.APP_CONFIG && window.APP_CONFIG.requireAuth && window.APP_CONFIG.requireAuth()) || null;
+    const username = session ? session.username : "";
+    const userId = session ? session.userId : "";
+
+    const API_ORIGIN = (window.APP_CONFIG && window.APP_CONFIG.backendOrigin) || "http://localhost:5000";
+    const params = new URLSearchParams(window.location.search);
+    const targetUsername = (params.get("u") || "").trim();
+    const isOwnerView = !!targetUsername && String(targetUsername).toLowerCase() === String(username || "").toLowerCase();
+    const targetPostId = (params.get("post") || "").trim();
+
+    const pageTitle = document.getElementById("pageTitle");
+    const metaText = document.getElementById("metaText");
+    const postsList = document.getElementById("postsList");
+    const statusEl = document.getElementById("status");
+    const backBtn = document.getElementById("backBtn");
+
+    if (!targetUsername) {
+      statusEl.textContent = "No user selected.";
+      metaText.textContent = "Missing username.";
+    } else {
+      backBtn.href = `user-profile.html?u=${encodeURIComponent(targetUsername)}`;
+    }
+
+    function escapeHtml(text) {
+      return String(text || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function formatPostDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "";
+      return date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "numeric" });
+    }
+
+    function isScheduledPost(post) {
+      if (!post || !post.publishAt) return false;
+      if (post.isPublished === false) return true;
+      const publishAtTime = new Date(post.publishAt).getTime();
+      if (Number.isNaN(publishAtTime)) return false;
+      return publishAtTime > Date.now();
+    }
+
+    async function fetchJson(url, options = {}) {
+      const request = (window.APP_CONFIG && window.APP_CONFIG.authFetch) || fetch;
+      const merged = { ...options };
+      merged.headers = {
+        ...(options.headers || {}),
+        
+      };
+      if (!(window.APP_CONFIG && window.APP_CONFIG.authFetch)) {
+        merged.credentials = "include";
+      }
+      const res = await request(url, merged);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Request failed");
+      return data;
+    }
+
+    function renderPosts(posts) {
+      if (!posts.length) {
+        postsList.innerHTML = "<p>No posts yet.</p>";
+        return;
+      }
+
+      postsList.innerHTML = posts.map((post) => {
+        const caption = escapeHtml(post.caption || "");
+        const safeMediaUrl = escapeHtml(post.mediaUrl || "");
+        const mediaType = post.mediaType === "video" ? "video" : "image";
+        const likesCount = Number(post.likesCount || 0);
+        const createdLabel = formatPostDate(post.createdAt);
+        const isScheduled = isOwnerView && isScheduledPost(post);
+        const scheduledLabel = isScheduled ? " - Scheduled" : "";
+        const isTarget = String(post.id) === targetPostId;
+
+        const mediaHtml = mediaType === "video"
+          ? `<video class="post-media" data-hover-play src="${safeMediaUrl}" muted playsinline preload="metadata" loop></video>`
+          : `<img class="post-media" src="${safeMediaUrl}" alt="Post media" loading="lazy" onerror="this.src='assets/default-avatar.svg'">`;
+
+        return `
+          <article id="post-${escapeHtml(post.id)}" class="post-card${isTarget ? " highlight" : ""}">
+            ${mediaHtml}
+            <div class="post-meta">
+              <p class="post-caption">${caption || "No caption"}</p>
+              <div class="post-sub">${likesCount} likes${createdLabel ? ` - ${escapeHtml(createdLabel)}` : ""}${scheduledLabel}</div>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      bindHoverVideos(postsList);
+
+      if (targetPostId) {
+        const target = document.getElementById(`post-${targetPostId}`);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }
+
+    function bindHoverVideos(root = document) {
+      if (!root || typeof root.querySelectorAll !== "function") return;
+      root.querySelectorAll("video[data-hover-play]").forEach((video) => {
+        if (video.dataset.hoverBound === "1") return;
+        video.dataset.hoverBound = "1";
+        video.autoplay = false;
+        video.loop = true;
+        video.muted = true;
+        video.playsInline = true;
+
+        const startPlayback = () => {
+          const playPromise = video.play();
+          if (playPromise && typeof playPromise.catch === "function") playPromise.catch(() => {});
+        };
+
+        const stopPlayback = () => {
+          try {
+            video.pause();
+          } catch (err) {}
+          video.currentTime = 0;
+        };
+
+        video.addEventListener("mouseenter", startPlayback);
+        video.addEventListener("mouseleave", stopPlayback);
+        video.addEventListener("focusin", startPlayback);
+        video.addEventListener("focusout", stopPlayback);
+        video.addEventListener("touchstart", startPlayback, { passive: true });
+
+        stopPlayback();
+      });
+    }
+
+    async function loadUserPostsPage() {
+      if (!targetUsername) return;
+      try {
+        const profile = await fetchJson(`${API_ORIGIN}/api/users/profile/${encodeURIComponent(targetUsername)}`);
+        const posts = await fetchJson(`${API_ORIGIN}/api/posts/user/${encodeURIComponent(targetUsername)}`);
+        const displayName = profile.name || profile.username || targetUsername;
+        pageTitle.textContent = `${displayName}'s Posts`;
+        const totalPosts = Array.isArray(posts) ? posts.length : 0;
+        const scheduledPosts = isOwnerView ? posts.filter((post) => isScheduledPost(post)).length : 0;
+        metaText.textContent = isOwnerView && scheduledPosts > 0
+          ? `@${profile.username || targetUsername} - ${totalPosts} posts (${scheduledPosts} scheduled)`
+          : `@${profile.username || targetUsername} - ${totalPosts} posts`;
+        renderPosts(Array.isArray(posts) ? posts : []);
+        statusEl.textContent = "";
+      } catch (err) {
+        statusEl.textContent = err.message || "Could not load user posts.";
+        postsList.innerHTML = "";
+      }
+    }
+
+    loadUserPostsPage();
+  </script>
+  <script src="js/user-navbar-menu.js"></script>
+  <script src="js/missed-calls-badge.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="js/seo-meta.js"></script>
+</body>
+</html>
+
+
+
+
